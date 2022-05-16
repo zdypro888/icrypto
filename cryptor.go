@@ -6,7 +6,6 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
-	"github.com/zdypro888/idevice"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -53,9 +52,8 @@ func (crypt *Cryptor) metaContext() (context.Context, context.CancelFunc) {
 	return metactx, cancel
 }
 
-//Initialize init crypto with device
-func (crypt *Cryptor) Initialize(device *idevice.Device) error {
-	var err error
+//Initialize init crypto with device[see device struct]
+func (crypt *Cryptor) Initialize(device any) error {
 	devicePlist, err := plist.MarshalIndent(device, plist.BinaryFormat, "\t")
 	if err != nil {
 		return err
