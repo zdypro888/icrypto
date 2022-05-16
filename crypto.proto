@@ -1,0 +1,109 @@
+syntax = "proto3";
+package icrypto;
+
+option go_package = "github.com/zdypro888/icrypto";
+
+message InitializeRequest {
+  bytes DevicePlist = 1;
+}
+message InitializeResponse {
+}
+
+message FinalizeRequest {
+}
+message FinalizeResponse {
+}
+
+message ActivationRequest { 
+  bytes Sha1Data = 1;
+}
+message ActivationResponse {
+  int32 Code = 1;
+  bytes Sign = 2;
+  bytes Cert = 3;
+}
+
+message ActivationKeyDataRequest { 
+  bytes KeyData = 1; 
+}
+message ActivationKeyDataResponse {
+}
+
+message ActivationDRMHandshakeRequest {
+}
+message ActivationDRMHandshakeResponse {
+  int32 Code = 1;
+  uint64 Session = 2;
+  bytes HandshakeRequestMessage = 3;
+}
+
+message ActivationDRMHandshakeInfoRequest {
+  uint64 Session = 1;
+  bytes FDRBlob = 2;
+  bytes SUInfo = 3;
+  bytes HandshakeResponseMessage = 4;
+  bytes ServerKP = 5;
+  bytes ActivationInfoXML= 6;
+}
+message ActivationDRMHandshakeInfoResponse {
+  int32 Code = 1;
+  bytes SignActRequest = 2;
+  bytes ServerKP = 3;
+}
+
+message ADIStartProvisioningRequest {
+  int64 DSID = 1;
+  bytes SPIM = 2;
+}
+message ADIStartProvisioningResponse {
+  int32 Code = 1;
+  uint64 Session = 2;
+  bytes CPIM = 3;
+}
+
+message ADIEndProvisioningRequest {
+  uint64 Session = 1;
+  int64 DSID = 2;
+  int64 RINFO = 3;
+  bytes PTM = 4;
+  bytes TK = 5;
+  bytes ADI = 10;
+}
+message ADIEndProvisioningResponse {
+  int32 Code = 1;
+  bytes MID = 2;
+  bytes OTP = 3;
+  bytes ADI = 10;
+}
+
+message IndentitySessionRequest {
+  bytes Cert = 1;
+}
+message IndentitySessionResponse {
+  int32 Code = 1;
+  bytes Request = 2;
+}
+
+message IndentityValidationRequest {
+  bytes Response = 1;
+  bytes SignData = 2;
+}
+message IndentityValidationResponse {
+  int32 Code = 1;
+  bytes VlidationData = 2;
+}
+
+service CryptService {
+  rpc Initialize(InitializeRequest) returns (InitializeResponse){}
+  rpc Finalize(FinalizeRequest) returns (FinalizeResponse){}  
+
+  rpc Activation(ActivationRequest) returns (ActivationResponse){}
+  rpc ActivationKeyData(ActivationKeyDataRequest) returns (ActivationKeyDataResponse){}
+  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest) returns (ActivationDRMHandshakeResponse){}
+  rpc ActivationDRMHandshakeInfo(ActivationDRMHandshakeInfoRequest) returns (ActivationDRMHandshakeInfoResponse){}
+  rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse){}
+  rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}
+
+  rpc IndentitySession(IndentitySessionRequest) returns (IndentitySessionResponse){}
+  rpc IndentityValidation(IndentityValidationRequest) returns (IndentityValidationResponse){}
+}
