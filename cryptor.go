@@ -2,6 +2,7 @@ package icrypto
 
 import (
 	context "context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -38,7 +39,10 @@ type Cryptor struct {
 	clientId string
 }
 
-func NewCrypto() (*Cryptor, error) {
+func NewCryptor() (*Cryptor, error) {
+	if cryptoClient == nil {
+		return nil, errors.New("please InitCryptor first")
+	}
 	crypt := &Cryptor{
 		clientId: uuid.NewV4().String(),
 	}
