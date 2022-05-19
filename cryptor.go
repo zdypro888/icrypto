@@ -2,7 +2,6 @@ package icrypto
 
 import (
 	context "context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -12,18 +11,6 @@ import (
 	"google.golang.org/grpc/metadata"
 	"howett.net/plist"
 )
-
-var cryptoConn *grpc.ClientConn
-var cryptoClient CryptServiceClient
-
-func InitCryptor(address string) error {
-	var err error
-	if cryptoConn, err = grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
-		return err
-	}
-	cryptoClient = NewCryptServiceClient(cryptoConn)
-	return nil
-}
 
 //CryptoError error for crypto
 type CryptoError struct {
@@ -35,58 +22,90 @@ func (ce *CryptoError) Error() string {
 	return fmt.Sprintf("%s(Code: %d)", ce.Message, ce.Code)
 }
 
-type Cryptor struct {
-	clientId string
+type Cryptor interface {
+	Initialize(device any) error
+	Finalize() error
+	//Activation 取得激活信息 Sign Cert Error
+	Activation(sha1Data []byte) ([]byte, []byte, error)
+	ActivationKeyData(keyData []byte) error
+	//ActivationDRMHandshake 请求DRM 返回 session handshakeMessage Error
+	ActivationDRMHandshake() (uint64, []byte, error)
+	//ActivationDRMHandshakeResponse 设置DRM信息 返回 SignActRequest ServerKP Error
+	ActivationDRMHandshakeResponse(session uint64, fdrBlob []byte, suInfo []byte, handshakeResponseMessage []byte, serverKP []byte, activationInfoXML []byte) ([]byte, []byte, error)
+	//ADIStartProvisioning 返回 CPIM Session Error
+	ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error)
+	//ADIEndProvisioning 返回 MID OTP ADI Error
+	ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error)
+	//IndentitySession 注册 SessionInfoRequest
+	IndentitySession(cert []byte) ([]byte, error)
+	//IndentityValidation 取得VD
+	IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error)
 }
 
-func NewCryptor() (*Cryptor, error) {
-	if cryptoClient == nil {
-		return nil, errors.New("please InitCryptor first")
+var NewCryptor func() (Cryptor, error)
+
+var cryptoConn *grpc.ClientConn
+var cryptoClient CryptServiceClient
+
+func InitGCryptor(address string) error {
+	var err error
+	if cryptoConn, err = grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
+		return err
 	}
-	crypt := &Cryptor{
-		clientId: uuid.NewV4().String(),
+	cryptoClient = NewCryptServiceClient(cryptoConn)
+	NewCryptor = func() (Cryptor, error) {
+		crypt := &CryptorGrpc{
+			ClientId: uuid.NewV4().String(),
+			Client:   cryptoClient,
+		}
+		return crypt, nil
 	}
-	return crypt, nil
+	return nil
 }
 
-func (crypt *Cryptor) metaContext() (context.Context, context.CancelFunc) {
+type CryptorGrpc struct {
+	ClientId string
+	Client   CryptServiceClient
+}
+
+func (crypt *CryptorGrpc) metaContext() (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-	md := metadata.Pairs("client_id", crypt.clientId)
+	md := metadata.Pairs("client_id", crypt.ClientId)
 	metactx := metadata.NewOutgoingContext(ctx, md)
 	return metactx, cancel
 }
 
 //Initialize init crypto with device[see device struct]
-func (crypt *Cryptor) Initialize(device any) error {
+func (crypt *CryptorGrpc) Initialize(device any) error {
 	devicePlist, err := plist.MarshalIndent(device, plist.BinaryFormat, "\t")
 	if err != nil {
 		return err
 	}
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
-	if _, err = cryptoClient.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist}); err != nil {
+	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist}); err != nil {
 		return err
 	}
 	return nil
 }
 
 //InitDevice finalize crypto
-func (crypt *Cryptor) Finalize() error {
+func (crypt *CryptorGrpc) Finalize() error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
-	if _, err := cryptoClient.Finalize(ctx, &FinalizeRequest{}); err != nil {
+	if _, err := crypt.Client.Finalize(ctx, &FinalizeRequest{}); err != nil {
 		return err
 	}
 	return nil
 }
 
 //Activation 取得激活信息 Sign Cert Error
-func (crypt *Cryptor) Activation(sha1Data []byte) ([]byte, []byte, error) {
+func (crypt *CryptorGrpc) Activation(sha1Data []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
 	var response *ActivationResponse
-	if response, err = cryptoClient.Activation(ctx, &ActivationRequest{Sha1Data: sha1Data}); err != nil {
+	if response, err = crypt.Client.Activation(ctx, &ActivationRequest{Sha1Data: sha1Data}); err != nil {
 		return nil, nil, err
 	}
 	if response.Code != 0 {
@@ -96,23 +115,23 @@ func (crypt *Cryptor) Activation(sha1Data []byte) ([]byte, []byte, error) {
 }
 
 //ActivationKeyData 设置激活KEY
-func (crypt *Cryptor) ActivationKeyData(keyData []byte) error {
+func (crypt *CryptorGrpc) ActivationKeyData(keyData []byte) error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	if _, err = cryptoClient.ActivationKeyData(ctx, &ActivationKeyDataRequest{KeyData: keyData}); err != nil {
+	if _, err = crypt.Client.ActivationKeyData(ctx, &ActivationKeyDataRequest{KeyData: keyData}); err != nil {
 		return err
 	}
 	return nil
 }
 
 //ActivationDRMHandshake 请求DRM 返回 session handshakeMessage Error
-func (crypt *Cryptor) ActivationDRMHandshake() (uint64, []byte, error) {
+func (crypt *CryptorGrpc) ActivationDRMHandshake() (uint64, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
 	var response *ActivationDRMHandshakeResponse
-	if response, err = cryptoClient.ActivationDRMHandshake(ctx, &ActivationDRMHandshakeRequest{}); err != nil {
+	if response, err = crypt.Client.ActivationDRMHandshake(ctx, &ActivationDRMHandshakeRequest{}); err != nil {
 		return 0, nil, err
 	}
 	if response.Code != 0 {
@@ -122,12 +141,12 @@ func (crypt *Cryptor) ActivationDRMHandshake() (uint64, []byte, error) {
 }
 
 //ActivationDRMHandshakeResponse 设置DRM信息 返回 SignActRequest ServerKP Error
-func (crypt *Cryptor) ActivationDRMHandshakeResponse(session uint64, fdrBlob []byte, suInfo []byte, handshakeResponseMessage []byte, serverKP []byte, activationInfoXML []byte) ([]byte, []byte, error) {
+func (crypt *CryptorGrpc) ActivationDRMHandshakeResponse(session uint64, fdrBlob []byte, suInfo []byte, handshakeResponseMessage []byte, serverKP []byte, activationInfoXML []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
 	var response *ActivationDRMHandshakeInfoResponse
-	if response, err = cryptoClient.ActivationDRMHandshakeInfo(ctx, &ActivationDRMHandshakeInfoRequest{Session: session, FDRBlob: fdrBlob, SUInfo: suInfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP, ActivationInfoXML: activationInfoXML}); err != nil {
+	if response, err = crypt.Client.ActivationDRMHandshakeInfo(ctx, &ActivationDRMHandshakeInfoRequest{Session: session, FDRBlob: fdrBlob, SUInfo: suInfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP, ActivationInfoXML: activationInfoXML}); err != nil {
 		return nil, nil, err
 	}
 	if response.Code != 0 {
@@ -137,12 +156,12 @@ func (crypt *Cryptor) ActivationDRMHandshakeResponse(session uint64, fdrBlob []b
 }
 
 //ADIStartProvisioning 返回 CPIM Session Error
-func (crypt *Cryptor) ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error) {
+func (crypt *CryptorGrpc) ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
 	var response *ADIStartProvisioningResponse
-	if response, err = cryptoClient.ADIStartProvisioning(ctx, &ADIStartProvisioningRequest{DSID: dsid, SPIM: spim}); err != nil {
+	if response, err = crypt.Client.ADIStartProvisioning(ctx, &ADIStartProvisioningRequest{DSID: dsid, SPIM: spim}); err != nil {
 		return nil, 0, err
 	}
 	if response.Code != 0 {
@@ -152,12 +171,12 @@ func (crypt *Cryptor) ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uin
 }
 
 //ADIEndProvisioning 返回 MID OTP ADI Error
-func (crypt *Cryptor) ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error) {
+func (crypt *CryptorGrpc) ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
 	var response *ADIEndProvisioningResponse
-	if response, err = cryptoClient.ADIEndProvisioning(ctx, &ADIEndProvisioningRequest{Session: session, DSID: dsid, RINFO: rinfo, PTM: ptm, TK: tk, ADI: adi}); err != nil {
+	if response, err = crypt.Client.ADIEndProvisioning(ctx, &ADIEndProvisioningRequest{Session: session, DSID: dsid, RINFO: rinfo, PTM: ptm, TK: tk, ADI: adi}); err != nil {
 		return nil, nil, nil, err
 	}
 	if response.Code != 0 {
@@ -167,12 +186,12 @@ func (crypt *Cryptor) ADIEndProvisioning(session uint64, dsid int64, rinfo int64
 }
 
 //IndentitySession 注册 SessionInfoRequest
-func (crypt *Cryptor) IndentitySession(cert []byte) ([]byte, error) {
+func (crypt *CryptorGrpc) IndentitySession(cert []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
 	var response *IndentitySessionResponse
-	if response, err = cryptoClient.IndentitySession(ctx, &IndentitySessionRequest{Cert: cert}); err != nil {
+	if response, err = crypt.Client.IndentitySession(ctx, &IndentitySessionRequest{Cert: cert}); err != nil {
 		return nil, err
 	}
 	if response.Code != 0 {
@@ -182,12 +201,12 @@ func (crypt *Cryptor) IndentitySession(cert []byte) ([]byte, error) {
 }
 
 //IndentityValidation 取得VD
-func (crypt *Cryptor) IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error) {
+func (crypt *CryptorGrpc) IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
 	var response *IndentityValidationResponse
-	if response, err = cryptoClient.IndentityValidation(ctx, &IndentityValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
+	if response, err = crypt.Client.IndentityValidation(ctx, &IndentityValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
 		return nil, err
 	}
 	if response.Code != 0 {
