@@ -50,7 +50,7 @@ type IOS struct {
 }
 
 type Device struct {
-	OSType           OSEnum `plist:"OSType" bson:"OSType" json:"OSType"`
+	OStype           OSEnum `plist:"OStype" bson:"OStype" json:"OStype"`
 	SerialNumber     string `plist:"SerialNumber" bson:"SerialNumber" json:"SerialNumber"`
 	MacOS            `plist:",inline" bson:",inline" json:",inline"`
 	IOS              `plist:",inline" bson:",inline" json:",inline"`
