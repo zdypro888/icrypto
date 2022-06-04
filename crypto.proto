@@ -76,6 +76,14 @@ message ADIEndProvisioningResponse {
   bytes ADI = 10;
 }
 
+message AbsintheHelloRequest {
+  int32 Mode = 1;
+}
+message AbsintheHelloResponse {
+  int32 Code = 1;
+  bytes HelloMessage = 2;
+}
+
 message IndentitySessionRequest {
   bytes Cert = 1;
 }
@@ -104,6 +112,7 @@ service CryptService {
   rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse){}
   rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}
 
+  rpc AbsintheHello(AbsintheHelloRequest) returns (AbsintheHelloResponse){}
   rpc IndentitySession(IndentitySessionRequest) returns (IndentitySessionResponse){}
   rpc IndentityValidation(IndentityValidationRequest) returns (IndentityValidationResponse){}
 }

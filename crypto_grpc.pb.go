@@ -30,6 +30,7 @@ type CryptServiceClient interface {
 	ActivationDRMHandshakeInfo(ctx context.Context, in *ActivationDRMHandshakeInfoRequest, opts ...grpc.CallOption) (*ActivationDRMHandshakeInfoResponse, error)
 	ADIStartProvisioning(ctx context.Context, in *ADIStartProvisioningRequest, opts ...grpc.CallOption) (*ADIStartProvisioningResponse, error)
 	ADIEndProvisioning(ctx context.Context, in *ADIEndProvisioningRequest, opts ...grpc.CallOption) (*ADIEndProvisioningResponse, error)
+	AbsintheHello(ctx context.Context, in *AbsintheHelloRequest, opts ...grpc.CallOption) (*AbsintheHelloResponse, error)
 	IndentitySession(ctx context.Context, in *IndentitySessionRequest, opts ...grpc.CallOption) (*IndentitySessionResponse, error)
 	IndentityValidation(ctx context.Context, in *IndentityValidationRequest, opts ...grpc.CallOption) (*IndentityValidationResponse, error)
 }
@@ -114,6 +115,15 @@ func (c *cryptServiceClient) ADIEndProvisioning(ctx context.Context, in *ADIEndP
 	return out, nil
 }
 
+func (c *cryptServiceClient) AbsintheHello(ctx context.Context, in *AbsintheHelloRequest, opts ...grpc.CallOption) (*AbsintheHelloResponse, error) {
+	out := new(AbsintheHelloResponse)
+	err := c.cc.Invoke(ctx, "/icrypto.CryptService/AbsintheHello", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cryptServiceClient) IndentitySession(ctx context.Context, in *IndentitySessionRequest, opts ...grpc.CallOption) (*IndentitySessionResponse, error) {
 	out := new(IndentitySessionResponse)
 	err := c.cc.Invoke(ctx, "/icrypto.CryptService/IndentitySession", in, out, opts...)
@@ -144,6 +154,7 @@ type CryptServiceServer interface {
 	ActivationDRMHandshakeInfo(context.Context, *ActivationDRMHandshakeInfoRequest) (*ActivationDRMHandshakeInfoResponse, error)
 	ADIStartProvisioning(context.Context, *ADIStartProvisioningRequest) (*ADIStartProvisioningResponse, error)
 	ADIEndProvisioning(context.Context, *ADIEndProvisioningRequest) (*ADIEndProvisioningResponse, error)
+	AbsintheHello(context.Context, *AbsintheHelloRequest) (*AbsintheHelloResponse, error)
 	IndentitySession(context.Context, *IndentitySessionRequest) (*IndentitySessionResponse, error)
 	IndentityValidation(context.Context, *IndentityValidationRequest) (*IndentityValidationResponse, error)
 	mustEmbedUnimplementedCryptServiceServer()
@@ -176,6 +187,9 @@ func (UnimplementedCryptServiceServer) ADIStartProvisioning(context.Context, *AD
 }
 func (UnimplementedCryptServiceServer) ADIEndProvisioning(context.Context, *ADIEndProvisioningRequest) (*ADIEndProvisioningResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ADIEndProvisioning not implemented")
+}
+func (UnimplementedCryptServiceServer) AbsintheHello(context.Context, *AbsintheHelloRequest) (*AbsintheHelloResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AbsintheHello not implemented")
 }
 func (UnimplementedCryptServiceServer) IndentitySession(context.Context, *IndentitySessionRequest) (*IndentitySessionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IndentitySession not implemented")
@@ -340,6 +354,24 @@ func _CryptService_ADIEndProvisioning_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CryptService_AbsintheHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AbsintheHelloRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).AbsintheHello(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/icrypto.CryptService/AbsintheHello",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).AbsintheHello(ctx, req.(*AbsintheHelloRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CryptService_IndentitySession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IndentitySessionRequest)
 	if err := dec(in); err != nil {
@@ -414,6 +446,10 @@ var CryptService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ADIEndProvisioning",
 			Handler:    _CryptService_ADIEndProvisioning_Handler,
+		},
+		{
+			MethodName: "AbsintheHello",
+			Handler:    _CryptService_AbsintheHello_Handler,
 		},
 		{
 			MethodName: "IndentitySession",

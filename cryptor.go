@@ -6,10 +6,10 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
+	"github.com/zdypro888/go-plist"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
-	"howett.net/plist"
 )
 
 //CryptoError error for crypto
@@ -23,7 +23,9 @@ func (ce *CryptoError) Error() string {
 }
 
 type Cryptor interface {
+	//Initialize 初始化
 	Initialize(device any) error
+	//Finalize 释放
 	Finalize() error
 	//Activation 取得激活信息 Sign Cert Error
 	Activation(sha1Data []byte) ([]byte, []byte, error)
@@ -36,6 +38,8 @@ type Cryptor interface {
 	ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error)
 	//ADIEndProvisioning 返回 MID OTP ADI Error
 	ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error)
+	//AbsintheHello 取得 absinthe hello
+	AbsintheHello(mode int) ([]byte, error)
 	//IndentitySession 注册 SessionInfoRequest
 	IndentitySession(cert []byte) ([]byte, error)
 	//IndentityValidation 取得VD
@@ -183,6 +187,20 @@ func (crypt *CryptorGrpc) ADIEndProvisioning(session uint64, dsid int64, rinfo i
 		return nil, nil, nil, &CryptoError{Code: response.Code, Message: "ADIEndProvisioning Faild"}
 	}
 	return response.MID, response.OTP, response.ADI, nil
+}
+
+func (crypt *CryptorGrpc) AbsintheHello(mode int) ([]byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *AbsintheHelloResponse
+	if response, err = crypt.Client.AbsintheHello(ctx, &AbsintheHelloRequest{Mode: int32(mode)}); err != nil {
+		return nil, err
+	}
+	if response.Code != 0 {
+		return nil, &CryptoError{Code: response.Code, Message: "AbsintheHello Faild"}
+	}
+	return response.HelloMessage, nil
 }
 
 //IndentitySession 注册 SessionInfoRequest
