@@ -71,3 +71,34 @@ type Device struct {
 	CFNetworkVersion string `plist:"CFNetworkVersion,omitempty" bson:"CFNetworkVersion,omitempty" json:"CFNetworkVersion,omitempty"`
 	DarwinVersion    string `plist:"DarwinVersion,omitempty" bson:"DarwinVersion,omitempty" json:"DarwinVersion,omitempty"`
 }
+
+const (
+	HardwareiPod4   int = 1
+	HardwareiPhone5 int = 3
+	HardwareiPhone7 int = 101
+	HardwaremacOS   int = 201
+)
+
+//ProductHW 版本号
+func ProductHW(productType string) int {
+	switch productType {
+	case "iPhone2,1":
+		return HardwareiPod4
+	case "iPhone3,1":
+		return HardwareiPod4
+	case "iPhone3,2":
+		return HardwareiPod4
+	case "iPad2,2":
+		return HardwareiPod4
+	case "iPad2,3":
+		return HardwareiPod4
+	case "iPad2,5":
+		return HardwareiPod4
+	case "iPad2,6":
+		return HardwareiPod4
+	case "iPod4,1":
+		return HardwareiPod4
+	default:
+		return HardwareiPhone7
+	}
+}
