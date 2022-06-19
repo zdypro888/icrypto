@@ -14,24 +14,27 @@ import (
 var cryptoConn *grpc.ClientConn
 var cryptoClient CryptServiceClient
 
-func InitGCryptor(address string) error {
+func InitCryptorGRPC(address string) error {
 	var err error
 	if cryptoConn, err = grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
 		return err
 	}
 	cryptoClient = NewCryptServiceClient(cryptoConn)
-	NewCryptor = func() (Cryptor, error) {
-		crypt := &CryptorGrpc{
-			ClientId: uuid.NewV4().String(),
-			Client:   cryptoClient,
-		}
-		return crypt, nil
-	}
 	return nil
+}
+
+func NewCryptorGRPC(hardware int) Cryptor {
+	crypt := &CryptorGrpc{
+		ClientId: uuid.NewV4().String(),
+		Hardware: hardware,
+		Client:   cryptoClient,
+	}
+	return crypt
 }
 
 type CryptorGrpc struct {
 	ClientId string
+	Hardware int
 	Client   CryptServiceClient
 }
 
@@ -43,14 +46,14 @@ func (crypt *CryptorGrpc) metaContext() (context.Context, context.CancelFunc) {
 }
 
 //Initialize init crypto with device[see device struct]
-func (crypt *CryptorGrpc) Initialize(device any, hardware int) error {
+func (crypt *CryptorGrpc) Initialize(device any) error {
 	devicePlist, err := plist.MarshalIndent(device, plist.BinaryFormat, "\t")
 	if err != nil {
 		return err
 	}
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
-	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist, Hardware: int32(hardware)}); err != nil {
+	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist, Hardware: int32(crypt.Hardware)}); err != nil {
 		return err
 	}
 	return nil

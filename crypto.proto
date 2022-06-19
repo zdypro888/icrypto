@@ -110,6 +110,7 @@ service CryptService {
   rpc ActivationKeyData(ActivationKeyDataRequest) returns (ActivationKeyDataResponse){}
   rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest) returns (ActivationDRMHandshakeResponse){}
   rpc ActivationDRMHandshakeInfo(ActivationDRMHandshakeInfoRequest) returns (ActivationDRMHandshakeInfoResponse){}
+  
   rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse){}
   rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}
 

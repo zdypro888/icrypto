@@ -16,11 +16,12 @@ func (ce *CryptoError) Error() string {
 
 type Cryptor interface {
 	//Initialize 初始化
-	Initialize(device any, hardware int) error
+	Initialize(device any) error
 	//Finalize 释放
 	Finalize() error
 	//Activation 取得激活信息 Sign Cert Error
 	Activation(sha1Data []byte) ([]byte, []byte, error)
+	//ActivationKeyData 设置激活后返回keyData
 	ActivationKeyData(keyData []byte) error
 	//ActivationDRMHandshake 请求DRM 返回 session handshakeMessage Error
 	ActivationDRMHandshake() (uint64, []byte, error)
@@ -38,4 +39,18 @@ type Cryptor interface {
 	IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error)
 }
 
-var NewCryptor func() (Cryptor, error)
+type CryptorKind int
+
+const (
+	ForAuto          CryptorKind = iota
+	ForAbsinthe      CryptorKind = iota
+	ForActivation    CryptorKind = iota
+	ForProvisioning  CryptorKind = iota
+	ForAbsintheHello CryptorKind = iota
+)
+
+//NewCryptorCall 创建cryptor调用
+type NewCryptorCall func(CryptorKind) (Cryptor, error)
+
+//NewCryptor 创建cryptor
+var NewCryptor NewCryptorCall
