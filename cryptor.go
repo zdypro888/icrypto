@@ -50,7 +50,7 @@ const (
 )
 
 //NewCryptorCall 创建cryptor调用
-type NewCryptorCall func(CryptorKind) (Cryptor, error)
+type NewCryptorCall func(CryptorKind) Cryptor
 
 //NewCryptor 创建cryptor
 var NewCryptor NewCryptorCall

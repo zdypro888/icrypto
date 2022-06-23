@@ -39,7 +39,7 @@ type CryptorGrpc struct {
 }
 
 func (crypt *CryptorGrpc) metaContext() (context.Context, context.CancelFunc) {
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	md := metadata.Pairs("client_id", crypt.ClientId)
 	metactx := metadata.NewOutgoingContext(ctx, md)
 	return metactx, cancel
