@@ -6,12 +6,20 @@ import (
 
 //CryptoError error for crypto
 type CryptoError struct {
-	Code    int32
-	Message string
+	Code   int32
+	Method string
+	CError error
 }
 
 func (ce *CryptoError) Error() string {
-	return fmt.Sprintf("%s(Code: %d)", ce.Message, ce.Code)
+	if ce.CError != nil {
+		return ce.CError.Error()
+	}
+	return fmt.Sprintf("method: %s code: %d", ce.Method, ce.Code)
+}
+
+func WithError(err error) error {
+	return &CryptoError{CError: err}
 }
 
 type Cryptor interface {

@@ -49,12 +49,12 @@ func (crypt *CryptorGrpc) metaContext() (context.Context, context.CancelFunc) {
 func (crypt *CryptorGrpc) Initialize(device any) error {
 	devicePlist, err := plist.MarshalIndent(device, plist.BinaryFormat, "\t")
 	if err != nil {
-		return err
+		return WithError(err)
 	}
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist, Hardware: int32(crypt.Hardware)}); err != nil {
-		return err
+		return WithError(err)
 	}
 	return nil
 }
@@ -64,7 +64,7 @@ func (crypt *CryptorGrpc) Finalize() error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	if _, err := crypt.Client.Finalize(ctx, &FinalizeRequest{}); err != nil {
-		return err
+		return WithError(err)
 	}
 	return nil
 }
@@ -76,10 +76,7 @@ func (crypt *CryptorGrpc) Activation(sha1Data []byte) ([]byte, []byte, error) {
 	var err error
 	var response *ActivationResponse
 	if response, err = crypt.Client.Activation(ctx, &ActivationRequest{Sha1Data: sha1Data}); err != nil {
-		return nil, nil, err
-	}
-	if response.Code != 0 {
-		return nil, nil, &CryptoError{Code: response.Code, Message: "Activation Faild"}
+		return nil, nil, WithError(err)
 	}
 	return response.Sign, response.Cert, nil
 }
@@ -90,7 +87,7 @@ func (crypt *CryptorGrpc) ActivationKeyData(keyData []byte) error {
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.ActivationKeyData(ctx, &ActivationKeyDataRequest{KeyData: keyData}); err != nil {
-		return err
+		return WithError(err)
 	}
 	return nil
 }
@@ -102,10 +99,7 @@ func (crypt *CryptorGrpc) ActivationDRMHandshake() (uint64, []byte, error) {
 	var err error
 	var response *ActivationDRMHandshakeResponse
 	if response, err = crypt.Client.ActivationDRMHandshake(ctx, &ActivationDRMHandshakeRequest{}); err != nil {
-		return 0, nil, err
-	}
-	if response.Code != 0 {
-		return 0, nil, &CryptoError{Code: response.Code, Message: "DRMHandshake Faild"}
+		return 0, nil, WithError(err)
 	}
 	return response.Session, response.HandshakeRequestMessage, nil
 }
@@ -117,10 +111,7 @@ func (crypt *CryptorGrpc) ActivationDRMHandshakeResponse(session uint64, fdrBlob
 	var err error
 	var response *ActivationDRMHandshakeInfoResponse
 	if response, err = crypt.Client.ActivationDRMHandshakeInfo(ctx, &ActivationDRMHandshakeInfoRequest{Session: session, FDRBlob: fdrBlob, SUInfo: suInfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP, ActivationInfoXML: activationInfoXML}); err != nil {
-		return nil, nil, err
-	}
-	if response.Code != 0 {
-		return nil, nil, &CryptoError{Code: response.Code, Message: "DRMHandshakeResponse Faild"}
+		return nil, nil, WithError(err)
 	}
 	return response.SignActRequest, response.ServerKP, nil
 }
@@ -132,10 +123,7 @@ func (crypt *CryptorGrpc) ADIStartProvisioning(dsid int64, spim []byte) ([]byte,
 	var err error
 	var response *ADIStartProvisioningResponse
 	if response, err = crypt.Client.ADIStartProvisioning(ctx, &ADIStartProvisioningRequest{DSID: dsid, SPIM: spim}); err != nil {
-		return nil, 0, err
-	}
-	if response.Code != 0 {
-		return nil, 0, &CryptoError{Code: response.Code, Message: "ADIStartProvisioning Faild"}
+		return nil, 0, WithError(err)
 	}
 	return response.CPIM, response.Session, nil
 }
@@ -147,10 +135,7 @@ func (crypt *CryptorGrpc) ADIEndProvisioning(session uint64, dsid int64, rinfo i
 	var err error
 	var response *ADIEndProvisioningResponse
 	if response, err = crypt.Client.ADIEndProvisioning(ctx, &ADIEndProvisioningRequest{Session: session, DSID: dsid, RINFO: rinfo, PTM: ptm, TK: tk, ADI: adi}); err != nil {
-		return nil, nil, nil, err
-	}
-	if response.Code != 0 {
-		return nil, nil, nil, &CryptoError{Code: response.Code, Message: "ADIEndProvisioning Faild"}
+		return nil, nil, nil, WithError(err)
 	}
 	return response.MID, response.OTP, response.ADI, nil
 }
@@ -161,10 +146,7 @@ func (crypt *CryptorGrpc) AbsintheHello(mode int) ([]byte, error) {
 	var err error
 	var response *AbsintheHelloResponse
 	if response, err = crypt.Client.AbsintheHello(ctx, &AbsintheHelloRequest{Mode: int32(mode)}); err != nil {
-		return nil, err
-	}
-	if response.Code != 0 {
-		return nil, &CryptoError{Code: response.Code, Message: "AbsintheHello Faild"}
+		return nil, WithError(err)
 	}
 	return response.HelloMessage, nil
 }
@@ -176,10 +158,7 @@ func (crypt *CryptorGrpc) IndentitySession(cert []byte) ([]byte, error) {
 	var err error
 	var response *IndentitySessionResponse
 	if response, err = crypt.Client.IndentitySession(ctx, &IndentitySessionRequest{Cert: cert}); err != nil {
-		return nil, err
-	}
-	if response.Code != 0 {
-		return nil, &CryptoError{Code: response.Code, Message: "IndentitySession Faild"}
+		return nil, WithError(err)
 	}
 	return response.Request, nil
 }
@@ -191,10 +170,7 @@ func (crypt *CryptorGrpc) IndentityValidation(sessionInfo []byte, signData []byt
 	var err error
 	var response *IndentityValidationResponse
 	if response, err = crypt.Client.IndentityValidation(ctx, &IndentityValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
-		return nil, err
-	}
-	if response.Code != 0 {
-		return nil, &CryptoError{Code: response.Code, Message: "IndentityValidation Faild"}
+		return nil, WithError(err)
 	}
 	return response.VlidationData, nil
 }

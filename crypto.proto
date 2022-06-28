@@ -19,9 +19,8 @@ message ActivationRequest {
   bytes Sha1Data = 1;
 }
 message ActivationResponse {
-  int32 Code = 1;
-  bytes Sign = 2;
-  bytes Cert = 3;
+  bytes Sign = 1;
+  bytes Cert = 2;
 }
 
 message ActivationKeyDataRequest { 
@@ -33,9 +32,8 @@ message ActivationKeyDataResponse {
 message ActivationDRMHandshakeRequest {
 }
 message ActivationDRMHandshakeResponse {
-  int32 Code = 1;
-  uint64 Session = 2;
-  bytes HandshakeRequestMessage = 3;
+  uint64 Session = 1;
+  bytes HandshakeRequestMessage = 2;
 }
 
 message ActivationDRMHandshakeInfoRequest {
@@ -47,9 +45,8 @@ message ActivationDRMHandshakeInfoRequest {
   bytes ActivationInfoXML= 6;
 }
 message ActivationDRMHandshakeInfoResponse {
-  int32 Code = 1;
-  bytes SignActRequest = 2;
-  bytes ServerKP = 3;
+  bytes SignActRequest = 1;
+  bytes ServerKP = 2;
 }
 
 message ADIStartProvisioningRequest {
@@ -57,9 +54,8 @@ message ADIStartProvisioningRequest {
   bytes SPIM = 2;
 }
 message ADIStartProvisioningResponse {
-  int32 Code = 1;
-  uint64 Session = 2;
-  bytes CPIM = 3;
+  uint64 Session = 1;
+  bytes CPIM = 2;
 }
 
 message ADIEndProvisioningRequest {
@@ -71,9 +67,8 @@ message ADIEndProvisioningRequest {
   bytes ADI = 10;
 }
 message ADIEndProvisioningResponse {
-  int32 Code = 1;
-  bytes MID = 2;
-  bytes OTP = 3;
+  bytes MID = 1;
+  bytes OTP = 2;
   bytes ADI = 10;
 }
 
@@ -81,16 +76,14 @@ message AbsintheHelloRequest {
   int32 Mode = 1;
 }
 message AbsintheHelloResponse {
-  int32 Code = 1;
-  bytes HelloMessage = 2;
+  bytes HelloMessage = 1;
 }
 
 message IndentitySessionRequest {
   bytes Cert = 1;
 }
 message IndentitySessionResponse {
-  int32 Code = 1;
-  bytes Request = 2;
+  bytes Request = 1;
 }
 
 message IndentityValidationRequest {
@@ -98,8 +91,7 @@ message IndentityValidationRequest {
   bytes SignData = 2;
 }
 message IndentityValidationResponse {
-  int32 Code = 1;
-  bytes VlidationData = 2;
+  bytes VlidationData = 1;
 }
 
 service CryptService {
