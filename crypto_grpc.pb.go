@@ -31,6 +31,9 @@ type CryptServiceClient interface {
 	ADIStartProvisioning(ctx context.Context, in *ADIStartProvisioningRequest, opts ...grpc.CallOption) (*ADIStartProvisioningResponse, error)
 	ADIEndProvisioning(ctx context.Context, in *ADIEndProvisioningRequest, opts ...grpc.CallOption) (*ADIEndProvisioningResponse, error)
 	AbsintheHello(ctx context.Context, in *AbsintheHelloRequest, opts ...grpc.CallOption) (*AbsintheHelloResponse, error)
+	AbsintheAddOption(ctx context.Context, in *AbsintheAddOptionRequest, opts ...grpc.CallOption) (*AbsintheAddOptionResponse, error)
+	AbsintheAtivateSession(ctx context.Context, in *AbsintheAtivateSessionRequest, opts ...grpc.CallOption) (*AbsintheAtivateSessionResponse, error)
+	AbsintheSignData(ctx context.Context, in *AbsintheSignDataRequest, opts ...grpc.CallOption) (*AbsintheSignDataResponse, error)
 	IndentitySession(ctx context.Context, in *IndentitySessionRequest, opts ...grpc.CallOption) (*IndentitySessionResponse, error)
 	IndentityValidation(ctx context.Context, in *IndentityValidationRequest, opts ...grpc.CallOption) (*IndentityValidationResponse, error)
 }
@@ -124,6 +127,33 @@ func (c *cryptServiceClient) AbsintheHello(ctx context.Context, in *AbsintheHell
 	return out, nil
 }
 
+func (c *cryptServiceClient) AbsintheAddOption(ctx context.Context, in *AbsintheAddOptionRequest, opts ...grpc.CallOption) (*AbsintheAddOptionResponse, error) {
+	out := new(AbsintheAddOptionResponse)
+	err := c.cc.Invoke(ctx, "/icrypto.CryptService/AbsintheAddOption", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cryptServiceClient) AbsintheAtivateSession(ctx context.Context, in *AbsintheAtivateSessionRequest, opts ...grpc.CallOption) (*AbsintheAtivateSessionResponse, error) {
+	out := new(AbsintheAtivateSessionResponse)
+	err := c.cc.Invoke(ctx, "/icrypto.CryptService/AbsintheAtivateSession", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cryptServiceClient) AbsintheSignData(ctx context.Context, in *AbsintheSignDataRequest, opts ...grpc.CallOption) (*AbsintheSignDataResponse, error) {
+	out := new(AbsintheSignDataResponse)
+	err := c.cc.Invoke(ctx, "/icrypto.CryptService/AbsintheSignData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cryptServiceClient) IndentitySession(ctx context.Context, in *IndentitySessionRequest, opts ...grpc.CallOption) (*IndentitySessionResponse, error) {
 	out := new(IndentitySessionResponse)
 	err := c.cc.Invoke(ctx, "/icrypto.CryptService/IndentitySession", in, out, opts...)
@@ -155,6 +185,9 @@ type CryptServiceServer interface {
 	ADIStartProvisioning(context.Context, *ADIStartProvisioningRequest) (*ADIStartProvisioningResponse, error)
 	ADIEndProvisioning(context.Context, *ADIEndProvisioningRequest) (*ADIEndProvisioningResponse, error)
 	AbsintheHello(context.Context, *AbsintheHelloRequest) (*AbsintheHelloResponse, error)
+	AbsintheAddOption(context.Context, *AbsintheAddOptionRequest) (*AbsintheAddOptionResponse, error)
+	AbsintheAtivateSession(context.Context, *AbsintheAtivateSessionRequest) (*AbsintheAtivateSessionResponse, error)
+	AbsintheSignData(context.Context, *AbsintheSignDataRequest) (*AbsintheSignDataResponse, error)
 	IndentitySession(context.Context, *IndentitySessionRequest) (*IndentitySessionResponse, error)
 	IndentityValidation(context.Context, *IndentityValidationRequest) (*IndentityValidationResponse, error)
 	mustEmbedUnimplementedCryptServiceServer()
@@ -190,6 +223,15 @@ func (UnimplementedCryptServiceServer) ADIEndProvisioning(context.Context, *ADIE
 }
 func (UnimplementedCryptServiceServer) AbsintheHello(context.Context, *AbsintheHelloRequest) (*AbsintheHelloResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AbsintheHello not implemented")
+}
+func (UnimplementedCryptServiceServer) AbsintheAddOption(context.Context, *AbsintheAddOptionRequest) (*AbsintheAddOptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AbsintheAddOption not implemented")
+}
+func (UnimplementedCryptServiceServer) AbsintheAtivateSession(context.Context, *AbsintheAtivateSessionRequest) (*AbsintheAtivateSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AbsintheAtivateSession not implemented")
+}
+func (UnimplementedCryptServiceServer) AbsintheSignData(context.Context, *AbsintheSignDataRequest) (*AbsintheSignDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AbsintheSignData not implemented")
 }
 func (UnimplementedCryptServiceServer) IndentitySession(context.Context, *IndentitySessionRequest) (*IndentitySessionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IndentitySession not implemented")
@@ -372,6 +414,60 @@ func _CryptService_AbsintheHello_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CryptService_AbsintheAddOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AbsintheAddOptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).AbsintheAddOption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/icrypto.CryptService/AbsintheAddOption",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).AbsintheAddOption(ctx, req.(*AbsintheAddOptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CryptService_AbsintheAtivateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AbsintheAtivateSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).AbsintheAtivateSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/icrypto.CryptService/AbsintheAtivateSession",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).AbsintheAtivateSession(ctx, req.(*AbsintheAtivateSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CryptService_AbsintheSignData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AbsintheSignDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).AbsintheSignData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/icrypto.CryptService/AbsintheSignData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).AbsintheSignData(ctx, req.(*AbsintheSignDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CryptService_IndentitySession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IndentitySessionRequest)
 	if err := dec(in); err != nil {
@@ -450,6 +546,18 @@ var CryptService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AbsintheHello",
 			Handler:    _CryptService_AbsintheHello_Handler,
+		},
+		{
+			MethodName: "AbsintheAddOption",
+			Handler:    _CryptService_AbsintheAddOption_Handler,
+		},
+		{
+			MethodName: "AbsintheAtivateSession",
+			Handler:    _CryptService_AbsintheAtivateSession_Handler,
+		},
+		{
+			MethodName: "AbsintheSignData",
+			Handler:    _CryptService_AbsintheSignData_Handler,
 		},
 		{
 			MethodName: "IndentitySession",

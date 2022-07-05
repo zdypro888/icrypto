@@ -151,6 +151,39 @@ func (crypt *CryptorGrpc) AbsintheHello(mode int) ([]byte, error) {
 	return response.HelloMessage, nil
 }
 
+func (crypt *CryptorGrpc) AbsintheAddOption(BIKKey []byte, BAACert []byte, intermediateRootCert []byte) error {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	if _, err = crypt.Client.AbsintheAddOption(ctx, &AbsintheAddOptionRequest{BIKKey: BIKKey, BAACert: BAACert, IntermediateRootCert: intermediateRootCert}); err != nil {
+		return WithError(err)
+	}
+	return nil
+}
+
+//AbsintheAtivateSession 设置 session 返回（absinthe-response）
+func (crypt *CryptorGrpc) AbsintheAtivateSession(validationData []byte, serverKey []byte) error {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	if _, err = crypt.Client.AbsintheAtivateSession(ctx, &AbsintheAtivateSessionRequest{ValidationData: validationData, ServerKey: serverKey}); err != nil {
+		return WithError(err)
+	}
+	return nil
+}
+
+//AbsintheSignData signData 返回 signature outServKey
+func (crypt *CryptorGrpc) AbsintheSignData(dataToSign []byte) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *AbsintheSignDataResponse
+	if response, err = crypt.Client.AbsintheSignData(ctx, &AbsintheSignDataRequest{SignData: dataToSign}); err != nil {
+		return nil, nil, WithError(err)
+	}
+	return response.Signature, response.OutServKey, nil
+}
+
 //IndentitySession 注册 SessionInfoRequest
 func (crypt *CryptorGrpc) IndentitySession(cert []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext()

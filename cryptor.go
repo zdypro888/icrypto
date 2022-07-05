@@ -41,6 +41,12 @@ type Cryptor interface {
 	ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error)
 	//AbsintheHello 取得 absinthe hello
 	AbsintheHello(mode int) ([]byte, error)
+	//AbsintheAddOption 添加 option
+	AbsintheAddOption(BIKKeyRef []byte, BAACert []byte, intermediateRootCert []byte) error
+	//AbsintheAtivateSession 设置 session 返回（absinthe-response）
+	AbsintheAtivateSession(validationData []byte, serverKey []byte) error
+	//AbsintheSignData signData 返回 signature outServKey
+	AbsintheSignData(dataToSign []byte) ([]byte, []byte, error)
 	//IndentitySession 注册 SessionInfoRequest
 	IndentitySession(cert []byte) ([]byte, error)
 	//IndentityValidation 取得VD

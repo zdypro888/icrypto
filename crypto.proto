@@ -79,6 +79,29 @@ message AbsintheHelloResponse {
   bytes HelloMessage = 1;
 }
 
+message AbsintheAddOptionRequest {
+  bytes BIKKey = 1;
+  bytes BAACert = 2;
+  bytes IntermediateRootCert = 3;
+}
+message AbsintheAddOptionResponse {
+}
+
+message AbsintheAtivateSessionRequest {
+  bytes ValidationData = 1;
+  bytes ServerKey = 2;
+}
+message AbsintheAtivateSessionResponse {
+}
+
+message AbsintheSignDataRequest {
+  bytes SignData = 1;
+}
+message AbsintheSignDataResponse {
+  bytes Signature = 1;
+  bytes OutServKey = 2;
+}
+
 message IndentitySessionRequest {
   bytes Cert = 1;
 }
@@ -107,6 +130,10 @@ service CryptService {
   rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}
 
   rpc AbsintheHello(AbsintheHelloRequest) returns (AbsintheHelloResponse){}
+  rpc AbsintheAddOption(AbsintheAddOptionRequest) returns (AbsintheAddOptionResponse){}
+  rpc AbsintheAtivateSession(AbsintheAtivateSessionRequest) returns (AbsintheAtivateSessionResponse){}
+  rpc AbsintheSignData(AbsintheSignDataRequest) returns (AbsintheSignDataResponse){}
+
   rpc IndentitySession(IndentitySessionRequest) returns (IndentitySessionResponse){}
   rpc IndentityValidation(IndentityValidationRequest) returns (IndentityValidationResponse){}
 }
