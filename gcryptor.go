@@ -20,6 +20,9 @@ func InitCryptorGRPC(address string) error {
 		return err
 	}
 	cryptoClient = NewCryptServiceClient(cryptoConn)
+	NewCryptor = func(ckind CryptorKind) Cryptor {
+		return NewCryptorGRPC(101)
+	}
 	return nil
 }
 
@@ -49,12 +52,12 @@ func (crypt *CryptorGrpc) metaContext() (context.Context, context.CancelFunc) {
 func (crypt *CryptorGrpc) Initialize(device any) error {
 	devicePlist, err := plist.MarshalIndent(device, plist.BinaryFormat, "\t")
 	if err != nil {
-		return WithError(err)
+		return err
 	}
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist, Hardware: int32(crypt.Hardware)}); err != nil {
-		return WithError(err)
+		return err
 	}
 	return nil
 }
@@ -64,7 +67,7 @@ func (crypt *CryptorGrpc) Finalize() error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	if _, err := crypt.Client.Finalize(ctx, &FinalizeRequest{}); err != nil {
-		return WithError(err)
+		return err
 	}
 	return nil
 }
@@ -76,7 +79,7 @@ func (crypt *CryptorGrpc) Activation(sha1Data []byte) ([]byte, []byte, error) {
 	var err error
 	var response *ActivationResponse
 	if response, err = crypt.Client.Activation(ctx, &ActivationRequest{Sha1Data: sha1Data}); err != nil {
-		return nil, nil, WithError(err)
+		return nil, nil, err
 	}
 	return response.Sign, response.Cert, nil
 }
@@ -87,7 +90,7 @@ func (crypt *CryptorGrpc) ActivationKeyData(keyData []byte) error {
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.ActivationKeyData(ctx, &ActivationKeyDataRequest{KeyData: keyData}); err != nil {
-		return WithError(err)
+		return err
 	}
 	return nil
 }
@@ -99,7 +102,7 @@ func (crypt *CryptorGrpc) ActivationDRMHandshake() (uint64, []byte, error) {
 	var err error
 	var response *ActivationDRMHandshakeResponse
 	if response, err = crypt.Client.ActivationDRMHandshake(ctx, &ActivationDRMHandshakeRequest{}); err != nil {
-		return 0, nil, WithError(err)
+		return 0, nil, err
 	}
 	return response.Session, response.HandshakeRequestMessage, nil
 }
@@ -111,7 +114,7 @@ func (crypt *CryptorGrpc) ActivationDRMHandshakeResponse(session uint64, fdrBlob
 	var err error
 	var response *ActivationDRMHandshakeInfoResponse
 	if response, err = crypt.Client.ActivationDRMHandshakeInfo(ctx, &ActivationDRMHandshakeInfoRequest{Session: session, FDRBlob: fdrBlob, SUInfo: suInfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP, ActivationInfoXML: activationInfoXML}); err != nil {
-		return nil, nil, WithError(err)
+		return nil, nil, err
 	}
 	return response.SignActRequest, response.ServerKP, nil
 }
@@ -123,7 +126,7 @@ func (crypt *CryptorGrpc) ADIStartProvisioning(dsid int64, spim []byte) ([]byte,
 	var err error
 	var response *ADIStartProvisioningResponse
 	if response, err = crypt.Client.ADIStartProvisioning(ctx, &ADIStartProvisioningRequest{DSID: dsid, SPIM: spim}); err != nil {
-		return nil, 0, WithError(err)
+		return nil, 0, err
 	}
 	return response.CPIM, response.Session, nil
 }
@@ -135,7 +138,7 @@ func (crypt *CryptorGrpc) ADIEndProvisioning(session uint64, dsid int64, rinfo i
 	var err error
 	var response *ADIEndProvisioningResponse
 	if response, err = crypt.Client.ADIEndProvisioning(ctx, &ADIEndProvisioningRequest{Session: session, DSID: dsid, RINFO: rinfo, PTM: ptm, TK: tk, ADI: adi}); err != nil {
-		return nil, nil, nil, WithError(err)
+		return nil, nil, nil, err
 	}
 	return response.MID, response.OTP, response.ADI, nil
 }
@@ -146,7 +149,7 @@ func (crypt *CryptorGrpc) AbsintheHello(mode int) ([]byte, error) {
 	var err error
 	var response *AbsintheHelloResponse
 	if response, err = crypt.Client.AbsintheHello(ctx, &AbsintheHelloRequest{Mode: int32(mode)}); err != nil {
-		return nil, WithError(err)
+		return nil, err
 	}
 	return response.HelloMessage, nil
 }
@@ -156,7 +159,7 @@ func (crypt *CryptorGrpc) AbsintheAddOption(BIKKey []byte, BAACert []byte, inter
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.AbsintheAddOption(ctx, &AbsintheAddOptionRequest{BIKKey: BIKKey, BAACert: BAACert, IntermediateRootCert: intermediateRootCert}); err != nil {
-		return WithError(err)
+		return err
 	}
 	return nil
 }
@@ -167,7 +170,7 @@ func (crypt *CryptorGrpc) AbsintheAtivateSession(validationData []byte, serverKe
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.AbsintheAtivateSession(ctx, &AbsintheAtivateSessionRequest{ValidationData: validationData, ServerKey: serverKey}); err != nil {
-		return WithError(err)
+		return err
 	}
 	return nil
 }
@@ -179,7 +182,7 @@ func (crypt *CryptorGrpc) AbsintheSignData(dataToSign []byte) ([]byte, []byte, e
 	var err error
 	var response *AbsintheSignDataResponse
 	if response, err = crypt.Client.AbsintheSignData(ctx, &AbsintheSignDataRequest{SignData: dataToSign}); err != nil {
-		return nil, nil, WithError(err)
+		return nil, nil, err
 	}
 	return response.Signature, response.OutServKey, nil
 }
@@ -191,7 +194,7 @@ func (crypt *CryptorGrpc) IndentitySession(cert []byte) ([]byte, error) {
 	var err error
 	var response *IndentitySessionResponse
 	if response, err = crypt.Client.IndentitySession(ctx, &IndentitySessionRequest{Cert: cert}); err != nil {
-		return nil, WithError(err)
+		return nil, err
 	}
 	return response.Request, nil
 }
@@ -203,7 +206,7 @@ func (crypt *CryptorGrpc) IndentityValidation(sessionInfo []byte, signData []byt
 	var err error
 	var response *IndentityValidationResponse
 	if response, err = crypt.Client.IndentityValidation(ctx, &IndentityValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
-		return nil, WithError(err)
+		return nil, err
 	}
 	return response.VlidationData, nil
 }
