@@ -50,24 +50,27 @@ type IOS struct {
 }
 
 type Device struct {
-	OStype           OSEnum `plist:"OStype" bson:"OStype" json:"OStype"`
-	SerialNumber     string `plist:"SerialNumber" bson:"SerialNumber" json:"SerialNumber"`
-	MacOS            `plist:",inline" bson:",inline" json:",inline"`
-	IOS              `plist:",inline" bson:",inline" json:",inline"`
-	BuildVersion     string `plist:"BuildVersion" bson:"BuildVersion,omitempty" json:"BuildVersion,omitempty"`
-	ProductVersion   string `plist:"ProductVersion" bson:"ProductVersion,omitempty" json:"ProductVersion,omitempty"`
-	ClientIdentifier string `plist:"AppleIDClientIdentifier,omitempty" bson:"AppleIDClientIdentifier,omitempty" json:"AppleIDClientIdentifier,omitempty"`
-	PrivateKey       []byte `plist:"PrivateKey,omitempty" bson:"PrivateKey,omitempty" json:"PrivateKey,omitempty"`
-	Certificate      []byte `plist:"Certificate,omitempty" bson:"Certificate,omitempty" json:"Certificate,omitempty"`
-	FairplayKeyData  []byte `plist:"FairplayKeyData,omitempty" bson:"FairplayKeyData,omitempty" json:"FairplayKeyData,omitempty"`
-	PushToken        []byte `plist:"PushToken,omitempty" bson:"PushToken,omitempty" json:"PushToken,omitempty"`
-	ADI              []byte `plist:"ADI,omitempty" bson:"ADI,omitempty" json:"ADI,omitempty"`
-	ADID             string `plist:"ADID,omitempty" bson:"ADID,omitempty" json:"ADID,omitempty"`
-	RINFO            int64  `plist:"RINFO,omitempty" bson:"RINFO,omitempty" json:"RINFO,omitempty"`
+	OStype          OSEnum `plist:"OStype" bson:"OStype" json:"OStype"`
+	SerialNumber    string `plist:"SerialNumber" bson:"SerialNumber" json:"SerialNumber"`
+	MacOS           `plist:",inline" bson:",inline" json:",inline"`
+	IOS             `plist:",inline" bson:",inline" json:",inline"`
+	BuildVersion    string `plist:"BuildVersion" bson:"BuildVersion,omitempty" json:"BuildVersion,omitempty"`
+	ProductVersion  string `plist:"ProductVersion" bson:"ProductVersion,omitempty" json:"ProductVersion,omitempty"`
+	PrivateKey      []byte `plist:"PrivateKey,omitempty" bson:"PrivateKey,omitempty" json:"PrivateKey,omitempty"`
+	Certificate     []byte `plist:"Certificate,omitempty" bson:"Certificate,omitempty" json:"Certificate,omitempty"`
+	FairplayKeyData []byte `plist:"FairplayKeyData,omitempty" bson:"FairplayKeyData,omitempty" json:"FairplayKeyData,omitempty"`
+	PushToken       []byte `plist:"PushToken,omitempty" bson:"PushToken,omitempty" json:"PushToken,omitempty"`
+	ADI             []byte `plist:"ADI,omitempty" bson:"ADI,omitempty" json:"ADI,omitempty"`
+	RINFO           int64  `plist:"RINFO,omitempty" bson:"RINFO,omitempty" json:"RINFO,omitempty"`
 
-	AcceptLanguage   string `plist:"AcceptLanguage,omitempty" bson:"AcceptLanguage,omitempty" json:"AcceptLanguage,omitempty"`
-	ApppleILocale    string `plist:"ApppleILocale,omitempty" bson:"ApppleILocale,omitempty" json:"ApppleILocale,omitempty"`
-	XMMeCountry      string `plist:"XMMeCountry,omitempty" bson:"XMMeCountry,omitempty" json:"XMMeCountry,omitempty"`
-	CFNetworkVersion string `plist:"CFNetworkVersion,omitempty" bson:"CFNetworkVersion,omitempty" json:"CFNetworkVersion,omitempty"`
-	DarwinVersion    string `plist:"DarwinVersion,omitempty" bson:"DarwinVersion,omitempty" json:"DarwinVersion,omitempty"`
+	Name                  string `plist:"Name,omitempty" bson:"Name,omitempty" json:"Name,omitempty"`
+	ClientIdentifier      string `plist:"AppleIDClientIdentifier,omitempty" bson:"AppleIDClientIdentifier,omitempty" json:"AppleIDClientIdentifier,omitempty"`
+	AcceptLanguage        string `plist:"AcceptLanguage,omitempty" bson:"AcceptLanguage,omitempty" json:"AcceptLanguage,omitempty"`
+	XAppleILocale         string `plist:"XAppleILocale,omitempty" bson:"XAppleILocale,omitempty" json:"XAppleILocale,omitempty"`
+	XAppleITimeZone       string `plist:"XAppleITimeZone,omitempty" bson:"XAppleITimeZone,omitempty" json:"XAppleITimeZone,omitempty"`
+	XAppleITimeZoneOffset string `plist:"XAppleITimeZoneOffset,omitempty" bson:"XAppleITimeZoneOffset,omitempty" json:"XAppleITimeZoneOffset,omitempty"`
+	XMMeCountry           string `plist:"XMMeCountry,omitempty" bson:"XMMeCountry,omitempty" json:"XMMeCountry,omitempty"`
+	XMMeLanguage          string `plist:"XMMeLanguage,omitempty" bson:"XMMeLanguage,omitempty" json:"XMMeLanguage,omitempty"`
+	CFNetworkVersion      string `plist:"CFNetworkVersion,omitempty" bson:"CFNetworkVersion,omitempty" json:"CFNetworkVersion,omitempty"`
+	DarwinVersion         string `plist:"DarwinVersion,omitempty" bson:"DarwinVersion,omitempty" json:"DarwinVersion,omitempty"`
 }
