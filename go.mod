@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/zdypro888/go-plist v1.50.0
-	google.golang.org/grpc v1.47.0
+	google.golang.org/grpc v1.48.0
 	google.golang.org/protobuf v1.28.0
 )
 
