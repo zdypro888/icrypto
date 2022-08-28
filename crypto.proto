@@ -29,22 +29,23 @@ message ActivationKeyDataRequest {
 message ActivationKeyDataResponse {
 }
 
-message ActivationDRMHandshakeRequest {
+message ActivationDRMGenerateRequest {
 }
-message ActivationDRMHandshakeResponse {
-  uint64 Session = 1;
-  bytes HandshakeRequestMessage = 2;
+message ActivationDRMGenerateResponse {
+  bytes HelloMessage = 1;
 }
 
-message ActivationDRMHandshakeInfoRequest {
-  uint64 Session = 1;
-  bytes FDRBlob = 2;
-  bytes SUInfo = 3;
-  bytes HandshakeResponseMessage = 4;
-  bytes ServerKP = 5;
-  bytes ActivationInfoXML= 6;
+message ActivationDRMResponseRequest {
+  bytes HandshakeResponseMessage = 1;
+  bytes ServerKP = 2;
 }
-message ActivationDRMHandshakeInfoResponse {
+message ActivationDRMResponseResponse {
+}
+
+message ActivationDRMSignDataRequest {
+  bytes ActivationInfoXML = 1;
+}
+message ActivationDRMSignDataResponse {
   bytes SignActRequest = 1;
   bytes ServerKP = 2;
 }
@@ -123,9 +124,10 @@ service CryptService {
 
   rpc Activation(ActivationRequest) returns (ActivationResponse){}
   rpc ActivationKeyData(ActivationKeyDataRequest) returns (ActivationKeyDataResponse){}
-  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest) returns (ActivationDRMHandshakeResponse){}
-  rpc ActivationDRMHandshakeInfo(ActivationDRMHandshakeInfoRequest) returns (ActivationDRMHandshakeInfoResponse){}
-  
+  rpc ActivationDRMGenerate(ActivationDRMGenerateRequest) returns (ActivationDRMGenerateResponse){}
+  rpc ActivationDRMResponse(ActivationDRMResponseRequest) returns (ActivationDRMResponseResponse){}
+  rpc ActivationDRMSignData(ActivationDRMSignDataRequest) returns (ActivationDRMSignDataResponse){}
+
   rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse){}
   rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}
 

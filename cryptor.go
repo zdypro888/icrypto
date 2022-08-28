@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-//CryptoError error for crypto
+// CryptoError error for crypto
 type CryptoError struct {
 	Code   int32
 	Method string
@@ -23,10 +23,12 @@ type Cryptor interface {
 	Activation(sha1Data []byte) ([]byte, []byte, error)
 	//ActivationKeyData 设置激活后返回keyData
 	ActivationKeyData(keyData []byte) error
-	//ActivationDRMHandshake 请求DRM 返回 session handshakeMessage Error
-	ActivationDRMHandshake() (uint64, []byte, error)
-	//ActivationDRMHandshakeResponse 设置DRM信息 返回 SignActRequest ServerKP Error
-	ActivationDRMHandshakeResponse(session uint64, fdrBlob []byte, suInfo []byte, handshakeResponseMessage []byte, serverKP []byte, activationInfoXML []byte) ([]byte, []byte, error)
+	//ActivationDRMGenerate 取得 ActivationDRM HelloMessage
+	ActivationDRMGenerate() ([]byte, error)
+	//ActivationDRMResponse 设置返回 message(process response message)
+	ActivationDRMResponse(HandshakeResponseMessage []byte, serverKP []byte) error
+	//ActivationDRMSignData signData 返回 signActRequest serverKP
+	ActivationDRMSignData(dataToSign []byte) ([]byte, []byte, error)
 	//ADIStartProvisioning 返回 CPIM Session Error
 	ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error)
 	//ADIEndProvisioning 返回 MID OTP ADI Error
@@ -55,8 +57,8 @@ const (
 	ForAbsintheHello CryptorKind = iota
 )
 
-//NewCryptorCall 创建cryptor调用
+// NewCryptorCall 创建cryptor调用
 type NewCryptorCall func(CryptorKind) Cryptor
 
-//NewCryptor 创建cryptor
+// NewCryptor 创建cryptor
 var NewCryptor NewCryptorCall

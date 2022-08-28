@@ -48,7 +48,7 @@ func (crypt *CryptorGrpc) metaContext() (context.Context, context.CancelFunc) {
 	return metactx, cancel
 }
 
-//Initialize init crypto with device[see device struct]
+// Initialize init crypto with device[see device struct]
 func (crypt *CryptorGrpc) Initialize(device any) error {
 	devicePlist, err := plist.MarshalIndent(device, plist.BinaryFormat, "\t")
 	if err != nil {
@@ -62,7 +62,7 @@ func (crypt *CryptorGrpc) Initialize(device any) error {
 	return nil
 }
 
-//InitDevice finalize crypto
+// InitDevice finalize crypto
 func (crypt *CryptorGrpc) Finalize() error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -72,7 +72,7 @@ func (crypt *CryptorGrpc) Finalize() error {
 	return nil
 }
 
-//Activation 取得激活信息 Sign Cert Error
+// Activation 取得激活信息 Sign Cert Error
 func (crypt *CryptorGrpc) Activation(sha1Data []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -84,7 +84,7 @@ func (crypt *CryptorGrpc) Activation(sha1Data []byte) ([]byte, []byte, error) {
 	return response.Sign, response.Cert, nil
 }
 
-//ActivationKeyData 设置激活KEY
+// ActivationKeyData 设置激活KEY
 func (crypt *CryptorGrpc) ActivationKeyData(keyData []byte) error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -95,31 +95,42 @@ func (crypt *CryptorGrpc) ActivationKeyData(keyData []byte) error {
 	return nil
 }
 
-//ActivationDRMHandshake 请求DRM 返回 session handshakeMessage Error
-func (crypt *CryptorGrpc) ActivationDRMHandshake() (uint64, []byte, error) {
+// ActivationDRMGenerate 取得 ActivationDRM HelloMessage
+func (crypt *CryptorGrpc) ActivationDRMGenerate() ([]byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	var response *ActivationDRMHandshakeResponse
-	if response, err = crypt.Client.ActivationDRMHandshake(ctx, &ActivationDRMHandshakeRequest{}); err != nil {
-		return 0, nil, err
+	var response *ActivationDRMGenerateResponse
+	if response, err = crypt.Client.ActivationDRMGenerate(ctx, &ActivationDRMGenerateRequest{}); err != nil {
+		return nil, err
 	}
-	return response.Session, response.HandshakeRequestMessage, nil
+	return response.HelloMessage, nil
 }
 
-//ActivationDRMHandshakeResponse 设置DRM信息 返回 SignActRequest ServerKP Error
-func (crypt *CryptorGrpc) ActivationDRMHandshakeResponse(session uint64, fdrBlob []byte, suInfo []byte, handshakeResponseMessage []byte, serverKP []byte, activationInfoXML []byte) ([]byte, []byte, error) {
+// ActivationDRMResponse 设置返回 message(process response message)
+func (crypt *CryptorGrpc) ActivationDRMResponse(HandshakeResponseMessage []byte, serverKP []byte) error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	var response *ActivationDRMHandshakeInfoResponse
-	if response, err = crypt.Client.ActivationDRMHandshakeInfo(ctx, &ActivationDRMHandshakeInfoRequest{Session: session, FDRBlob: fdrBlob, SUInfo: suInfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP, ActivationInfoXML: activationInfoXML}); err != nil {
+	if _, err = crypt.Client.ActivationDRMResponse(ctx, &ActivationDRMResponseRequest{HandshakeResponseMessage: HandshakeResponseMessage, ServerKP: serverKP}); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ActivationDRMSignData signData 返回 signActRequest serverKP
+func (crypt *CryptorGrpc) ActivationDRMSignData(dataToSign []byte) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *ActivationDRMSignDataResponse
+	if response, err = crypt.Client.ActivationDRMSignData(ctx, &ActivationDRMSignDataRequest{ActivationInfoXML: dataToSign}); err != nil {
 		return nil, nil, err
 	}
 	return response.SignActRequest, response.ServerKP, nil
 }
 
-//ADIStartProvisioning 返回 CPIM Session Error
+// ADIStartProvisioning 返回 CPIM Session Error
 func (crypt *CryptorGrpc) ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -131,7 +142,7 @@ func (crypt *CryptorGrpc) ADIStartProvisioning(dsid int64, spim []byte) ([]byte,
 	return response.CPIM, response.Session, nil
 }
 
-//ADIEndProvisioning 返回 MID OTP ADI Error
+// ADIEndProvisioning 返回 MID OTP ADI Error
 func (crypt *CryptorGrpc) ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -164,7 +175,7 @@ func (crypt *CryptorGrpc) AbsintheAddOption(BIKKey []byte, BAACert []byte, inter
 	return nil
 }
 
-//AbsintheAtivateSession 设置 session 返回（absinthe-response）
+// AbsintheAtivateSession 设置 session 返回（absinthe-response）
 func (crypt *CryptorGrpc) AbsintheAtivateSession(validationData []byte, serverKey []byte) error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -175,7 +186,7 @@ func (crypt *CryptorGrpc) AbsintheAtivateSession(validationData []byte, serverKe
 	return nil
 }
 
-//AbsintheSignData signData 返回 signature outServKey
+// AbsintheSignData signData 返回 signature outServKey
 func (crypt *CryptorGrpc) AbsintheSignData(dataToSign []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -187,7 +198,7 @@ func (crypt *CryptorGrpc) AbsintheSignData(dataToSign []byte) ([]byte, []byte, e
 	return response.Signature, response.OutServKey, nil
 }
 
-//IndentitySession 注册 SessionInfoRequest
+// IndentitySession 注册 SessionInfoRequest
 func (crypt *CryptorGrpc) IndentitySession(cert []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
@@ -199,7 +210,7 @@ func (crypt *CryptorGrpc) IndentitySession(cert []byte) ([]byte, error) {
 	return response.Request, nil
 }
 
-//IndentityValidation 取得VD
+// IndentityValidation 取得VD
 func (crypt *CryptorGrpc) IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
