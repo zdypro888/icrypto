@@ -266,7 +266,7 @@ func RegisterCryptServiceServer(s grpc.ServiceRegistrar, srv CryptServiceServer)
 	s.RegisterService(&CryptService_ServiceDesc, srv)
 }
 
-func _CryptService_Initialize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_Initialize_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(InitializeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -278,13 +278,13 @@ func _CryptService_Initialize_Handler(srv interface{}, ctx context.Context, dec 
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/Initialize",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).Initialize(ctx, req.(*InitializeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_Finalize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_Finalize_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(FinalizeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -296,13 +296,13 @@ func _CryptService_Finalize_Handler(srv interface{}, ctx context.Context, dec fu
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/Finalize",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).Finalize(ctx, req.(*FinalizeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_Activation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_Activation_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(ActivationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -314,13 +314,13 @@ func _CryptService_Activation_Handler(srv interface{}, ctx context.Context, dec 
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/Activation",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).Activation(ctx, req.(*ActivationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_ActivationKeyData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_ActivationKeyData_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(ActivationKeyDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -332,13 +332,13 @@ func _CryptService_ActivationKeyData_Handler(srv interface{}, ctx context.Contex
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/ActivationKeyData",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).ActivationKeyData(ctx, req.(*ActivationKeyDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_ActivationDRMGenerate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_ActivationDRMGenerate_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(ActivationDRMGenerateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -350,13 +350,13 @@ func _CryptService_ActivationDRMGenerate_Handler(srv interface{}, ctx context.Co
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/ActivationDRMGenerate",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).ActivationDRMGenerate(ctx, req.(*ActivationDRMGenerateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_ActivationDRMResponse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_ActivationDRMResponse_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(ActivationDRMResponseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -368,13 +368,13 @@ func _CryptService_ActivationDRMResponse_Handler(srv interface{}, ctx context.Co
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/ActivationDRMResponse",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).ActivationDRMResponse(ctx, req.(*ActivationDRMResponseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_ActivationDRMSignData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_ActivationDRMSignData_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(ActivationDRMSignDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -386,13 +386,13 @@ func _CryptService_ActivationDRMSignData_Handler(srv interface{}, ctx context.Co
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/ActivationDRMSignData",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).ActivationDRMSignData(ctx, req.(*ActivationDRMSignDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_ADIStartProvisioning_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_ADIStartProvisioning_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(ADIStartProvisioningRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -404,13 +404,13 @@ func _CryptService_ADIStartProvisioning_Handler(srv interface{}, ctx context.Con
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/ADIStartProvisioning",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).ADIStartProvisioning(ctx, req.(*ADIStartProvisioningRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_ADIEndProvisioning_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_ADIEndProvisioning_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(ADIEndProvisioningRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -422,13 +422,13 @@ func _CryptService_ADIEndProvisioning_Handler(srv interface{}, ctx context.Conte
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/ADIEndProvisioning",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).ADIEndProvisioning(ctx, req.(*ADIEndProvisioningRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_AbsintheHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_AbsintheHello_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(AbsintheHelloRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -440,13 +440,13 @@ func _CryptService_AbsintheHello_Handler(srv interface{}, ctx context.Context, d
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/AbsintheHello",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).AbsintheHello(ctx, req.(*AbsintheHelloRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_AbsintheAddOption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_AbsintheAddOption_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(AbsintheAddOptionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -458,13 +458,13 @@ func _CryptService_AbsintheAddOption_Handler(srv interface{}, ctx context.Contex
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/AbsintheAddOption",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).AbsintheAddOption(ctx, req.(*AbsintheAddOptionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_AbsintheAtivateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_AbsintheAtivateSession_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(AbsintheAtivateSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -476,13 +476,13 @@ func _CryptService_AbsintheAtivateSession_Handler(srv interface{}, ctx context.C
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/AbsintheAtivateSession",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).AbsintheAtivateSession(ctx, req.(*AbsintheAtivateSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_AbsintheSignData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_AbsintheSignData_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(AbsintheSignDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -494,13 +494,13 @@ func _CryptService_AbsintheSignData_Handler(srv interface{}, ctx context.Context
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/AbsintheSignData",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).AbsintheSignData(ctx, req.(*AbsintheSignDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_IndentitySession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_IndentitySession_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(IndentitySessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -512,13 +512,13 @@ func _CryptService_IndentitySession_Handler(srv interface{}, ctx context.Context
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/IndentitySession",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).IndentitySession(ctx, req.(*IndentitySessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CryptService_IndentityValidation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CryptService_IndentityValidation_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(IndentityValidationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -530,7 +530,7 @@ func _CryptService_IndentityValidation_Handler(srv interface{}, ctx context.Cont
 		Server:     srv,
 		FullMethod: "/icrypto.CryptService/IndentityValidation",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(CryptServiceServer).IndentityValidation(ctx, req.(*IndentityValidationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
