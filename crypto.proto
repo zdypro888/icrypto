@@ -15,39 +15,58 @@ message FinalizeRequest {
 message FinalizeResponse {
 }
 
-message ActivationRequest { 
-  bytes Sha1Data = 1;
+message ActivationDRMHandshakeRequest {
 }
-message ActivationResponse {
+message ActivationDRMHandshakeResponse {
+  bytes CollectionBlob = 1;
+  bytes HandshakeRequestMessage = 2;
+}
+
+message ActivationDRMProcessRequest {
+  bytes SUInfo = 1;
+  bytes HandshakeResponseMessage = 2;
+  bytes serverKP = 3;
+}
+message ActivationDRMProcessResponse {
+  bytes UIK = 1;
+  bytes RK = 2;
+}
+
+message ActivationDRMSignatureRequest {
+  bytes ActivationInfoXML = 1;
+}
+message ActivationDRMSignatureRespone {
+  bytes FairPlayCertChain = 1;
+  bytes FairPlaySignature = 2;
+  bytes RKSignature = 3;
+  bytes SignActRequest = 4;
+  bytes ServerKP = 5;
+}
+
+message ActivationDeprecatedRequest { 
+  bytes ActivationInfoXML = 1;
+}
+message ActivationDeprecatedResponse {
   bytes Sign = 1;
   bytes Cert = 2;
 }
 
-message ActivationKeyDataRequest { 
-  bytes KeyData = 1; 
+message ActivationRecordRequest { 
+  bool Unbrick = 1;
+	bytes AccountTokenCertificate = 2;
+	bytes DeviceCertificate = 3;
+	bytes RegulatoryInfo = 4;
+	bytes FairPlayKeyData = 5;
+	bytes AccountToken = 6;
+	bytes AccountTokenSignature = 7;
+	bytes UniqueDeviceCertificate = 8;
 }
-message ActivationKeyDataResponse {
-}
-
-message ActivationDRMGenerateRequest {
-}
-message ActivationDRMGenerateResponse {
-  bytes HelloMessage = 1;
-}
-
-message ActivationDRMResponseRequest {
-  bytes HandshakeResponseMessage = 1;
-  bytes ServerKP = 2;
-}
-message ActivationDRMResponseResponse {
-}
-
-message ActivationDRMSignDataRequest {
-  bytes ActivationInfoXML = 1;
-}
-message ActivationDRMSignDataResponse {
-  bytes SignActRequest = 1;
-  bytes ServerKP = 2;
+message ActivationRecordResponse {
+  bytes SubCAKey = 1;
+  bytes AttestationKey = 2;
+  bytes UIK = 3;
+  bytes RK = 4;
+  bytes PSCSui = 5;
 }
 
 message ADIStartProvisioningRequest {
@@ -122,11 +141,11 @@ service CryptService {
   rpc Initialize(InitializeRequest) returns (InitializeResponse){}
   rpc Finalize(FinalizeRequest) returns (FinalizeResponse){}  
 
-  rpc Activation(ActivationRequest) returns (ActivationResponse){}
-  rpc ActivationKeyData(ActivationKeyDataRequest) returns (ActivationKeyDataResponse){}
-  rpc ActivationDRMGenerate(ActivationDRMGenerateRequest) returns (ActivationDRMGenerateResponse){}
-  rpc ActivationDRMResponse(ActivationDRMResponseRequest) returns (ActivationDRMResponseResponse){}
-  rpc ActivationDRMSignData(ActivationDRMSignDataRequest) returns (ActivationDRMSignDataResponse){}
+  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest) returns (ActivationDRMHandshakeResponse){}
+  rpc ActivationDRMProcess(ActivationDRMProcessRequest) returns (ActivationDRMProcessResponse){}
+  rpc ActivationDRMSignature(ActivationDRMSignatureRequest) returns (ActivationDRMSignatureRespone){}
+  rpc ActivationDeprecated(ActivationDeprecatedRequest) returns (ActivationDeprecatedResponse){}
+  rpc ActivationRecord(ActivationRecordRequest) returns (ActivationRecordResponse){}
 
   rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse){}
   rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}

@@ -15,20 +15,22 @@ func (ce *CryptoError) Error() string {
 }
 
 type Cryptor interface {
-	//Initialize 初始化
+	//Initialize with device plist data
 	Initialize(device any) error
-	//Finalize 释放
+	//Finalize finalize object
 	Finalize() error
-	//Activation 取得激活信息 Sign Cert Error
-	Activation(sha1Data []byte) ([]byte, []byte, error)
-	//ActivationKeyData 设置激活后返回keyData
-	ActivationKeyData(keyData []byte) error
-	//ActivationDRMGenerate 取得 ActivationDRM HelloMessage
-	ActivationDRMGenerate() ([]byte, error)
-	//ActivationDRMResponse 设置返回 message(process response message)
-	ActivationDRMResponse(HandshakeResponseMessage []byte, serverKP []byte) error
-	//ActivationDRMSignData signData 返回 signActRequest serverKP
-	ActivationDRMSignData(dataToSign []byte) ([]byte, []byte, error)
+
+	//ActivationDRMHandshake generate [0]CollectionBlob and [1]handshakeRequestMessage
+	ActivationDRMHandshake() ([]byte, []byte, error)
+	//ActivationDRMProcess process handshake response and return [0]UIK [1]RK
+	ActivationDRMProcess(suinfo, handshakeResponseMessage, serverKP []byte) ([]byte, []byte, error)
+	//ActivationDRMSignature sign activation xml and return [0]fairpalySign, [1]fairplayCert, [2]RKSignature, [3]signActRequest, [4]serverKP
+	ActivationDRMSignature(activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error)
+	//ActivationDeprecated return [0]fairpalySign, [1]fairplayCert
+	ActivationDeprecated(activationXML []byte) ([]byte, []byte, error)
+	//ActivationRecord set activation response return [0]subCAKey, [1]attestationKey, [2]UIK, [3]RK, [4]psc.sui
+	ActivationRecord(unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, []byte, error)
+
 	//ADIStartProvisioning 返回 CPIM Session Error
 	ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error)
 	//ADIEndProvisioning 返回 MID OTP ADI Error

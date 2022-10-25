@@ -72,62 +72,73 @@ func (crypt *CryptorGrpc) Finalize() error {
 	return nil
 }
 
-// Activation 取得激活信息 Sign Cert Error
-func (crypt *CryptorGrpc) Activation(sha1Data []byte) ([]byte, []byte, error) {
+// ActivationDRMHandshake generate [0]CollectionBlob and [1]handshakeRequestMessage
+func (crypt *CryptorGrpc) ActivationDRMHandshake() ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	var response *ActivationResponse
-	if response, err = crypt.Client.Activation(ctx, &ActivationRequest{Sha1Data: sha1Data}); err != nil {
+	var response *ActivationDRMHandshakeResponse
+	if response, err = crypt.Client.ActivationDRMHandshake(ctx, &ActivationDRMHandshakeRequest{}); err != nil {
+		return nil, nil, err
+	}
+	return response.CollectionBlob, response.HandshakeRequestMessage, nil
+}
+
+// ActivationDRMProcess process handshake response and return [0]UIK [1]RK
+func (crypt *CryptorGrpc) ActivationDRMProcess(suinfo, handshakeResponseMessage, serverKP []byte) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *ActivationDRMProcessResponse
+	if response, err = crypt.Client.ActivationDRMProcess(ctx, &ActivationDRMProcessRequest{SUInfo: suinfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP}); err != nil {
+		return nil, nil, err
+	}
+	return response.UIK, response.RK, nil
+}
+
+// ActivationDRMSignature sign activation xml and return [0]fairpalySign, [1]fairplayCert, [2]RKSignature, [3]signActRequest, [4]serverKP
+func (crypt *CryptorGrpc) ActivationDRMSignature(activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *ActivationDRMSignatureRespone
+	if response, err = crypt.Client.ActivationDRMSignature(ctx, &ActivationDRMSignatureRequest{ActivationInfoXML: activationXML}); err != nil {
+		return nil, nil, nil, nil, nil, err
+	}
+	return response.FairPlaySignature, response.FairPlayCertChain, response.RKSignature, response.SignActRequest, response.ServerKP, nil
+}
+
+// ActivationDeprecated return [0]fairpalySign, [1]fairplayCert
+func (crypt *CryptorGrpc) ActivationDeprecated(activationXML []byte) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *ActivationDeprecatedResponse
+	if response, err = crypt.Client.ActivationDeprecated(ctx, &ActivationDeprecatedRequest{ActivationInfoXML: activationXML}); err != nil {
 		return nil, nil, err
 	}
 	return response.Sign, response.Cert, nil
 }
 
-// ActivationKeyData 设置激活KEY
-func (crypt *CryptorGrpc) ActivationKeyData(keyData []byte) error {
+// ActivationRecord set activation response return [0]subCAKey, [1]attestationKey, [2]UIK, [3]RK, [4]psc.sui
+func (crypt *CryptorGrpc) ActivationRecord(unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	if _, err = crypt.Client.ActivationKeyData(ctx, &ActivationKeyDataRequest{KeyData: keyData}); err != nil {
-		return err
+	var response *ActivationRecordResponse
+	if response, err = crypt.Client.ActivationRecord(ctx, &ActivationRecordRequest{
+		Unbrick:                 unbrick,
+		AccountTokenCertificate: AccountTokenCertificate,
+		DeviceCertificate:       DeviceCertificate,
+		RegulatoryInfo:          RegulatoryInfo,
+		FairPlayKeyData:         FairPlayKeyData,
+		AccountToken:            AccountToken,
+		AccountTokenSignature:   AccountTokenSignature,
+		UniqueDeviceCertificate: UniqueDeviceCertificate,
+	}); err != nil {
+		return nil, nil, nil, nil, nil, err
 	}
-	return nil
-}
-
-// ActivationDRMGenerate 取得 ActivationDRM HelloMessage
-func (crypt *CryptorGrpc) ActivationDRMGenerate() ([]byte, error) {
-	ctx, cancel := crypt.metaContext()
-	defer cancel()
-	var err error
-	var response *ActivationDRMGenerateResponse
-	if response, err = crypt.Client.ActivationDRMGenerate(ctx, &ActivationDRMGenerateRequest{}); err != nil {
-		return nil, err
-	}
-	return response.HelloMessage, nil
-}
-
-// ActivationDRMResponse 设置返回 message(process response message)
-func (crypt *CryptorGrpc) ActivationDRMResponse(HandshakeResponseMessage []byte, serverKP []byte) error {
-	ctx, cancel := crypt.metaContext()
-	defer cancel()
-	var err error
-	if _, err = crypt.Client.ActivationDRMResponse(ctx, &ActivationDRMResponseRequest{HandshakeResponseMessage: HandshakeResponseMessage, ServerKP: serverKP}); err != nil {
-		return err
-	}
-	return nil
-}
-
-// ActivationDRMSignData signData 返回 signActRequest serverKP
-func (crypt *CryptorGrpc) ActivationDRMSignData(dataToSign []byte) ([]byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
-	defer cancel()
-	var err error
-	var response *ActivationDRMSignDataResponse
-	if response, err = crypt.Client.ActivationDRMSignData(ctx, &ActivationDRMSignDataRequest{ActivationInfoXML: dataToSign}); err != nil {
-		return nil, nil, err
-	}
-	return response.SignActRequest, response.ServerKP, nil
+	return response.SubCAKey, response.AttestationKey, response.UIK, response.RK, response.PSCSui, nil
 }
 
 // ADIStartProvisioning 返回 CPIM Session Error

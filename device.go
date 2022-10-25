@@ -46,9 +46,15 @@ type IOS struct {
 	IntegratedCircuitCardIdentity         string `plist:"IntegratedCircuitCardIdentity" bson:"IntegratedCircuitCardIdentity,omitempty" json:"IntegratedCircuitCardIdentity,omitempty"`
 	InternationalMobileSubscriberIdentity string `plist:"InternationalMobileSubscriberIdentity" bson:"InternationalMobileSubscriberIdentity,omitempty" json:"InternationalMobileSubscriberIdentity,omitempty"`
 	BluetoothAddress                      string `plist:"BluetoothAddress,omitempty" bson:"BluetoothAddress,omitempty" json:"BluetoothAddress,omitempty"`
+	EthernetMacAddress                    string `plist:"EthernetMacAddress,omitempty" bson:"EthernetMacAddress,omitempty" json:"EthernetMacAddress,omitempty"`
 	ActivationInfo                        []byte `plist:"ActivationInfo,omitempty" bson:"ActivationInfo,omitempty" json:"ActivationInfo,omitempty"`
+	SecureElementSN                       string `plist:"SecureElementSN,omitempty" bson:"SecureElementSN,omitempty" json:"SecureElementSN,omitempty"`
 }
 
+// Device 机器信息
+// ProductType mac 的为 model
+// HardWareUUID 为 UniqueDeviceID
+// OSVersion 为 BuildVersion
 type Device struct {
 	OStype          OSEnum `plist:"OStype" bson:"OStype" json:"OStype"`
 	SerialNumber    string `plist:"SerialNumber" bson:"SerialNumber" json:"SerialNumber"`
@@ -73,4 +79,9 @@ type Device struct {
 	XMMeLanguage          string `plist:"XMMeLanguage,omitempty" bson:"XMMeLanguage,omitempty" json:"XMMeLanguage,omitempty"`
 	CFNetworkVersion      string `plist:"CFNetworkVersion,omitempty" bson:"CFNetworkVersion,omitempty" json:"CFNetworkVersion,omitempty"`
 	DarwinVersion         string `plist:"DarwinVersion,omitempty" bson:"DarwinVersion,omitempty" json:"DarwinVersion,omitempty"`
+
+	APTicket  []byte `plist:"APTicket,omitempty" bson:"APTicket,omitempty" json:"APTicket,omitempty"`
+	BBTicket  []byte `plist:"BBTicket,omitempty" bson:"BBTicket,omitempty" json:"BBTicket,omitempty"`
+	PCRTToken []byte `plist:"PCRTToken,omitempty" bson:"PCRTToken,omitempty" json:"PCRTToken,omitempty"`
+	SUInfo    []byte `plist:"SUInfo,omitempty" bson:"SUInfo,omitempty" json:"SUInfo,omitempty"`
 }
