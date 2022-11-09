@@ -20,16 +20,13 @@ func InitCryptorGRPC(address string) error {
 		return err
 	}
 	cryptoClient = NewCryptServiceClient(cryptoConn)
-	NewCryptor = func(ckind CryptorKind) Cryptor {
-		return NewCryptorGRPC(101)
-	}
+	NewCryptor = NewCryptorGRPC
 	return nil
 }
 
-func NewCryptorGRPC(hardware int) Cryptor {
+func NewCryptorGRPC() Cryptor {
 	crypt := &CryptorGrpc{
 		ClientId: uuid.NewV4().String(),
-		Hardware: hardware,
 		Client:   cryptoClient,
 	}
 	return crypt
@@ -37,7 +34,6 @@ func NewCryptorGRPC(hardware int) Cryptor {
 
 type CryptorGrpc struct {
 	ClientId string
-	Hardware int
 	Client   CryptServiceClient
 }
 
@@ -56,7 +52,7 @@ func (crypt *CryptorGrpc) Initialize(device any) error {
 	}
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
-	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist, Hardware: int32(crypt.Hardware)}); err != nil {
+	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist}); err != nil {
 		return err
 	}
 	return nil

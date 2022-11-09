@@ -49,18 +49,8 @@ type Cryptor interface {
 	IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error)
 }
 
-type CryptorKind int
-
-const (
-	ForAuto          CryptorKind = iota
-	ForAbsinthe      CryptorKind = iota
-	ForActivation    CryptorKind = iota
-	ForProvisioning  CryptorKind = iota
-	ForAbsintheHello CryptorKind = iota
-)
-
 // NewCryptorCall 创建cryptor调用
-type NewCryptorCall func(CryptorKind) Cryptor
+type NewCryptorCall func() Cryptor
 
 // NewCryptor 创建cryptor
 var NewCryptor NewCryptorCall
