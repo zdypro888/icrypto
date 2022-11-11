@@ -45,14 +45,14 @@ func (crypt *CryptorGrpc) metaContext() (context.Context, context.CancelFunc) {
 }
 
 // Initialize init crypto with device[see device struct]
-func (crypt *CryptorGrpc) Initialize(device any) error {
+func (crypt *CryptorGrpc) Initialize(control uint64, device any) error {
 	devicePlist, err := plist.MarshalIndent(device, plist.BinaryFormat, "\t")
 	if err != nil {
 		return err
 	}
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
-	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{DevicePlist: devicePlist}); err != nil {
+	if _, err = crypt.Client.Initialize(ctx, &InitializeRequest{Control: control, DevicePlist: devicePlist}); err != nil {
 		return err
 	}
 	return nil

@@ -4,7 +4,8 @@ package icrypto;
 option go_package = "github.com/zdypro888/icrypto";
 
 message InitializeRequest {
-  bytes DevicePlist = 1;
+  uint64 Control = 1;
+  bytes DevicePlist = 2;
 }
 message InitializeResponse {
 }

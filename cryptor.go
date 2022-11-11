@@ -14,9 +14,18 @@ func (ce *CryptoError) Error() string {
 	return fmt.Sprintf("method: %s code: %d", ce.Method, ce.Code)
 }
 
+const (
+	ControlActivationDeprecated uint64 = 1 << iota
+	ControlActivationDRM        uint64 = 1 << iota
+	ControlProvisioning         uint64 = 1 << iota
+	ControlAbsinthe             uint64 = 1 << iota
+	ControlIndentitySession     uint64 = 1 << iota
+	ControlIndentityAbsinthe    uint64 = 1 << iota
+)
+
 type Cryptor interface {
 	//Initialize with device plist data
-	Initialize(device any) error
+	Initialize(control uint64, device any) error
 	//Finalize finalize object
 	Finalize() error
 
