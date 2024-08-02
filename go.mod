@@ -1,12 +1,12 @@
 module github.com/zdypro888/icrypto
 
-go 1.21
+go 1.22
 
 toolchain go1.22.5
 
 require (
 	github.com/satori/go.uuid v1.2.0
-	github.com/zdypro888/go-plist v0.0.0-20230707093721-f4a9d66c85fb
+	github.com/zdypro888/go-plist v0.0.0-20240802062741-1d0d6f67bb01
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
 )
