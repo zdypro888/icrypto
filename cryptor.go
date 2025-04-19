@@ -44,6 +44,8 @@ type Cryptor interface {
 	ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error)
 	//ADIEndProvisioning 返回 MID OTP ADI Error
 	ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error)
+	//ADIGenerateLoginCode 返回 loginCode
+	ADIGenerateLoginCode(dsid int64, adi []byte) (uint32, error)
 	//AbsintheHello 取得 absinthe hello
 	AbsintheHello(mode int) ([]byte, error)
 	//AbsintheAddOption 添加 option

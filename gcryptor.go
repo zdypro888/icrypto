@@ -2,6 +2,7 @@ package icrypto
 
 import (
 	context "context"
+	"fmt"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -159,6 +160,21 @@ func (crypt *CryptorGrpc) ADIEndProvisioning(session uint64, dsid int64, rinfo i
 		return nil, nil, nil, err
 	}
 	return response.MID, response.OTP, response.ADI, nil
+}
+
+// ADIGenerateLoginCode 返回 loginCode
+func (crypt *CryptorGrpc) ADIGenerateLoginCode(dsid int64, adi []byte) (uint32, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *ADIGenerateLoginCodeResponse
+	if response, err = crypt.Client.ADIGenerateLoginCode(ctx, &ADIGenerateLoginCodeRequest{DSID: dsid, ADI: adi}); err != nil {
+		return 0, err
+	}
+	if response.Code != 0 {
+		return 0, fmt.Errorf("ADIGenerateLoginCode error: %d", response.Code)
+	}
+	return response.LoginCode, nil
 }
 
 func (crypt *CryptorGrpc) AbsintheHello(mode int) ([]byte, error) {

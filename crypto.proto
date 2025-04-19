@@ -92,6 +92,15 @@ message ADIEndProvisioningResponse {
   bytes ADI = 10;
 }
 
+message ADIGenerateLoginCodeRequest {
+  int64 DSID = 1;
+  bytes ADI = 2;
+}
+message ADIGenerateLoginCodeResponse {
+  int32 Code = 1;
+  uint32 LoginCode = 2;
+}
+
 message AbsintheHelloRequest {
   int32 Mode = 1;
 }
@@ -149,6 +158,7 @@ service CryptService {
 
   rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse){}
   rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}
+  rpc ADIGenerateLoginCode(ADIGenerateLoginCodeRequest) returns (ADIGenerateLoginCodeResponse){}
 
   rpc AbsintheHello(AbsintheHelloRequest) returns (AbsintheHelloResponse){}
   rpc AbsintheAddOption(AbsintheAddOptionRequest) returns (AbsintheAddOptionResponse){}
