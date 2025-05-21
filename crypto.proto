@@ -3,20 +3,57 @@ package icrypto;
 
 option go_package = "github.com/zdypro888/icrypto";
 
+enum OSEnum {
+  All = 0;
+  macOS = 1;
+  iOS = 2;
+}
+
+message Device {
+  OSEnum OStype = 1;
+  string SerialNumber = 2;
+  // macOS
+  string Model = 3;
+  uint64 OSRevision = 4;
+  string OSVersion = 5;
+  string BoardId = 6;
+  string DiskId = 7;
+  string HardWareUUID = 8;
+  bytes MacAddress = 9;
+  bytes ROM = 10;
+  string MLB = 11;
+  bytes KGq3489ugfi = 12;
+  bytes KFyp98tpgj = 13;
+  bytes KkbjfrfpoJU = 14;
+  bytes KoycqAZloTNDm = 15;
+  bytes KabKPld1EcMni = 16;
+  // iOS
+  string ProductType = 17;
+  uint64 UniqueChipID = 18;
+  string UniqueDeviceID = 19;
+  string WifiAddress = 21;
+  string BluetoothAddress = 26;
+  string SecureElementSN = 28;
+  // Global
+  string BuildVersion = 29;
+  string ProductVersion = 30;
+  bytes FairplayKeyData = 33;
+  bytes ADI = 35;
+  int64 RINFO = 36;
+  bytes APTicket = 47;
+  bytes SUInfo = 50;
+}
+
 message InitializeRequest {
   uint64 Control = 1;
-  bytes DevicePlist = 2;
+  Device Device = 2;
 }
-message InitializeResponse {
-}
+message InitializeResponse {}
 
-message FinalizeRequest {
-}
-message FinalizeResponse {
-}
+message FinalizeRequest {}
+message FinalizeResponse {}
 
-message ActivationDRMHandshakeRequest {
-}
+message ActivationDRMHandshakeRequest {}
 message ActivationDRMHandshakeResponse {
   bytes CollectionBlob = 1;
   bytes HandshakeRequestMessage = 2;
@@ -32,9 +69,7 @@ message ActivationDRMProcessResponse {
   bytes RK = 2;
 }
 
-message ActivationDRMSignatureRequest {
-  bytes ActivationInfoXML = 1;
-}
+message ActivationDRMSignatureRequest { bytes ActivationInfoXML = 1; }
 message ActivationDRMSignatureRespone {
   bytes FairPlayCertChain = 1;
   bytes FairPlaySignature = 2;
@@ -43,23 +78,21 @@ message ActivationDRMSignatureRespone {
   bytes ServerKP = 5;
 }
 
-message ActivationDeprecatedRequest { 
-  bytes ActivationInfoXML = 1;
-}
+message ActivationDeprecatedRequest { bytes ActivationInfoXML = 1; }
 message ActivationDeprecatedResponse {
   bytes Sign = 1;
   bytes Cert = 2;
 }
 
-message ActivationRecordRequest { 
+message ActivationRecordRequest {
   bool Unbrick = 1;
-	bytes AccountTokenCertificate = 2;
-	bytes DeviceCertificate = 3;
-	bytes RegulatoryInfo = 4;
-	bytes FairPlayKeyData = 5;
-	bytes AccountToken = 6;
-	bytes AccountTokenSignature = 7;
-	bytes UniqueDeviceCertificate = 8;
+  bytes AccountTokenCertificate = 2;
+  bytes DeviceCertificate = 3;
+  bytes RegulatoryInfo = 4;
+  bytes FairPlayKeyData = 5;
+  bytes AccountToken = 6;
+  bytes AccountTokenSignature = 7;
+  bytes UniqueDeviceCertificate = 8;
 }
 message ActivationRecordResponse {
   bytes SubCAKey = 1;
@@ -101,70 +134,69 @@ message ADIGenerateLoginCodeResponse {
   uint32 LoginCode = 2;
 }
 
-message AbsintheHelloRequest {
-  int32 Mode = 1;
-}
-message AbsintheHelloResponse {
-  bytes HelloMessage = 1;
-}
+message AbsintheHelloRequest { int32 Mode = 1; }
+message AbsintheHelloResponse { bytes HelloMessage = 1; }
 
 message AbsintheAddOptionRequest {
   bytes BIKKey = 1;
   bytes BAACert = 2;
   bytes IntermediateRootCert = 3;
 }
-message AbsintheAddOptionResponse {
-}
+message AbsintheAddOptionResponse {}
 
 message AbsintheAtivateSessionRequest {
   bytes ValidationData = 1;
   bytes ServerKey = 2;
 }
-message AbsintheAtivateSessionResponse {
-}
+message AbsintheAtivateSessionResponse {}
 
-message AbsintheSignDataRequest {
-  bytes SignData = 1;
-}
+message AbsintheSignDataRequest { bytes SignData = 1; }
 message AbsintheSignDataResponse {
   bytes Signature = 1;
   bytes OutServKey = 2;
 }
 
-message IndentitySessionRequest {
-  bytes Cert = 1;
-}
-message IndentitySessionResponse {
-  bytes Request = 1;
-}
+message IndentitySessionRequest { bytes Cert = 1; }
+message IndentitySessionResponse { bytes Request = 1; }
 
 message IndentityValidationRequest {
   bytes Response = 1;
   bytes SignData = 2;
 }
-message IndentityValidationResponse {
-  bytes VlidationData = 1;
-}
+message IndentityValidationResponse { bytes VlidationData = 1; }
 
 service CryptService {
-  rpc Initialize(InitializeRequest) returns (InitializeResponse){}
-  rpc Finalize(FinalizeRequest) returns (FinalizeResponse){}  
+  rpc Initialize(InitializeRequest) returns (InitializeResponse) {}
+  rpc Finalize(FinalizeRequest) returns (FinalizeResponse) {}
 
-  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest) returns (ActivationDRMHandshakeResponse){}
-  rpc ActivationDRMProcess(ActivationDRMProcessRequest) returns (ActivationDRMProcessResponse){}
-  rpc ActivationDRMSignature(ActivationDRMSignatureRequest) returns (ActivationDRMSignatureRespone){}
-  rpc ActivationDeprecated(ActivationDeprecatedRequest) returns (ActivationDeprecatedResponse){}
-  rpc ActivationRecord(ActivationRecordRequest) returns (ActivationRecordResponse){}
+  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest)
+      returns (ActivationDRMHandshakeResponse) {}
+  rpc ActivationDRMProcess(ActivationDRMProcessRequest)
+      returns (ActivationDRMProcessResponse) {}
+  rpc ActivationDRMSignature(ActivationDRMSignatureRequest)
+      returns (ActivationDRMSignatureRespone) {}
+  rpc ActivationDeprecated(ActivationDeprecatedRequest)
+      returns (ActivationDeprecatedResponse) {}
+  rpc ActivationRecord(ActivationRecordRequest)
+      returns (ActivationRecordResponse) {}
 
-  rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse){}
-  rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse){}
-  rpc ADIGenerateLoginCode(ADIGenerateLoginCodeRequest) returns (ADIGenerateLoginCodeResponse){}
+  rpc ADIStartProvisioning(ADIStartProvisioningRequest)
+      returns (ADIStartProvisioningResponse) {}
+  rpc ADIEndProvisioning(ADIEndProvisioningRequest)
+      returns (ADIEndProvisioningResponse) {}
+  rpc ADIGenerateLoginCode(ADIGenerateLoginCodeRequest)
+      returns (ADIGenerateLoginCodeResponse) {}
 
-  rpc AbsintheHello(AbsintheHelloRequest) returns (AbsintheHelloResponse){}
-  rpc AbsintheAddOption(AbsintheAddOptionRequest) returns (AbsintheAddOptionResponse){}
-  rpc AbsintheAtivateSession(AbsintheAtivateSessionRequest) returns (AbsintheAtivateSessionResponse){}
-  rpc AbsintheSignData(AbsintheSignDataRequest) returns (AbsintheSignDataResponse){}
+  rpc AbsintheHello(AbsintheHelloRequest) returns (AbsintheHelloResponse) {}
+  rpc AbsintheAddOption(AbsintheAddOptionRequest)
+      returns (AbsintheAddOptionResponse) {}
+  rpc AbsintheAtivateSession(AbsintheAtivateSessionRequest)
+      returns (AbsintheAtivateSessionResponse) {}
+  rpc AbsintheSignData(AbsintheSignDataRequest)
+      returns (AbsintheSignDataResponse) {}
 
-  rpc IndentitySession(IndentitySessionRequest) returns (IndentitySessionResponse){}
-  rpc IndentityValidation(IndentityValidationRequest) returns (IndentityValidationResponse){}
+  rpc IndentitySession(IndentitySessionRequest)
+      returns (IndentitySessionResponse) {}
+  rpc IndentityValidation(IndentityValidationRequest)
+      returns (IndentityValidationResponse) {}
 }

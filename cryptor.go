@@ -25,7 +25,7 @@ const (
 
 type Cryptor interface {
 	//Initialize with device plist data
-	Initialize(control uint64, device any) error
+	Initialize(control uint64, device *Device) error
 	//Finalize finalize object
 	Finalize() error
 
