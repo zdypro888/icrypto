@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/icrypto/absinthe/activate-session": {
+    "/absinthe/activate-session": {
       "post": {
         "operationId": "CryptService_AbsintheAtivateSession",
         "responses": {
@@ -48,7 +48,7 @@
         ]
       }
     },
-    "/icrypto/absinthe/add-option": {
+    "/absinthe/add-option": {
       "post": {
         "operationId": "CryptService_AbsintheAddOption",
         "responses": {
@@ -80,7 +80,7 @@
         ]
       }
     },
-    "/icrypto/absinthe/hello": {
+    "/absinthe/hello": {
       "post": {
         "operationId": "CryptService_AbsintheHello",
         "responses": {
@@ -112,7 +112,7 @@
         ]
       }
     },
-    "/icrypto/absinthe/sign-data": {
+    "/absinthe/sign-data": {
       "post": {
         "operationId": "CryptService_AbsintheSignData",
         "responses": {
@@ -144,7 +144,7 @@
         ]
       }
     },
-    "/icrypto/activation/deprecated": {
+    "/activation/deprecated": {
       "post": {
         "operationId": "CryptService_ActivationDeprecated",
         "responses": {
@@ -176,7 +176,7 @@
         ]
       }
     },
-    "/icrypto/activation/drm/handshake": {
+    "/activation/drm/handshake": {
       "post": {
         "operationId": "CryptService_ActivationDRMHandshake",
         "responses": {
@@ -208,7 +208,7 @@
         ]
       }
     },
-    "/icrypto/activation/drm/process": {
+    "/activation/drm/process": {
       "post": {
         "operationId": "CryptService_ActivationDRMProcess",
         "responses": {
@@ -240,7 +240,7 @@
         ]
       }
     },
-    "/icrypto/activation/drm/signature": {
+    "/activation/drm/signature": {
       "post": {
         "operationId": "CryptService_ActivationDRMSignature",
         "responses": {
@@ -272,7 +272,7 @@
         ]
       }
     },
-    "/icrypto/activation/record": {
+    "/activation/record": {
       "post": {
         "operationId": "CryptService_ActivationRecord",
         "responses": {
@@ -304,7 +304,7 @@
         ]
       }
     },
-    "/icrypto/adi/end-provisioning": {
+    "/adi/end-provisioning": {
       "post": {
         "operationId": "CryptService_ADIEndProvisioning",
         "responses": {
@@ -336,7 +336,7 @@
         ]
       }
     },
-    "/icrypto/adi/generate-login-code": {
+    "/adi/generate-login-code": {
       "post": {
         "operationId": "CryptService_ADIGenerateLoginCode",
         "responses": {
@@ -368,7 +368,7 @@
         ]
       }
     },
-    "/icrypto/adi/start-provisioning": {
+    "/adi/start-provisioning": {
       "post": {
         "operationId": "CryptService_ADIStartProvisioning",
         "responses": {
@@ -400,7 +400,7 @@
         ]
       }
     },
-    "/icrypto/finalize": {
+    "/finalize": {
       "post": {
         "operationId": "CryptService_Finalize",
         "responses": {
@@ -432,7 +432,7 @@
         ]
       }
     },
-    "/icrypto/identity/session": {
+    "/identity/session": {
       "post": {
         "operationId": "CryptService_IndentitySession",
         "responses": {
@@ -464,7 +464,7 @@
         ]
       }
     },
-    "/icrypto/identity/validation": {
+    "/identity/validation": {
       "post": {
         "operationId": "CryptService_IndentityValidation",
         "responses": {
@@ -496,7 +496,7 @@
         ]
       }
     },
-    "/icrypto/initialize": {
+    "/initialize": {
       "post": {
         "operationId": "CryptService_Initialize",
         "responses": {

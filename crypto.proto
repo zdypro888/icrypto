@@ -170,13 +170,13 @@ message IndentityValidationResponse { bytes VlidationData = 1; }
 service CryptService {
   rpc Initialize(InitializeRequest) returns (InitializeResponse) {
     option (google.api.http) = {
-      post: "/icrypto/initialize"
+      post: "/initialize"
       body: "*"
     };
   }
   rpc Finalize(FinalizeRequest) returns (FinalizeResponse) {
     option (google.api.http) = {
-      post: "/icrypto/finalize"
+      post: "/finalize"
       body: "*"
     };
   }
@@ -184,35 +184,35 @@ service CryptService {
   rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest)
       returns (ActivationDRMHandshakeResponse) {
     option (google.api.http) = {
-      post: "/icrypto/activation/drm/handshake"
+      post: "/activation/drm/handshake"
       body: "*"
     };
   }
   rpc ActivationDRMProcess(ActivationDRMProcessRequest)
       returns (ActivationDRMProcessResponse) {
     option (google.api.http) = {
-      post: "/icrypto/activation/drm/process"
+      post: "/activation/drm/process"
       body: "*"
     };
   }
   rpc ActivationDRMSignature(ActivationDRMSignatureRequest)
       returns (ActivationDRMSignatureResponse) {
     option (google.api.http) = {
-      post: "/icrypto/activation/drm/signature"
+      post: "/activation/drm/signature"
       body: "*"
     };
   }
   rpc ActivationDeprecated(ActivationDeprecatedRequest)
       returns (ActivationDeprecatedResponse) {
     option (google.api.http) = {
-      post: "/icrypto/activation/deprecated"
+      post: "/activation/deprecated"
       body: "*"
     };
   }
   rpc ActivationRecord(ActivationRecordRequest)
       returns (ActivationRecordResponse) {
     option (google.api.http) = {
-      post: "/icrypto/activation/record"
+      post: "/activation/record"
       body: "*"
     };
   }
@@ -220,49 +220,49 @@ service CryptService {
   rpc ADIStartProvisioning(ADIStartProvisioningRequest)
       returns (ADIStartProvisioningResponse) {
     option (google.api.http) = {
-      post: "/icrypto/adi/start-provisioning"
+      post: "/adi/start-provisioning"
       body: "*"
     };
   }
   rpc ADIEndProvisioning(ADIEndProvisioningRequest)
       returns (ADIEndProvisioningResponse) {
     option (google.api.http) = {
-      post: "/icrypto/adi/end-provisioning"
+      post: "/adi/end-provisioning"
       body: "*"
     };
   }
   rpc ADIGenerateLoginCode(ADIGenerateLoginCodeRequest)
       returns (ADIGenerateLoginCodeResponse) {
     option (google.api.http) = {
-      post: "/icrypto/adi/generate-login-code"
+      post: "/adi/generate-login-code"
       body: "*"
     };
   }
 
   rpc AbsintheHello(AbsintheHelloRequest) returns (AbsintheHelloResponse) {
     option (google.api.http) = {
-      post: "/icrypto/absinthe/hello"
+      post: "/absinthe/hello"
       body: "*"
     };
   }
   rpc AbsintheAddOption(AbsintheAddOptionRequest)
       returns (AbsintheAddOptionResponse) {
     option (google.api.http) = {
-      post: "/icrypto/absinthe/add-option"
+      post: "/absinthe/add-option"
       body: "*"
     };
   }
   rpc AbsintheAtivateSession(AbsintheAtivateSessionRequest)
       returns (AbsintheAtivateSessionResponse) {
     option (google.api.http) = {
-      post: "/icrypto/absinthe/activate-session"
+      post: "/absinthe/activate-session"
       body: "*"
     };
   }
   rpc AbsintheSignData(AbsintheSignDataRequest)
       returns (AbsintheSignDataResponse) {
     option (google.api.http) = {
-      post: "/icrypto/absinthe/sign-data"
+      post: "/absinthe/sign-data"
       body: "*"
     };
   }
@@ -270,14 +270,14 @@ service CryptService {
   rpc IndentitySession(IndentitySessionRequest)
       returns (IndentitySessionResponse) {
     option (google.api.http) = {
-      post: "/icrypto/identity/session"
+      post: "/identity/session"
       body: "*"
     };
   }
   rpc IndentityValidation(IndentityValidationRequest)
       returns (IndentityValidationResponse) {
     option (google.api.http) = {
-      post: "/icrypto/identity/validation"
+      post: "/identity/validation"
       body: "*"
     };
   }

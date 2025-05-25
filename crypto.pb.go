@@ -2142,25 +2142,25 @@ const file_crypto_proto_rawDesc = "" +
 	"\x06OSEnum\x12\a\n" +
 	"\x03All\x10\x00\x12\t\n" +
 	"\x05macOS\x10\x01\x12\a\n" +
-	"\x03iOS\x10\x022\xfb\x10\n" +
-	"\fCryptService\x12e\n" +
+	"\x03iOS\x10\x022\xf9\x0f\n" +
+	"\fCryptService\x12]\n" +
 	"\n" +
-	"Initialize\x12\x1a.icrypto.InitializeRequest\x1a\x1b.icrypto.InitializeResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/icrypto/initialize\x12]\n" +
-	"\bFinalize\x12\x18.icrypto.FinalizeRequest\x1a\x19.icrypto.FinalizeResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/icrypto/finalize\x12\x97\x01\n" +
-	"\x16ActivationDRMHandshake\x12&.icrypto.ActivationDRMHandshakeRequest\x1a'.icrypto.ActivationDRMHandshakeResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/icrypto/activation/drm/handshake\x12\x8f\x01\n" +
-	"\x14ActivationDRMProcess\x12$.icrypto.ActivationDRMProcessRequest\x1a%.icrypto.ActivationDRMProcessResponse\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/icrypto/activation/drm/process\x12\x97\x01\n" +
-	"\x16ActivationDRMSignature\x12&.icrypto.ActivationDRMSignatureRequest\x1a'.icrypto.ActivationDRMSignatureResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/icrypto/activation/drm/signature\x12\x8e\x01\n" +
-	"\x14ActivationDeprecated\x12$.icrypto.ActivationDeprecatedRequest\x1a%.icrypto.ActivationDeprecatedResponse\")\x82\xd3\xe4\x93\x02#:\x01*\"\x1e/icrypto/activation/deprecated\x12~\n" +
-	"\x10ActivationRecord\x12 .icrypto.ActivationRecordRequest\x1a!.icrypto.ActivationRecordResponse\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/icrypto/activation/record\x12\x8f\x01\n" +
-	"\x14ADIStartProvisioning\x12$.icrypto.ADIStartProvisioningRequest\x1a%.icrypto.ADIStartProvisioningResponse\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/icrypto/adi/start-provisioning\x12\x87\x01\n" +
-	"\x12ADIEndProvisioning\x12\".icrypto.ADIEndProvisioningRequest\x1a#.icrypto.ADIEndProvisioningResponse\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/icrypto/adi/end-provisioning\x12\x90\x01\n" +
-	"\x14ADIGenerateLoginCode\x12$.icrypto.ADIGenerateLoginCodeRequest\x1a%.icrypto.ADIGenerateLoginCodeResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /icrypto/adi/generate-login-code\x12r\n" +
-	"\rAbsintheHello\x12\x1d.icrypto.AbsintheHelloRequest\x1a\x1e.icrypto.AbsintheHelloResponse\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/icrypto/absinthe/hello\x12\x83\x01\n" +
-	"\x11AbsintheAddOption\x12!.icrypto.AbsintheAddOptionRequest\x1a\".icrypto.AbsintheAddOptionResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/icrypto/absinthe/add-option\x12\x98\x01\n" +
-	"\x16AbsintheAtivateSession\x12&.icrypto.AbsintheAtivateSessionRequest\x1a'.icrypto.AbsintheAtivateSessionResponse\"-\x82\xd3\xe4\x93\x02':\x01*\"\"/icrypto/absinthe/activate-session\x12\x7f\n" +
-	"\x10AbsintheSignData\x12 .icrypto.AbsintheSignDataRequest\x1a!.icrypto.AbsintheSignDataResponse\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/icrypto/absinthe/sign-data\x12}\n" +
-	"\x10IndentitySession\x12 .icrypto.IndentitySessionRequest\x1a!.icrypto.IndentitySessionResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/icrypto/identity/session\x12\x89\x01\n" +
-	"\x13IndentityValidation\x12#.icrypto.IndentityValidationRequest\x1a$.icrypto.IndentityValidationResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/icrypto/identity/validationB\x1eZ\x1cgithub.com/zdypro888/icryptob\x06proto3"
+	"Initialize\x12\x1a.icrypto.InitializeRequest\x1a\x1b.icrypto.InitializeResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/initialize\x12U\n" +
+	"\bFinalize\x12\x18.icrypto.FinalizeRequest\x1a\x19.icrypto.FinalizeResponse\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/finalize\x12\x8f\x01\n" +
+	"\x16ActivationDRMHandshake\x12&.icrypto.ActivationDRMHandshakeRequest\x1a'.icrypto.ActivationDRMHandshakeResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/activation/drm/handshake\x12\x87\x01\n" +
+	"\x14ActivationDRMProcess\x12$.icrypto.ActivationDRMProcessRequest\x1a%.icrypto.ActivationDRMProcessResponse\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/activation/drm/process\x12\x8f\x01\n" +
+	"\x16ActivationDRMSignature\x12&.icrypto.ActivationDRMSignatureRequest\x1a'.icrypto.ActivationDRMSignatureResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/activation/drm/signature\x12\x86\x01\n" +
+	"\x14ActivationDeprecated\x12$.icrypto.ActivationDeprecatedRequest\x1a%.icrypto.ActivationDeprecatedResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/activation/deprecated\x12v\n" +
+	"\x10ActivationRecord\x12 .icrypto.ActivationRecordRequest\x1a!.icrypto.ActivationRecordResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/activation/record\x12\x87\x01\n" +
+	"\x14ADIStartProvisioning\x12$.icrypto.ADIStartProvisioningRequest\x1a%.icrypto.ADIStartProvisioningResponse\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/adi/start-provisioning\x12\x7f\n" +
+	"\x12ADIEndProvisioning\x12\".icrypto.ADIEndProvisioningRequest\x1a#.icrypto.ADIEndProvisioningResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/adi/end-provisioning\x12\x88\x01\n" +
+	"\x14ADIGenerateLoginCode\x12$.icrypto.ADIGenerateLoginCodeRequest\x1a%.icrypto.ADIGenerateLoginCodeResponse\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/adi/generate-login-code\x12j\n" +
+	"\rAbsintheHello\x12\x1d.icrypto.AbsintheHelloRequest\x1a\x1e.icrypto.AbsintheHelloResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/absinthe/hello\x12{\n" +
+	"\x11AbsintheAddOption\x12!.icrypto.AbsintheAddOptionRequest\x1a\".icrypto.AbsintheAddOptionResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/absinthe/add-option\x12\x90\x01\n" +
+	"\x16AbsintheAtivateSession\x12&.icrypto.AbsintheAtivateSessionRequest\x1a'.icrypto.AbsintheAtivateSessionResponse\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/absinthe/activate-session\x12w\n" +
+	"\x10AbsintheSignData\x12 .icrypto.AbsintheSignDataRequest\x1a!.icrypto.AbsintheSignDataResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/absinthe/sign-data\x12u\n" +
+	"\x10IndentitySession\x12 .icrypto.IndentitySessionRequest\x1a!.icrypto.IndentitySessionResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/identity/session\x12\x81\x01\n" +
+	"\x13IndentityValidation\x12#.icrypto.IndentityValidationRequest\x1a$.icrypto.IndentityValidationResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/identity/validationB\x1eZ\x1cgithub.com/zdypro888/icryptob\x06proto3"
 
 var (
 	file_crypto_proto_rawDescOnce sync.Once

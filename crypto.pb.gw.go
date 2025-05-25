@@ -431,7 +431,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/Initialize", runtime.WithHTTPPathPattern("/icrypto/initialize"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/Initialize", runtime.WithHTTPPathPattern("/initialize"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -451,7 +451,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/Finalize", runtime.WithHTTPPathPattern("/icrypto/finalize"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/Finalize", runtime.WithHTTPPathPattern("/finalize"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -471,7 +471,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMHandshake", runtime.WithHTTPPathPattern("/icrypto/activation/drm/handshake"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMHandshake", runtime.WithHTTPPathPattern("/activation/drm/handshake"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -491,7 +491,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMProcess", runtime.WithHTTPPathPattern("/icrypto/activation/drm/process"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMProcess", runtime.WithHTTPPathPattern("/activation/drm/process"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -511,7 +511,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMSignature", runtime.WithHTTPPathPattern("/icrypto/activation/drm/signature"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMSignature", runtime.WithHTTPPathPattern("/activation/drm/signature"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -531,7 +531,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDeprecated", runtime.WithHTTPPathPattern("/icrypto/activation/deprecated"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDeprecated", runtime.WithHTTPPathPattern("/activation/deprecated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -551,7 +551,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationRecord", runtime.WithHTTPPathPattern("/icrypto/activation/record"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationRecord", runtime.WithHTTPPathPattern("/activation/record"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -571,7 +571,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ADIStartProvisioning", runtime.WithHTTPPathPattern("/icrypto/adi/start-provisioning"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ADIStartProvisioning", runtime.WithHTTPPathPattern("/adi/start-provisioning"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -591,7 +591,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ADIEndProvisioning", runtime.WithHTTPPathPattern("/icrypto/adi/end-provisioning"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ADIEndProvisioning", runtime.WithHTTPPathPattern("/adi/end-provisioning"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -611,7 +611,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ADIGenerateLoginCode", runtime.WithHTTPPathPattern("/icrypto/adi/generate-login-code"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ADIGenerateLoginCode", runtime.WithHTTPPathPattern("/adi/generate-login-code"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -631,7 +631,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheHello", runtime.WithHTTPPathPattern("/icrypto/absinthe/hello"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheHello", runtime.WithHTTPPathPattern("/absinthe/hello"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -651,7 +651,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAddOption", runtime.WithHTTPPathPattern("/icrypto/absinthe/add-option"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAddOption", runtime.WithHTTPPathPattern("/absinthe/add-option"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -671,7 +671,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAtivateSession", runtime.WithHTTPPathPattern("/icrypto/absinthe/activate-session"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAtivateSession", runtime.WithHTTPPathPattern("/absinthe/activate-session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -691,7 +691,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheSignData", runtime.WithHTTPPathPattern("/icrypto/absinthe/sign-data"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/AbsintheSignData", runtime.WithHTTPPathPattern("/absinthe/sign-data"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -711,7 +711,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/IndentitySession", runtime.WithHTTPPathPattern("/icrypto/identity/session"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/IndentitySession", runtime.WithHTTPPathPattern("/identity/session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -731,7 +731,7 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/IndentityValidation", runtime.WithHTTPPathPattern("/icrypto/identity/validation"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/IndentityValidation", runtime.WithHTTPPathPattern("/identity/validation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -789,7 +789,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/Initialize", runtime.WithHTTPPathPattern("/icrypto/initialize"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/Initialize", runtime.WithHTTPPathPattern("/initialize"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -806,7 +806,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/Finalize", runtime.WithHTTPPathPattern("/icrypto/finalize"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/Finalize", runtime.WithHTTPPathPattern("/finalize"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -823,7 +823,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMHandshake", runtime.WithHTTPPathPattern("/icrypto/activation/drm/handshake"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMHandshake", runtime.WithHTTPPathPattern("/activation/drm/handshake"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -840,7 +840,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMProcess", runtime.WithHTTPPathPattern("/icrypto/activation/drm/process"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMProcess", runtime.WithHTTPPathPattern("/activation/drm/process"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -857,7 +857,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMSignature", runtime.WithHTTPPathPattern("/icrypto/activation/drm/signature"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMSignature", runtime.WithHTTPPathPattern("/activation/drm/signature"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -874,7 +874,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDeprecated", runtime.WithHTTPPathPattern("/icrypto/activation/deprecated"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDeprecated", runtime.WithHTTPPathPattern("/activation/deprecated"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -891,7 +891,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationRecord", runtime.WithHTTPPathPattern("/icrypto/activation/record"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationRecord", runtime.WithHTTPPathPattern("/activation/record"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -908,7 +908,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ADIStartProvisioning", runtime.WithHTTPPathPattern("/icrypto/adi/start-provisioning"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ADIStartProvisioning", runtime.WithHTTPPathPattern("/adi/start-provisioning"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -925,7 +925,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ADIEndProvisioning", runtime.WithHTTPPathPattern("/icrypto/adi/end-provisioning"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ADIEndProvisioning", runtime.WithHTTPPathPattern("/adi/end-provisioning"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -942,7 +942,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ADIGenerateLoginCode", runtime.WithHTTPPathPattern("/icrypto/adi/generate-login-code"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ADIGenerateLoginCode", runtime.WithHTTPPathPattern("/adi/generate-login-code"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -959,7 +959,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheHello", runtime.WithHTTPPathPattern("/icrypto/absinthe/hello"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheHello", runtime.WithHTTPPathPattern("/absinthe/hello"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -976,7 +976,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAddOption", runtime.WithHTTPPathPattern("/icrypto/absinthe/add-option"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAddOption", runtime.WithHTTPPathPattern("/absinthe/add-option"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -993,7 +993,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAtivateSession", runtime.WithHTTPPathPattern("/icrypto/absinthe/activate-session"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheAtivateSession", runtime.WithHTTPPathPattern("/absinthe/activate-session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1010,7 +1010,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheSignData", runtime.WithHTTPPathPattern("/icrypto/absinthe/sign-data"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/AbsintheSignData", runtime.WithHTTPPathPattern("/absinthe/sign-data"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1027,7 +1027,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/IndentitySession", runtime.WithHTTPPathPattern("/icrypto/identity/session"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/IndentitySession", runtime.WithHTTPPathPattern("/identity/session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1044,7 +1044,7 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/IndentityValidation", runtime.WithHTTPPathPattern("/icrypto/identity/validation"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/IndentityValidation", runtime.WithHTTPPathPattern("/identity/validation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1061,22 +1061,22 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 }
 
 var (
-	pattern_CryptService_Initialize_0             = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"icrypto", "initialize"}, ""))
-	pattern_CryptService_Finalize_0               = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"icrypto", "finalize"}, ""))
-	pattern_CryptService_ActivationDRMHandshake_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"icrypto", "activation", "drm", "handshake"}, ""))
-	pattern_CryptService_ActivationDRMProcess_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"icrypto", "activation", "drm", "process"}, ""))
-	pattern_CryptService_ActivationDRMSignature_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"icrypto", "activation", "drm", "signature"}, ""))
-	pattern_CryptService_ActivationDeprecated_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "activation", "deprecated"}, ""))
-	pattern_CryptService_ActivationRecord_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "activation", "record"}, ""))
-	pattern_CryptService_ADIStartProvisioning_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "adi", "start-provisioning"}, ""))
-	pattern_CryptService_ADIEndProvisioning_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "adi", "end-provisioning"}, ""))
-	pattern_CryptService_ADIGenerateLoginCode_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "adi", "generate-login-code"}, ""))
-	pattern_CryptService_AbsintheHello_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "absinthe", "hello"}, ""))
-	pattern_CryptService_AbsintheAddOption_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "absinthe", "add-option"}, ""))
-	pattern_CryptService_AbsintheAtivateSession_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "absinthe", "activate-session"}, ""))
-	pattern_CryptService_AbsintheSignData_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "absinthe", "sign-data"}, ""))
-	pattern_CryptService_IndentitySession_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "identity", "session"}, ""))
-	pattern_CryptService_IndentityValidation_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"icrypto", "identity", "validation"}, ""))
+	pattern_CryptService_Initialize_0             = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"initialize"}, ""))
+	pattern_CryptService_Finalize_0               = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"finalize"}, ""))
+	pattern_CryptService_ActivationDRMHandshake_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"activation", "drm", "handshake"}, ""))
+	pattern_CryptService_ActivationDRMProcess_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"activation", "drm", "process"}, ""))
+	pattern_CryptService_ActivationDRMSignature_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"activation", "drm", "signature"}, ""))
+	pattern_CryptService_ActivationDeprecated_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"activation", "deprecated"}, ""))
+	pattern_CryptService_ActivationRecord_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"activation", "record"}, ""))
+	pattern_CryptService_ADIStartProvisioning_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "start-provisioning"}, ""))
+	pattern_CryptService_ADIEndProvisioning_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "end-provisioning"}, ""))
+	pattern_CryptService_ADIGenerateLoginCode_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "generate-login-code"}, ""))
+	pattern_CryptService_AbsintheHello_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "hello"}, ""))
+	pattern_CryptService_AbsintheAddOption_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "add-option"}, ""))
+	pattern_CryptService_AbsintheAtivateSession_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "activate-session"}, ""))
+	pattern_CryptService_AbsintheSignData_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "sign-data"}, ""))
+	pattern_CryptService_IndentitySession_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"identity", "session"}, ""))
+	pattern_CryptService_IndentityValidation_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"identity", "validation"}, ""))
 )
 
 var (
