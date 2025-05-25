@@ -1,4 +1,7 @@
 # icrypto
-apple iOS system crypto framework
+apple iOS system crypto framework(grpc or resultFul api)
+see docs/crypto.swagger.json
 
-any question telegram: @dxxlabc
+telegram: @dxxlabc
+
+drm only work for A7(SEP)

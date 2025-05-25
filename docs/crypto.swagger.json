@@ -1,0 +1,1078 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "crypto.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CryptService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/icrypto/absinthe/activate-session": {
+      "post": {
+        "operationId": "CryptService_AbsintheAtivateSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheAtivateSessionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheAtivateSessionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/absinthe/add-option": {
+      "post": {
+        "operationId": "CryptService_AbsintheAddOption",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheAddOptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheAddOptionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/absinthe/hello": {
+      "post": {
+        "operationId": "CryptService_AbsintheHello",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheHelloResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheHelloRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/absinthe/sign-data": {
+      "post": {
+        "operationId": "CryptService_AbsintheSignData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheSignDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoAbsintheSignDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/activation/deprecated": {
+      "post": {
+        "operationId": "CryptService_ActivationDeprecated",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDeprecatedResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDeprecatedRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/activation/drm/handshake": {
+      "post": {
+        "operationId": "CryptService_ActivationDRMHandshake",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDRMHandshakeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDRMHandshakeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/activation/drm/process": {
+      "post": {
+        "operationId": "CryptService_ActivationDRMProcess",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDRMProcessResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDRMProcessRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/activation/drm/signature": {
+      "post": {
+        "operationId": "CryptService_ActivationDRMSignature",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDRMSignatureResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationDRMSignatureRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/activation/record": {
+      "post": {
+        "operationId": "CryptService_ActivationRecord",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationRecordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationRecordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/adi/end-provisioning": {
+      "post": {
+        "operationId": "CryptService_ADIEndProvisioning",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoADIEndProvisioningResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoADIEndProvisioningRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/adi/generate-login-code": {
+      "post": {
+        "operationId": "CryptService_ADIGenerateLoginCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoADIGenerateLoginCodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoADIGenerateLoginCodeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/adi/start-provisioning": {
+      "post": {
+        "operationId": "CryptService_ADIStartProvisioning",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoADIStartProvisioningResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoADIStartProvisioningRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/finalize": {
+      "post": {
+        "operationId": "CryptService_Finalize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoFinalizeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoFinalizeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/identity/session": {
+      "post": {
+        "operationId": "CryptService_IndentitySession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoIndentitySessionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoIndentitySessionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/identity/validation": {
+      "post": {
+        "operationId": "CryptService_IndentityValidation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoIndentityValidationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoIndentityValidationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/icrypto/initialize": {
+      "post": {
+        "operationId": "CryptService_Initialize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoInitializeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoInitializeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "icryptoADIEndProvisioningRequest": {
+      "type": "object",
+      "properties": {
+        "Session": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "DSID": {
+          "type": "string",
+          "format": "int64"
+        },
+        "RINFO": {
+          "type": "string",
+          "format": "int64"
+        },
+        "PTM": {
+          "type": "string",
+          "format": "byte"
+        },
+        "TK": {
+          "type": "string",
+          "format": "byte"
+        },
+        "ADI": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoADIEndProvisioningResponse": {
+      "type": "object",
+      "properties": {
+        "MID": {
+          "type": "string",
+          "format": "byte"
+        },
+        "OTP": {
+          "type": "string",
+          "format": "byte"
+        },
+        "ADI": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoADIGenerateLoginCodeRequest": {
+      "type": "object",
+      "properties": {
+        "DSID": {
+          "type": "string",
+          "format": "int64"
+        },
+        "ADI": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoADIGenerateLoginCodeResponse": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "LoginCode": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "icryptoADIStartProvisioningRequest": {
+      "type": "object",
+      "properties": {
+        "DSID": {
+          "type": "string",
+          "format": "int64"
+        },
+        "SPIM": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoADIStartProvisioningResponse": {
+      "type": "object",
+      "properties": {
+        "Session": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "CPIM": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoAbsintheAddOptionRequest": {
+      "type": "object",
+      "properties": {
+        "BIKKey": {
+          "type": "string",
+          "format": "byte"
+        },
+        "BAACert": {
+          "type": "string",
+          "format": "byte"
+        },
+        "IntermediateRootCert": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoAbsintheAddOptionResponse": {
+      "type": "object"
+    },
+    "icryptoAbsintheAtivateSessionRequest": {
+      "type": "object",
+      "properties": {
+        "ValidationData": {
+          "type": "string",
+          "format": "byte"
+        },
+        "ServerKey": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoAbsintheAtivateSessionResponse": {
+      "type": "object"
+    },
+    "icryptoAbsintheHelloRequest": {
+      "type": "object",
+      "properties": {
+        "Mode": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "icryptoAbsintheHelloResponse": {
+      "type": "object",
+      "properties": {
+        "HelloMessage": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoAbsintheSignDataRequest": {
+      "type": "object",
+      "properties": {
+        "SignData": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoAbsintheSignDataResponse": {
+      "type": "object",
+      "properties": {
+        "Signature": {
+          "type": "string",
+          "format": "byte"
+        },
+        "OutServKey": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationDRMHandshakeRequest": {
+      "type": "object"
+    },
+    "icryptoActivationDRMHandshakeResponse": {
+      "type": "object",
+      "properties": {
+        "CollectionBlob": {
+          "type": "string",
+          "format": "byte"
+        },
+        "HandshakeRequestMessage": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationDRMProcessRequest": {
+      "type": "object",
+      "properties": {
+        "SUInfo": {
+          "type": "string",
+          "format": "byte"
+        },
+        "HandshakeResponseMessage": {
+          "type": "string",
+          "format": "byte"
+        },
+        "serverKP": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationDRMProcessResponse": {
+      "type": "object",
+      "properties": {
+        "UIK": {
+          "type": "string",
+          "format": "byte"
+        },
+        "RK": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationDRMSignatureRequest": {
+      "type": "object",
+      "properties": {
+        "ActivationInfoXML": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationDRMSignatureResponse": {
+      "type": "object",
+      "properties": {
+        "FairPlayCertChain": {
+          "type": "string",
+          "format": "byte"
+        },
+        "FairPlaySignature": {
+          "type": "string",
+          "format": "byte"
+        },
+        "RKSignature": {
+          "type": "string",
+          "format": "byte"
+        },
+        "SignActRequest": {
+          "type": "string",
+          "format": "byte"
+        },
+        "ServerKP": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationDeprecatedRequest": {
+      "type": "object",
+      "properties": {
+        "ActivationInfoXML": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationDeprecatedResponse": {
+      "type": "object",
+      "properties": {
+        "Sign": {
+          "type": "string",
+          "format": "byte"
+        },
+        "Cert": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationRecordRequest": {
+      "type": "object",
+      "properties": {
+        "Unbrick": {
+          "type": "boolean"
+        },
+        "AccountTokenCertificate": {
+          "type": "string",
+          "format": "byte"
+        },
+        "DeviceCertificate": {
+          "type": "string",
+          "format": "byte"
+        },
+        "RegulatoryInfo": {
+          "type": "string",
+          "format": "byte"
+        },
+        "FairPlayKeyData": {
+          "type": "string",
+          "format": "byte"
+        },
+        "AccountToken": {
+          "type": "string",
+          "format": "byte"
+        },
+        "AccountTokenSignature": {
+          "type": "string",
+          "format": "byte"
+        },
+        "UniqueDeviceCertificate": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoActivationRecordResponse": {
+      "type": "object",
+      "properties": {
+        "SubCAKey": {
+          "type": "string",
+          "format": "byte"
+        },
+        "AttestationKey": {
+          "type": "string",
+          "format": "byte"
+        },
+        "UIK": {
+          "type": "string",
+          "format": "byte"
+        },
+        "RK": {
+          "type": "string",
+          "format": "byte"
+        },
+        "PSCSui": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoDevice": {
+      "type": "object",
+      "properties": {
+        "OStype": {
+          "$ref": "#/definitions/icryptoOSEnum"
+        },
+        "SerialNumber": {
+          "type": "string"
+        },
+        "Model": {
+          "type": "string",
+          "title": "macOS"
+        },
+        "OSRevision": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "OSVersion": {
+          "type": "string"
+        },
+        "BoardId": {
+          "type": "string"
+        },
+        "DiskId": {
+          "type": "string"
+        },
+        "HardWareUUID": {
+          "type": "string"
+        },
+        "MacAddress": {
+          "type": "string",
+          "format": "byte"
+        },
+        "ROM": {
+          "type": "string",
+          "format": "byte"
+        },
+        "MLB": {
+          "type": "string"
+        },
+        "KGq3489ugfi": {
+          "type": "string",
+          "format": "byte"
+        },
+        "KFyp98tpgj": {
+          "type": "string",
+          "format": "byte"
+        },
+        "KkbjfrfpoJU": {
+          "type": "string",
+          "format": "byte"
+        },
+        "KoycqAZloTNDm": {
+          "type": "string",
+          "format": "byte"
+        },
+        "KabKPld1EcMni": {
+          "type": "string",
+          "format": "byte"
+        },
+        "ProductType": {
+          "type": "string",
+          "title": "iOS"
+        },
+        "UniqueChipID": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "UniqueDeviceID": {
+          "type": "string"
+        },
+        "WifiAddress": {
+          "type": "string"
+        },
+        "BluetoothAddress": {
+          "type": "string"
+        },
+        "SecureElementSN": {
+          "type": "string"
+        },
+        "BuildVersion": {
+          "type": "string",
+          "title": "Global"
+        },
+        "ProductVersion": {
+          "type": "string"
+        },
+        "FairplayKeyData": {
+          "type": "string",
+          "format": "byte"
+        },
+        "ADI": {
+          "type": "string",
+          "format": "byte"
+        },
+        "RINFO": {
+          "type": "string",
+          "format": "int64"
+        },
+        "APTicket": {
+          "type": "string",
+          "format": "byte"
+        },
+        "SUInfo": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoFinalizeRequest": {
+      "type": "object"
+    },
+    "icryptoFinalizeResponse": {
+      "type": "object"
+    },
+    "icryptoIndentitySessionRequest": {
+      "type": "object",
+      "properties": {
+        "Cert": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoIndentitySessionResponse": {
+      "type": "object",
+      "properties": {
+        "Request": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoIndentityValidationRequest": {
+      "type": "object",
+      "properties": {
+        "Response": {
+          "type": "string",
+          "format": "byte"
+        },
+        "SignData": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoIndentityValidationResponse": {
+      "type": "object",
+      "properties": {
+        "VlidationData": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoInitializeRequest": {
+      "type": "object",
+      "properties": {
+        "Control": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "Device": {
+          "$ref": "#/definitions/icryptoDevice"
+        }
+      }
+    },
+    "icryptoInitializeResponse": {
+      "type": "object"
+    },
+    "icryptoOSEnum": {
+      "type": "string",
+      "enum": [
+        "All",
+        "macOS",
+        "iOS"
+      ],
+      "default": "All"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

@@ -45,7 +45,7 @@ type CryptServiceClient interface {
 	Finalize(ctx context.Context, in *FinalizeRequest, opts ...grpc.CallOption) (*FinalizeResponse, error)
 	ActivationDRMHandshake(ctx context.Context, in *ActivationDRMHandshakeRequest, opts ...grpc.CallOption) (*ActivationDRMHandshakeResponse, error)
 	ActivationDRMProcess(ctx context.Context, in *ActivationDRMProcessRequest, opts ...grpc.CallOption) (*ActivationDRMProcessResponse, error)
-	ActivationDRMSignature(ctx context.Context, in *ActivationDRMSignatureRequest, opts ...grpc.CallOption) (*ActivationDRMSignatureRespone, error)
+	ActivationDRMSignature(ctx context.Context, in *ActivationDRMSignatureRequest, opts ...grpc.CallOption) (*ActivationDRMSignatureResponse, error)
 	ActivationDeprecated(ctx context.Context, in *ActivationDeprecatedRequest, opts ...grpc.CallOption) (*ActivationDeprecatedResponse, error)
 	ActivationRecord(ctx context.Context, in *ActivationRecordRequest, opts ...grpc.CallOption) (*ActivationRecordResponse, error)
 	ADIStartProvisioning(ctx context.Context, in *ADIStartProvisioningRequest, opts ...grpc.CallOption) (*ADIStartProvisioningResponse, error)
@@ -107,9 +107,9 @@ func (c *cryptServiceClient) ActivationDRMProcess(ctx context.Context, in *Activ
 	return out, nil
 }
 
-func (c *cryptServiceClient) ActivationDRMSignature(ctx context.Context, in *ActivationDRMSignatureRequest, opts ...grpc.CallOption) (*ActivationDRMSignatureRespone, error) {
+func (c *cryptServiceClient) ActivationDRMSignature(ctx context.Context, in *ActivationDRMSignatureRequest, opts ...grpc.CallOption) (*ActivationDRMSignatureResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ActivationDRMSignatureRespone)
+	out := new(ActivationDRMSignatureResponse)
 	err := c.cc.Invoke(ctx, CryptService_ActivationDRMSignature_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -235,7 +235,7 @@ type CryptServiceServer interface {
 	Finalize(context.Context, *FinalizeRequest) (*FinalizeResponse, error)
 	ActivationDRMHandshake(context.Context, *ActivationDRMHandshakeRequest) (*ActivationDRMHandshakeResponse, error)
 	ActivationDRMProcess(context.Context, *ActivationDRMProcessRequest) (*ActivationDRMProcessResponse, error)
-	ActivationDRMSignature(context.Context, *ActivationDRMSignatureRequest) (*ActivationDRMSignatureRespone, error)
+	ActivationDRMSignature(context.Context, *ActivationDRMSignatureRequest) (*ActivationDRMSignatureResponse, error)
 	ActivationDeprecated(context.Context, *ActivationDeprecatedRequest) (*ActivationDeprecatedResponse, error)
 	ActivationRecord(context.Context, *ActivationRecordRequest) (*ActivationRecordResponse, error)
 	ADIStartProvisioning(context.Context, *ADIStartProvisioningRequest) (*ADIStartProvisioningResponse, error)
@@ -269,7 +269,7 @@ func (UnimplementedCryptServiceServer) ActivationDRMHandshake(context.Context, *
 func (UnimplementedCryptServiceServer) ActivationDRMProcess(context.Context, *ActivationDRMProcessRequest) (*ActivationDRMProcessResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActivationDRMProcess not implemented")
 }
-func (UnimplementedCryptServiceServer) ActivationDRMSignature(context.Context, *ActivationDRMSignatureRequest) (*ActivationDRMSignatureRespone, error) {
+func (UnimplementedCryptServiceServer) ActivationDRMSignature(context.Context, *ActivationDRMSignatureRequest) (*ActivationDRMSignatureResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActivationDRMSignature not implemented")
 }
 func (UnimplementedCryptServiceServer) ActivationDeprecated(context.Context, *ActivationDeprecatedRequest) (*ActivationDeprecatedResponse, error) {

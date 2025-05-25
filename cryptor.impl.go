@@ -93,7 +93,7 @@ func (crypt *CryptorGRPC) ActivationDRMSignature(activationXML []byte) ([]byte, 
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	var response *ActivationDRMSignatureRespone
+	var response *ActivationDRMSignatureResponse
 	if response, err = crypt.Client.ActivationDRMSignature(ctx, &ActivationDRMSignatureRequest{ActivationInfoXML: activationXML}); err != nil {
 		return nil, nil, nil, nil, nil, err
 	}
