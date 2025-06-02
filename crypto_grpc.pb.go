@@ -35,6 +35,11 @@ const (
 	CryptService_AbsintheSignData_FullMethodName       = "/icrypto.CryptService/AbsintheSignData"
 	CryptService_IndentitySession_FullMethodName       = "/icrypto.CryptService/IndentitySession"
 	CryptService_IndentityValidation_FullMethodName    = "/icrypto.CryptService/IndentityValidation"
+	CryptService_SAPExchange_FullMethodName            = "/icrypto.CryptService/SAPExchange"
+	CryptService_SAPSignPrime_FullMethodName           = "/icrypto.CryptService/SAPSignPrime"
+	CryptService_SAPVerifyPrime_FullMethodName         = "/icrypto.CryptService/SAPVerifyPrime"
+	CryptService_SAPSign_FullMethodName                = "/icrypto.CryptService/SAPSign"
+	CryptService_SAPVerify_FullMethodName              = "/icrypto.CryptService/SAPVerify"
 )
 
 // CryptServiceClient is the client API for CryptService service.
@@ -57,6 +62,11 @@ type CryptServiceClient interface {
 	AbsintheSignData(ctx context.Context, in *AbsintheSignDataRequest, opts ...grpc.CallOption) (*AbsintheSignDataResponse, error)
 	IndentitySession(ctx context.Context, in *IndentitySessionRequest, opts ...grpc.CallOption) (*IndentitySessionResponse, error)
 	IndentityValidation(ctx context.Context, in *IndentityValidationRequest, opts ...grpc.CallOption) (*IndentityValidationResponse, error)
+	SAPExchange(ctx context.Context, in *SAPExchangeRequest, opts ...grpc.CallOption) (*SAPExchangeResponse, error)
+	SAPSignPrime(ctx context.Context, in *SAPSignPrimeRequest, opts ...grpc.CallOption) (*SAPSignPrimeResponse, error)
+	SAPVerifyPrime(ctx context.Context, in *SAPVerifyPrimeRequest, opts ...grpc.CallOption) (*SAPVerifyPrimeResponse, error)
+	SAPSign(ctx context.Context, in *SAPSignRequest, opts ...grpc.CallOption) (*SAPSignResponse, error)
+	SAPVerify(ctx context.Context, in *SAPVerifyRequest, opts ...grpc.CallOption) (*SAPVerifyResponse, error)
 }
 
 type cryptServiceClient struct {
@@ -227,6 +237,56 @@ func (c *cryptServiceClient) IndentityValidation(ctx context.Context, in *Indent
 	return out, nil
 }
 
+func (c *cryptServiceClient) SAPExchange(ctx context.Context, in *SAPExchangeRequest, opts ...grpc.CallOption) (*SAPExchangeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SAPExchangeResponse)
+	err := c.cc.Invoke(ctx, CryptService_SAPExchange_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cryptServiceClient) SAPSignPrime(ctx context.Context, in *SAPSignPrimeRequest, opts ...grpc.CallOption) (*SAPSignPrimeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SAPSignPrimeResponse)
+	err := c.cc.Invoke(ctx, CryptService_SAPSignPrime_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cryptServiceClient) SAPVerifyPrime(ctx context.Context, in *SAPVerifyPrimeRequest, opts ...grpc.CallOption) (*SAPVerifyPrimeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SAPVerifyPrimeResponse)
+	err := c.cc.Invoke(ctx, CryptService_SAPVerifyPrime_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cryptServiceClient) SAPSign(ctx context.Context, in *SAPSignRequest, opts ...grpc.CallOption) (*SAPSignResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SAPSignResponse)
+	err := c.cc.Invoke(ctx, CryptService_SAPSign_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cryptServiceClient) SAPVerify(ctx context.Context, in *SAPVerifyRequest, opts ...grpc.CallOption) (*SAPVerifyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SAPVerifyResponse)
+	err := c.cc.Invoke(ctx, CryptService_SAPVerify_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CryptServiceServer is the server API for CryptService service.
 // All implementations must embed UnimplementedCryptServiceServer
 // for forward compatibility.
@@ -247,6 +307,11 @@ type CryptServiceServer interface {
 	AbsintheSignData(context.Context, *AbsintheSignDataRequest) (*AbsintheSignDataResponse, error)
 	IndentitySession(context.Context, *IndentitySessionRequest) (*IndentitySessionResponse, error)
 	IndentityValidation(context.Context, *IndentityValidationRequest) (*IndentityValidationResponse, error)
+	SAPExchange(context.Context, *SAPExchangeRequest) (*SAPExchangeResponse, error)
+	SAPSignPrime(context.Context, *SAPSignPrimeRequest) (*SAPSignPrimeResponse, error)
+	SAPVerifyPrime(context.Context, *SAPVerifyPrimeRequest) (*SAPVerifyPrimeResponse, error)
+	SAPSign(context.Context, *SAPSignRequest) (*SAPSignResponse, error)
+	SAPVerify(context.Context, *SAPVerifyRequest) (*SAPVerifyResponse, error)
 	mustEmbedUnimplementedCryptServiceServer()
 }
 
@@ -304,6 +369,21 @@ func (UnimplementedCryptServiceServer) IndentitySession(context.Context, *Indent
 }
 func (UnimplementedCryptServiceServer) IndentityValidation(context.Context, *IndentityValidationRequest) (*IndentityValidationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IndentityValidation not implemented")
+}
+func (UnimplementedCryptServiceServer) SAPExchange(context.Context, *SAPExchangeRequest) (*SAPExchangeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SAPExchange not implemented")
+}
+func (UnimplementedCryptServiceServer) SAPSignPrime(context.Context, *SAPSignPrimeRequest) (*SAPSignPrimeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SAPSignPrime not implemented")
+}
+func (UnimplementedCryptServiceServer) SAPVerifyPrime(context.Context, *SAPVerifyPrimeRequest) (*SAPVerifyPrimeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SAPVerifyPrime not implemented")
+}
+func (UnimplementedCryptServiceServer) SAPSign(context.Context, *SAPSignRequest) (*SAPSignResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SAPSign not implemented")
+}
+func (UnimplementedCryptServiceServer) SAPVerify(context.Context, *SAPVerifyRequest) (*SAPVerifyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SAPVerify not implemented")
 }
 func (UnimplementedCryptServiceServer) mustEmbedUnimplementedCryptServiceServer() {}
 func (UnimplementedCryptServiceServer) testEmbeddedByValue()                      {}
@@ -614,6 +694,96 @@ func _CryptService_IndentityValidation_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CryptService_SAPExchange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SAPExchangeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).SAPExchange(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CryptService_SAPExchange_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).SAPExchange(ctx, req.(*SAPExchangeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CryptService_SAPSignPrime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SAPSignPrimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).SAPSignPrime(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CryptService_SAPSignPrime_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).SAPSignPrime(ctx, req.(*SAPSignPrimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CryptService_SAPVerifyPrime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SAPVerifyPrimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).SAPVerifyPrime(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CryptService_SAPVerifyPrime_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).SAPVerifyPrime(ctx, req.(*SAPVerifyPrimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CryptService_SAPSign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SAPSignRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).SAPSign(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CryptService_SAPSign_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).SAPSign(ctx, req.(*SAPSignRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CryptService_SAPVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SAPVerifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).SAPVerify(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CryptService_SAPVerify_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).SAPVerify(ctx, req.(*SAPVerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CryptService_ServiceDesc is the grpc.ServiceDesc for CryptService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -684,6 +854,26 @@ var CryptService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "IndentityValidation",
 			Handler:    _CryptService_IndentityValidation_Handler,
+		},
+		{
+			MethodName: "SAPExchange",
+			Handler:    _CryptService_SAPExchange_Handler,
+		},
+		{
+			MethodName: "SAPSignPrime",
+			Handler:    _CryptService_SAPSignPrime_Handler,
+		},
+		{
+			MethodName: "SAPVerifyPrime",
+			Handler:    _CryptService_SAPVerifyPrime_Handler,
+		},
+		{
+			MethodName: "SAPSign",
+			Handler:    _CryptService_SAPSign_Handler,
+		},
+		{
+			MethodName: "SAPVerify",
+			Handler:    _CryptService_SAPVerify_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

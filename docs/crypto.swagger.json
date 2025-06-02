@@ -527,6 +527,166 @@
           "CryptService"
         ]
       }
+    },
+    "/sap/exchange": {
+      "post": {
+        "operationId": "CryptService_SAPExchange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPExchangeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPExchangeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/sap/sign": {
+      "post": {
+        "operationId": "CryptService_SAPSign",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPSignResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPSignRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/sap/sign-prime": {
+      "post": {
+        "operationId": "CryptService_SAPSignPrime",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPSignPrimeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPSignPrimeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/sap/verify": {
+      "post": {
+        "operationId": "CryptService_SAPVerify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPVerifyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPVerifyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/sap/verify-prime": {
+      "post": {
+        "operationId": "CryptService_SAPVerifyPrime",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPVerifyPrimeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoSAPVerifyPrimeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -1045,6 +1205,88 @@
         "iOS"
       ],
       "default": "All"
+    },
+    "icryptoSAPExchangeRequest": {
+      "type": "object",
+      "properties": {
+        "Data": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPExchangeResponse": {
+      "type": "object",
+      "properties": {
+        "ExchangeData": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPSignPrimeRequest": {
+      "type": "object",
+      "properties": {
+        "SignData": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPSignPrimeResponse": {
+      "type": "object",
+      "properties": {
+        "Signature": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPSignRequest": {
+      "type": "object",
+      "properties": {
+        "SignData": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPSignResponse": {
+      "type": "object",
+      "properties": {
+        "Signature": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPVerifyPrimeRequest": {
+      "type": "object",
+      "properties": {
+        "Data": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPVerifyPrimeResponse": {
+      "type": "object"
+    },
+    "icryptoSAPVerifyRequest": {
+      "type": "object",
+      "properties": {
+        "Data": {
+          "type": "string",
+          "format": "byte"
+        },
+        "Signature": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "icryptoSAPVerifyResponse": {
+      "type": "object"
     },
     "protobufAny": {
       "type": "object",

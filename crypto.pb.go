@@ -1998,6 +1998,438 @@ func (x *IndentityValidationResponse) GetVlidationData() []byte {
 	return nil
 }
 
+type SAPExchangeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []byte                 `protobuf:"bytes,1,opt,name=Data,proto3" json:"Data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPExchangeRequest) Reset() {
+	*x = SAPExchangeRequest{}
+	mi := &file_crypto_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPExchangeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPExchangeRequest) ProtoMessage() {}
+
+func (x *SAPExchangeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPExchangeRequest.ProtoReflect.Descriptor instead.
+func (*SAPExchangeRequest) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *SAPExchangeRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type SAPExchangeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ExchangeData  []byte                 `protobuf:"bytes,1,opt,name=ExchangeData,proto3" json:"ExchangeData,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPExchangeResponse) Reset() {
+	*x = SAPExchangeResponse{}
+	mi := &file_crypto_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPExchangeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPExchangeResponse) ProtoMessage() {}
+
+func (x *SAPExchangeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPExchangeResponse.ProtoReflect.Descriptor instead.
+func (*SAPExchangeResponse) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *SAPExchangeResponse) GetExchangeData() []byte {
+	if x != nil {
+		return x.ExchangeData
+	}
+	return nil
+}
+
+type SAPSignPrimeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SignData      []byte                 `protobuf:"bytes,1,opt,name=SignData,proto3" json:"SignData,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPSignPrimeRequest) Reset() {
+	*x = SAPSignPrimeRequest{}
+	mi := &file_crypto_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPSignPrimeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPSignPrimeRequest) ProtoMessage() {}
+
+func (x *SAPSignPrimeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPSignPrimeRequest.ProtoReflect.Descriptor instead.
+func (*SAPSignPrimeRequest) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *SAPSignPrimeRequest) GetSignData() []byte {
+	if x != nil {
+		return x.SignData
+	}
+	return nil
+}
+
+type SAPSignPrimeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Signature     []byte                 `protobuf:"bytes,1,opt,name=Signature,proto3" json:"Signature,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPSignPrimeResponse) Reset() {
+	*x = SAPSignPrimeResponse{}
+	mi := &file_crypto_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPSignPrimeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPSignPrimeResponse) ProtoMessage() {}
+
+func (x *SAPSignPrimeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPSignPrimeResponse.ProtoReflect.Descriptor instead.
+func (*SAPSignPrimeResponse) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *SAPSignPrimeResponse) GetSignature() []byte {
+	if x != nil {
+		return x.Signature
+	}
+	return nil
+}
+
+type SAPVerifyPrimeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []byte                 `protobuf:"bytes,1,opt,name=Data,proto3" json:"Data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPVerifyPrimeRequest) Reset() {
+	*x = SAPVerifyPrimeRequest{}
+	mi := &file_crypto_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPVerifyPrimeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPVerifyPrimeRequest) ProtoMessage() {}
+
+func (x *SAPVerifyPrimeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPVerifyPrimeRequest.ProtoReflect.Descriptor instead.
+func (*SAPVerifyPrimeRequest) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *SAPVerifyPrimeRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type SAPVerifyPrimeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPVerifyPrimeResponse) Reset() {
+	*x = SAPVerifyPrimeResponse{}
+	mi := &file_crypto_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPVerifyPrimeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPVerifyPrimeResponse) ProtoMessage() {}
+
+func (x *SAPVerifyPrimeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPVerifyPrimeResponse.ProtoReflect.Descriptor instead.
+func (*SAPVerifyPrimeResponse) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{38}
+}
+
+type SAPSignRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SignData      []byte                 `protobuf:"bytes,1,opt,name=SignData,proto3" json:"SignData,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPSignRequest) Reset() {
+	*x = SAPSignRequest{}
+	mi := &file_crypto_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPSignRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPSignRequest) ProtoMessage() {}
+
+func (x *SAPSignRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPSignRequest.ProtoReflect.Descriptor instead.
+func (*SAPSignRequest) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *SAPSignRequest) GetSignData() []byte {
+	if x != nil {
+		return x.SignData
+	}
+	return nil
+}
+
+type SAPSignResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Signature     []byte                 `protobuf:"bytes,1,opt,name=Signature,proto3" json:"Signature,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPSignResponse) Reset() {
+	*x = SAPSignResponse{}
+	mi := &file_crypto_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPSignResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPSignResponse) ProtoMessage() {}
+
+func (x *SAPSignResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPSignResponse.ProtoReflect.Descriptor instead.
+func (*SAPSignResponse) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *SAPSignResponse) GetSignature() []byte {
+	if x != nil {
+		return x.Signature
+	}
+	return nil
+}
+
+type SAPVerifyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []byte                 `protobuf:"bytes,1,opt,name=Data,proto3" json:"Data,omitempty"`
+	Signature     []byte                 `protobuf:"bytes,2,opt,name=Signature,proto3" json:"Signature,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPVerifyRequest) Reset() {
+	*x = SAPVerifyRequest{}
+	mi := &file_crypto_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPVerifyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPVerifyRequest) ProtoMessage() {}
+
+func (x *SAPVerifyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPVerifyRequest.ProtoReflect.Descriptor instead.
+func (*SAPVerifyRequest) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *SAPVerifyRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *SAPVerifyRequest) GetSignature() []byte {
+	if x != nil {
+		return x.Signature
+	}
+	return nil
+}
+
+type SAPVerifyResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SAPVerifyResponse) Reset() {
+	*x = SAPVerifyResponse{}
+	mi := &file_crypto_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SAPVerifyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SAPVerifyResponse) ProtoMessage() {}
+
+func (x *SAPVerifyResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SAPVerifyResponse.ProtoReflect.Descriptor instead.
+func (*SAPVerifyResponse) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{42}
+}
+
 var File_crypto_proto protoreflect.FileDescriptor
 
 const file_crypto_proto_rawDesc = "" +
@@ -2138,11 +2570,30 @@ const file_crypto_proto_rawDesc = "" +
 	"\bResponse\x18\x01 \x01(\fR\bResponse\x12\x1a\n" +
 	"\bSignData\x18\x02 \x01(\fR\bSignData\"C\n" +
 	"\x1bIndentityValidationResponse\x12$\n" +
-	"\rVlidationData\x18\x01 \x01(\fR\rVlidationData*%\n" +
+	"\rVlidationData\x18\x01 \x01(\fR\rVlidationData\"(\n" +
+	"\x12SAPExchangeRequest\x12\x12\n" +
+	"\x04Data\x18\x01 \x01(\fR\x04Data\"9\n" +
+	"\x13SAPExchangeResponse\x12\"\n" +
+	"\fExchangeData\x18\x01 \x01(\fR\fExchangeData\"1\n" +
+	"\x13SAPSignPrimeRequest\x12\x1a\n" +
+	"\bSignData\x18\x01 \x01(\fR\bSignData\"4\n" +
+	"\x14SAPSignPrimeResponse\x12\x1c\n" +
+	"\tSignature\x18\x01 \x01(\fR\tSignature\"+\n" +
+	"\x15SAPVerifyPrimeRequest\x12\x12\n" +
+	"\x04Data\x18\x01 \x01(\fR\x04Data\"\x18\n" +
+	"\x16SAPVerifyPrimeResponse\",\n" +
+	"\x0eSAPSignRequest\x12\x1a\n" +
+	"\bSignData\x18\x01 \x01(\fR\bSignData\"/\n" +
+	"\x0fSAPSignResponse\x12\x1c\n" +
+	"\tSignature\x18\x01 \x01(\fR\tSignature\"D\n" +
+	"\x10SAPVerifyRequest\x12\x12\n" +
+	"\x04Data\x18\x01 \x01(\fR\x04Data\x12\x1c\n" +
+	"\tSignature\x18\x02 \x01(\fR\tSignature\"\x13\n" +
+	"\x11SAPVerifyResponse*%\n" +
 	"\x06OSEnum\x12\a\n" +
 	"\x03All\x10\x00\x12\t\n" +
 	"\x05macOS\x10\x01\x12\a\n" +
-	"\x03iOS\x10\x022\xf9\x0f\n" +
+	"\x03iOS\x10\x022\xe7\x13\n" +
 	"\fCryptService\x12]\n" +
 	"\n" +
 	"Initialize\x12\x1a.icrypto.InitializeRequest\x1a\x1b.icrypto.InitializeResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/initialize\x12U\n" +
@@ -2160,7 +2611,12 @@ const file_crypto_proto_rawDesc = "" +
 	"\x16AbsintheAtivateSession\x12&.icrypto.AbsintheAtivateSessionRequest\x1a'.icrypto.AbsintheAtivateSessionResponse\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/absinthe/activate-session\x12w\n" +
 	"\x10AbsintheSignData\x12 .icrypto.AbsintheSignDataRequest\x1a!.icrypto.AbsintheSignDataResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/absinthe/sign-data\x12u\n" +
 	"\x10IndentitySession\x12 .icrypto.IndentitySessionRequest\x1a!.icrypto.IndentitySessionResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/identity/session\x12\x81\x01\n" +
-	"\x13IndentityValidation\x12#.icrypto.IndentityValidationRequest\x1a$.icrypto.IndentityValidationResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/identity/validationB\x1eZ\x1cgithub.com/zdypro888/icryptob\x06proto3"
+	"\x13IndentityValidation\x12#.icrypto.IndentityValidationRequest\x1a$.icrypto.IndentityValidationResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/identity/validation\x12b\n" +
+	"\vSAPExchange\x12\x1b.icrypto.SAPExchangeRequest\x1a\x1c.icrypto.SAPExchangeResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/sap/exchange\x12g\n" +
+	"\fSAPSignPrime\x12\x1c.icrypto.SAPSignPrimeRequest\x1a\x1d.icrypto.SAPSignPrimeResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/sap/sign-prime\x12o\n" +
+	"\x0eSAPVerifyPrime\x12\x1e.icrypto.SAPVerifyPrimeRequest\x1a\x1f.icrypto.SAPVerifyPrimeResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/sap/verify-prime\x12R\n" +
+	"\aSAPSign\x12\x17.icrypto.SAPSignRequest\x1a\x18.icrypto.SAPSignResponse\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/sap/sign\x12Z\n" +
+	"\tSAPVerify\x12\x19.icrypto.SAPVerifyRequest\x1a\x1a.icrypto.SAPVerifyResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/sap/verifyB\x1eZ\x1cgithub.com/zdypro888/icryptob\x06proto3"
 
 var (
 	file_crypto_proto_rawDescOnce sync.Once
@@ -2175,7 +2631,7 @@ func file_crypto_proto_rawDescGZIP() []byte {
 }
 
 var file_crypto_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_crypto_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_crypto_proto_msgTypes = make([]protoimpl.MessageInfo, 43)
 var file_crypto_proto_goTypes = []any{
 	(OSEnum)(0),                            // 0: icrypto.OSEnum
 	(*Device)(nil),                         // 1: icrypto.Device
@@ -2211,6 +2667,16 @@ var file_crypto_proto_goTypes = []any{
 	(*IndentitySessionResponse)(nil),       // 31: icrypto.IndentitySessionResponse
 	(*IndentityValidationRequest)(nil),     // 32: icrypto.IndentityValidationRequest
 	(*IndentityValidationResponse)(nil),    // 33: icrypto.IndentityValidationResponse
+	(*SAPExchangeRequest)(nil),             // 34: icrypto.SAPExchangeRequest
+	(*SAPExchangeResponse)(nil),            // 35: icrypto.SAPExchangeResponse
+	(*SAPSignPrimeRequest)(nil),            // 36: icrypto.SAPSignPrimeRequest
+	(*SAPSignPrimeResponse)(nil),           // 37: icrypto.SAPSignPrimeResponse
+	(*SAPVerifyPrimeRequest)(nil),          // 38: icrypto.SAPVerifyPrimeRequest
+	(*SAPVerifyPrimeResponse)(nil),         // 39: icrypto.SAPVerifyPrimeResponse
+	(*SAPSignRequest)(nil),                 // 40: icrypto.SAPSignRequest
+	(*SAPSignResponse)(nil),                // 41: icrypto.SAPSignResponse
+	(*SAPVerifyRequest)(nil),               // 42: icrypto.SAPVerifyRequest
+	(*SAPVerifyResponse)(nil),              // 43: icrypto.SAPVerifyResponse
 }
 var file_crypto_proto_depIdxs = []int32{
 	0,  // 0: icrypto.Device.OStype:type_name -> icrypto.OSEnum
@@ -2231,24 +2697,34 @@ var file_crypto_proto_depIdxs = []int32{
 	28, // 15: icrypto.CryptService.AbsintheSignData:input_type -> icrypto.AbsintheSignDataRequest
 	30, // 16: icrypto.CryptService.IndentitySession:input_type -> icrypto.IndentitySessionRequest
 	32, // 17: icrypto.CryptService.IndentityValidation:input_type -> icrypto.IndentityValidationRequest
-	3,  // 18: icrypto.CryptService.Initialize:output_type -> icrypto.InitializeResponse
-	5,  // 19: icrypto.CryptService.Finalize:output_type -> icrypto.FinalizeResponse
-	7,  // 20: icrypto.CryptService.ActivationDRMHandshake:output_type -> icrypto.ActivationDRMHandshakeResponse
-	9,  // 21: icrypto.CryptService.ActivationDRMProcess:output_type -> icrypto.ActivationDRMProcessResponse
-	11, // 22: icrypto.CryptService.ActivationDRMSignature:output_type -> icrypto.ActivationDRMSignatureResponse
-	13, // 23: icrypto.CryptService.ActivationDeprecated:output_type -> icrypto.ActivationDeprecatedResponse
-	15, // 24: icrypto.CryptService.ActivationRecord:output_type -> icrypto.ActivationRecordResponse
-	17, // 25: icrypto.CryptService.ADIStartProvisioning:output_type -> icrypto.ADIStartProvisioningResponse
-	19, // 26: icrypto.CryptService.ADIEndProvisioning:output_type -> icrypto.ADIEndProvisioningResponse
-	21, // 27: icrypto.CryptService.ADIGenerateLoginCode:output_type -> icrypto.ADIGenerateLoginCodeResponse
-	23, // 28: icrypto.CryptService.AbsintheHello:output_type -> icrypto.AbsintheHelloResponse
-	25, // 29: icrypto.CryptService.AbsintheAddOption:output_type -> icrypto.AbsintheAddOptionResponse
-	27, // 30: icrypto.CryptService.AbsintheAtivateSession:output_type -> icrypto.AbsintheAtivateSessionResponse
-	29, // 31: icrypto.CryptService.AbsintheSignData:output_type -> icrypto.AbsintheSignDataResponse
-	31, // 32: icrypto.CryptService.IndentitySession:output_type -> icrypto.IndentitySessionResponse
-	33, // 33: icrypto.CryptService.IndentityValidation:output_type -> icrypto.IndentityValidationResponse
-	18, // [18:34] is the sub-list for method output_type
-	2,  // [2:18] is the sub-list for method input_type
+	34, // 18: icrypto.CryptService.SAPExchange:input_type -> icrypto.SAPExchangeRequest
+	36, // 19: icrypto.CryptService.SAPSignPrime:input_type -> icrypto.SAPSignPrimeRequest
+	38, // 20: icrypto.CryptService.SAPVerifyPrime:input_type -> icrypto.SAPVerifyPrimeRequest
+	40, // 21: icrypto.CryptService.SAPSign:input_type -> icrypto.SAPSignRequest
+	42, // 22: icrypto.CryptService.SAPVerify:input_type -> icrypto.SAPVerifyRequest
+	3,  // 23: icrypto.CryptService.Initialize:output_type -> icrypto.InitializeResponse
+	5,  // 24: icrypto.CryptService.Finalize:output_type -> icrypto.FinalizeResponse
+	7,  // 25: icrypto.CryptService.ActivationDRMHandshake:output_type -> icrypto.ActivationDRMHandshakeResponse
+	9,  // 26: icrypto.CryptService.ActivationDRMProcess:output_type -> icrypto.ActivationDRMProcessResponse
+	11, // 27: icrypto.CryptService.ActivationDRMSignature:output_type -> icrypto.ActivationDRMSignatureResponse
+	13, // 28: icrypto.CryptService.ActivationDeprecated:output_type -> icrypto.ActivationDeprecatedResponse
+	15, // 29: icrypto.CryptService.ActivationRecord:output_type -> icrypto.ActivationRecordResponse
+	17, // 30: icrypto.CryptService.ADIStartProvisioning:output_type -> icrypto.ADIStartProvisioningResponse
+	19, // 31: icrypto.CryptService.ADIEndProvisioning:output_type -> icrypto.ADIEndProvisioningResponse
+	21, // 32: icrypto.CryptService.ADIGenerateLoginCode:output_type -> icrypto.ADIGenerateLoginCodeResponse
+	23, // 33: icrypto.CryptService.AbsintheHello:output_type -> icrypto.AbsintheHelloResponse
+	25, // 34: icrypto.CryptService.AbsintheAddOption:output_type -> icrypto.AbsintheAddOptionResponse
+	27, // 35: icrypto.CryptService.AbsintheAtivateSession:output_type -> icrypto.AbsintheAtivateSessionResponse
+	29, // 36: icrypto.CryptService.AbsintheSignData:output_type -> icrypto.AbsintheSignDataResponse
+	31, // 37: icrypto.CryptService.IndentitySession:output_type -> icrypto.IndentitySessionResponse
+	33, // 38: icrypto.CryptService.IndentityValidation:output_type -> icrypto.IndentityValidationResponse
+	35, // 39: icrypto.CryptService.SAPExchange:output_type -> icrypto.SAPExchangeResponse
+	37, // 40: icrypto.CryptService.SAPSignPrime:output_type -> icrypto.SAPSignPrimeResponse
+	39, // 41: icrypto.CryptService.SAPVerifyPrime:output_type -> icrypto.SAPVerifyPrimeResponse
+	41, // 42: icrypto.CryptService.SAPSign:output_type -> icrypto.SAPSignResponse
+	43, // 43: icrypto.CryptService.SAPVerify:output_type -> icrypto.SAPVerifyResponse
+	23, // [23:44] is the sub-list for method output_type
+	2,  // [2:23] is the sub-list for method input_type
 	2,  // [2:2] is the sub-list for extension type_name
 	2,  // [2:2] is the sub-list for extension extendee
 	0,  // [0:2] is the sub-list for field type_name
@@ -2265,7 +2741,7 @@ func file_crypto_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_crypto_proto_rawDesc), len(file_crypto_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   33,
+			NumMessages:   43,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

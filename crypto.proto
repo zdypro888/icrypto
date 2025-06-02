@@ -167,6 +167,21 @@ message IndentityValidationRequest {
 }
 message IndentityValidationResponse { bytes VlidationData = 1; }
 
+message SAPExchangeRequest { bytes Data = 1; }
+message SAPExchangeResponse { bytes ExchangeData = 1; }
+
+message SAPSignPrimeRequest { bytes SignData = 1; }
+message SAPSignPrimeResponse { bytes Signature = 1; }
+
+message SAPVerifyPrimeRequest { bytes Data = 1; }
+message SAPVerifyPrimeResponse {}
+
+message SAPSignRequest { bytes SignData = 1; }
+message SAPSignResponse { bytes Signature = 1; }
+
+message SAPVerifyRequest { bytes Data = 1; bytes Signature = 2; }
+message SAPVerifyResponse {}
+
 service CryptService {
   rpc Initialize(InitializeRequest) returns (InitializeResponse) {
     option (google.api.http) = {
@@ -278,6 +293,38 @@ service CryptService {
       returns (IndentityValidationResponse) {
     option (google.api.http) = {
       post: "/identity/validation"
+      body: "*"
+    };
+  }
+
+  rpc SAPExchange(SAPExchangeRequest) returns (SAPExchangeResponse) {
+    option (google.api.http) = {
+      post: "/sap/exchange"
+      body: "*"
+    };
+  }
+
+  rpc SAPSignPrime(SAPSignPrimeRequest) returns (SAPSignPrimeResponse) {
+    option (google.api.http) = {
+      post: "/sap/sign-prime"
+      body: "*"
+    };
+  }
+  rpc SAPVerifyPrime(SAPVerifyPrimeRequest) returns (SAPVerifyPrimeResponse) {
+    option (google.api.http) = {
+      post: "/sap/verify-prime"
+      body: "*"
+    };
+  }
+  rpc SAPSign(SAPSignRequest) returns (SAPSignResponse) {
+    option (google.api.http) = {
+      post: "/sap/sign"
+      body: "*"
+    };
+  }
+  rpc SAPVerify(SAPVerifyRequest) returns (SAPVerifyResponse) {
+    option (google.api.http) = {
+      post: "/sap/verify"
       body: "*"
     };
   }

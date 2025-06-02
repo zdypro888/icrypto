@@ -15,12 +15,10 @@ func (ce *CryptoError) Error() string {
 }
 
 const (
-	ControlActivationDeprecated uint64 = 1 << iota
-	ControlActivationDRM        uint64 = 1 << iota
-	ControlProvisioning         uint64 = 1 << iota
-	ControlAbsinthe             uint64 = 1 << iota
-	ControlIndentitySession     uint64 = 1 << iota
-	ControlIndentityAbsinthe    uint64 = 1 << iota
+	ControlNone       uint64 = 0
+	ControlMust64     uint64 = 1
+	ControlDRM32      uint64 = 2
+	ControlDeprecated uint64 = 4
 )
 
 type Cryptor interface {
@@ -46,6 +44,7 @@ type Cryptor interface {
 	ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error)
 	//ADIGenerateLoginCode 返回 loginCode
 	ADIGenerateLoginCode(dsid int64, adi []byte) (uint32, error)
+
 	//AbsintheHello 取得 absinthe hello
 	AbsintheHello(mode int) ([]byte, error)
 	//AbsintheAddOption 添加 option
@@ -54,10 +53,22 @@ type Cryptor interface {
 	AbsintheAtivateSession(validationData []byte, serverKey []byte) error
 	//AbsintheSignData signData 返回 signature outServKey
 	AbsintheSignData(dataToSign []byte) ([]byte, []byte, error)
+
 	//IndentitySession 注册 SessionInfoRequest
 	IndentitySession(cert []byte) ([]byte, error)
 	//IndentityValidation 取得VD
 	IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error)
+
+	//SAPExchange 交换数据
+	SAPExchange(data []byte) ([]byte, error)
+	//SAPSignPrime 签名 prime
+	SAPSignPrime(signData []byte) ([]byte, error)
+	//SAPVerifyPrime 验证 prime
+	SAPVerifyPrime(data []byte) error
+	//SAPSign 签名
+	SAPSign(signData []byte) ([]byte, error)
+	//SAPVerify 验证
+	SAPVerify(data []byte, signature []byte) error
 }
 
 // NewCryptorCall 创建cryptor调用

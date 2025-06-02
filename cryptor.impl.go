@@ -239,3 +239,56 @@ func (crypt *CryptorGRPC) IndentityValidation(sessionInfo []byte, signData []byt
 	}
 	return response.VlidationData, nil
 }
+
+func (crypt *CryptorGRPC) SAPExchange(data []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *SAPExchangeResponse
+	if response, err = crypt.Client.SAPExchange(ctx, &SAPExchangeRequest{Data: data}); err != nil {
+		return nil, err
+	}
+	return response.ExchangeData, nil
+}
+
+func (crypt *CryptorGRPC) SAPSignPrime(signData []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *SAPSignPrimeResponse
+	if response, err = crypt.Client.SAPSignPrime(ctx, &SAPSignPrimeRequest{SignData: signData}); err != nil {
+		return nil, err
+	}
+	return response.Signature, nil
+}
+
+func (crypt *CryptorGRPC) SAPVerifyPrime(data []byte) error {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	if _, err = crypt.Client.SAPVerifyPrime(ctx, &SAPVerifyPrimeRequest{Data: data}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (crypt *CryptorGRPC) SAPSign(signData []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	var response *SAPSignResponse
+	if response, err = crypt.Client.SAPSign(ctx, &SAPSignRequest{SignData: signData}); err != nil {
+		return nil, err
+	}
+	return response.Signature, nil
+}
+
+func (crypt *CryptorGRPC) SAPVerify(data []byte, signature []byte) error {
+	ctx, cancel := crypt.metaContext()
+	defer cancel()
+	var err error
+	if _, err = crypt.Client.SAPVerify(ctx, &SAPVerifyRequest{Data: data, Signature: signature}); err != nil {
+		return err
+	}
+	return nil
+}
