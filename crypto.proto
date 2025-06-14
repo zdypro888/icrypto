@@ -41,7 +41,6 @@ message Device {
   string ProductVersion = 30;
   bytes FairplayKeyData = 33;
   bytes ADI = 35;
-  int64 RINFO = 36;
   bytes APTicket = 47;
   bytes SUInfo = 50;
 }

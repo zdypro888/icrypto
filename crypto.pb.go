@@ -102,7 +102,6 @@ type Device struct {
 	ProductVersion  string `protobuf:"bytes,30,opt,name=ProductVersion,proto3" json:"ProductVersion,omitempty"`
 	FairplayKeyData []byte `protobuf:"bytes,33,opt,name=FairplayKeyData,proto3" json:"FairplayKeyData,omitempty"`
 	ADI             []byte `protobuf:"bytes,35,opt,name=ADI,proto3" json:"ADI,omitempty"`
-	RINFO           int64  `protobuf:"varint,36,opt,name=RINFO,proto3" json:"RINFO,omitempty"`
 	APTicket        []byte `protobuf:"bytes,47,opt,name=APTicket,proto3" json:"APTicket,omitempty"`
 	SUInfo          []byte `protobuf:"bytes,50,opt,name=SUInfo,proto3" json:"SUInfo,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -319,13 +318,6 @@ func (x *Device) GetADI() []byte {
 		return x.ADI
 	}
 	return nil
-}
-
-func (x *Device) GetRINFO() int64 {
-	if x != nil {
-		return x.RINFO
-	}
-	return 0
 }
 
 func (x *Device) GetAPTicket() []byte {
@@ -2434,7 +2426,7 @@ var File_crypto_proto protoreflect.FileDescriptor
 
 const file_crypto_proto_rawDesc = "" +
 	"\n" +
-	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"\xab\a\n" +
+	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"\x95\a\n" +
 	"\x06Device\x12'\n" +
 	"\x06OStype\x18\x01 \x01(\x0e2\x0f.icrypto.OSEnumR\x06OStype\x12\"\n" +
 	"\fSerialNumber\x18\x02 \x01(\tR\fSerialNumber\x12\x14\n" +
@@ -2468,8 +2460,7 @@ const file_crypto_proto_rawDesc = "" +
 	"\fBuildVersion\x18\x1d \x01(\tR\fBuildVersion\x12&\n" +
 	"\x0eProductVersion\x18\x1e \x01(\tR\x0eProductVersion\x12(\n" +
 	"\x0fFairplayKeyData\x18! \x01(\fR\x0fFairplayKeyData\x12\x10\n" +
-	"\x03ADI\x18# \x01(\fR\x03ADI\x12\x14\n" +
-	"\x05RINFO\x18$ \x01(\x03R\x05RINFO\x12\x1a\n" +
+	"\x03ADI\x18# \x01(\fR\x03ADI\x12\x1a\n" +
 	"\bAPTicket\x18/ \x01(\fR\bAPTicket\x12\x16\n" +
 	"\x06SUInfo\x182 \x01(\fR\x06SUInfo\"V\n" +
 	"\x11InitializeRequest\x12\x18\n" +

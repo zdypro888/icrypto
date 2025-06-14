@@ -1122,10 +1122,6 @@
           "type": "string",
           "format": "byte"
         },
-        "RINFO": {
-          "type": "string",
-          "format": "int64"
-        },
         "APTicket": {
           "type": "string",
           "format": "byte"
