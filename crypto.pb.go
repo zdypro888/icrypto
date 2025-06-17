@@ -25,9 +25,10 @@ const (
 type OSEnum int32
 
 const (
-	OSEnum_All   OSEnum = 0
-	OSEnum_macOS OSEnum = 1
-	OSEnum_iOS   OSEnum = 2
+	OSEnum_All     OSEnum = 0
+	OSEnum_macOS   OSEnum = 1
+	OSEnum_iOS     OSEnum = 2
+	OSEnum_Android OSEnum = 3
 )
 
 // Enum value maps for OSEnum.
@@ -36,11 +37,13 @@ var (
 		0: "All",
 		1: "macOS",
 		2: "iOS",
+		3: "Android",
 	}
 	OSEnum_value = map[string]int32{
-		"All":   0,
-		"macOS": 1,
-		"iOS":   2,
+		"All":     0,
+		"macOS":   1,
+		"iOS":     2,
+		"Android": 3,
 	}
 )
 
@@ -2580,11 +2583,12 @@ const file_crypto_proto_rawDesc = "" +
 	"\x10SAPVerifyRequest\x12\x12\n" +
 	"\x04Data\x18\x01 \x01(\fR\x04Data\x12\x1c\n" +
 	"\tSignature\x18\x02 \x01(\fR\tSignature\"\x13\n" +
-	"\x11SAPVerifyResponse*%\n" +
+	"\x11SAPVerifyResponse*2\n" +
 	"\x06OSEnum\x12\a\n" +
 	"\x03All\x10\x00\x12\t\n" +
 	"\x05macOS\x10\x01\x12\a\n" +
-	"\x03iOS\x10\x022\xe7\x13\n" +
+	"\x03iOS\x10\x02\x12\v\n" +
+	"\aAndroid\x10\x032\xe7\x13\n" +
 	"\fCryptService\x12]\n" +
 	"\n" +
 	"Initialize\x12\x1a.icrypto.InitializeRequest\x1a\x1b.icrypto.InitializeResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/initialize\x12U\n" +

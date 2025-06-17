@@ -1198,7 +1198,8 @@
       "enum": [
         "All",
         "macOS",
-        "iOS"
+        "iOS",
+        "Android"
       ],
       "default": "All"
     },

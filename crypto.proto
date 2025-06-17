@@ -9,6 +9,7 @@ enum OSEnum {
   All = 0;
   macOS = 1;
   iOS = 2;
+  Android = 3;
 }
 
 message Device {
