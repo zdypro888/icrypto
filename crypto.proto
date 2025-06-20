@@ -32,8 +32,9 @@ message Device {
   bytes KabKPld1EcMni = 16;
   // iOS
   string ProductType = 17;
-  uint64 UniqueChipID = 18;
-  string UniqueDeviceID = 19;
+  string IMEI = 18;
+  uint64 UniqueChipID = 19;
+  string UniqueDeviceID = 20;
   string WifiAddress = 21;
   string BluetoothAddress = 26;
   string SecureElementSN = 28;
@@ -50,7 +51,9 @@ message InitializeRequest {
   uint64 Control = 1;
   Device Device = 2;
 }
-message InitializeResponse {}
+message InitializeResponse {
+  Device Device = 2;
+}
 
 message FinalizeRequest {}
 message FinalizeResponse {}

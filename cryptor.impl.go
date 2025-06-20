@@ -48,8 +48,41 @@ func (crypt *CryptorGRPC) metaContext() (context.Context, context.CancelFunc) {
 func (crypt *CryptorGRPC) Initialize(control uint64, device *Device) error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
-	if _, err := crypt.Client.Initialize(ctx, &InitializeRequest{Control: control, Device: device}); err != nil {
+	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Control: control, Device: device}); err != nil {
 		return err
+	} else {
+		device.OStype = response.Device.OStype
+		device.SerialNumber = response.Device.SerialNumber
+		// macOS
+		device.Model = response.Device.Model
+		device.OSRevision = response.Device.OSRevision
+		device.OSVersion = response.Device.OSVersion
+		device.BoardId = response.Device.BoardId
+		device.DiskId = response.Device.DiskId
+		device.HardWareUUID = response.Device.HardWareUUID
+		device.MacAddress = response.Device.MacAddress
+		device.ROM = response.Device.ROM
+		device.MLB = response.Device.MLB
+		device.KGq3489Ugfi = response.Device.KGq3489Ugfi
+		device.KFyp98Tpgj = response.Device.KFyp98Tpgj
+		device.KkbjfrfpoJU = response.Device.KkbjfrfpoJU
+		device.KoycqAZloTNDm = response.Device.KoycqAZloTNDm
+		device.KabKPld1EcMni = response.Device.KabKPld1EcMni
+		// iOS
+		device.ProductType = response.Device.ProductType
+		device.IMEI = response.Device.IMEI
+		device.UniqueChipID = response.Device.UniqueChipID
+		device.UniqueDeviceID = response.Device.UniqueDeviceID
+		device.WifiAddress = response.Device.WifiAddress
+		device.BluetoothAddress = response.Device.BluetoothAddress
+		device.SecureElementSN = response.Device.SecureElementSN
+		// Global
+		device.BuildVersion = response.Device.BuildVersion
+		device.ProductVersion = response.Device.ProductVersion
+		device.FairplayKeyData = response.Device.FairplayKeyData
+		device.ADI = response.Device.ADI
+		device.APTicket = response.Device.APTicket
+		device.SUInfo = response.Device.SUInfo
 	}
 	return nil
 }

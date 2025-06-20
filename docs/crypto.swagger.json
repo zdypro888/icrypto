@@ -1091,6 +1091,9 @@
           "type": "string",
           "title": "iOS"
         },
+        "IMEI": {
+          "type": "string"
+        },
         "UniqueChipID": {
           "type": "string",
           "format": "uint64"
@@ -1191,7 +1194,12 @@
       }
     },
     "icryptoInitializeResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "Device": {
+          "$ref": "#/definitions/icryptoDevice"
+        }
+      }
     },
     "icryptoOSEnum": {
       "type": "string",
