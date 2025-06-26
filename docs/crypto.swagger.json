@@ -1184,9 +1184,8 @@
     "icryptoInitializeRequest": {
       "type": "object",
       "properties": {
-        "Control": {
-          "type": "string",
-          "format": "uint64"
+        "Type": {
+          "$ref": "#/definitions/icryptoInitializeType"
         },
         "Device": {
           "$ref": "#/definitions/icryptoDevice"
@@ -1200,6 +1199,15 @@
           "$ref": "#/definitions/icryptoDevice"
         }
       }
+    },
+    "icryptoInitializeType": {
+      "type": "string",
+      "enum": [
+        "Auto",
+        "Arch64",
+        "DRM32"
+      ],
+      "default": "Auto"
     },
     "icryptoOSEnum": {
       "type": "string",

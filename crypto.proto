@@ -47,8 +47,14 @@ message Device {
   bytes SUInfo = 50;
 }
 
+enum InitializeType {
+  Auto   = 0;
+  Arch64 = 1;
+  DRM32  = 2;
+}
+
 message InitializeRequest {
-  uint64 Control = 1;
+  InitializeType Type = 1;
   Device Device = 2;
 }
 message InitializeResponse {

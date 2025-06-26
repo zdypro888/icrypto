@@ -45,10 +45,10 @@ func (crypt *CryptorGRPC) metaContext() (context.Context, context.CancelFunc) {
 }
 
 // Initialize init crypto with device[see device struct]
-func (crypt *CryptorGRPC) Initialize(control uint64, device *Device) error {
+func (crypt *CryptorGRPC) Initialize(type_ InitializeType, device *Device) error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
-	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Control: control, Device: device}); err != nil {
+	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Type: type_, Device: device}); err != nil {
 		return err
 	} else {
 		device.OStype = response.Device.OStype
