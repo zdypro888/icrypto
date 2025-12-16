@@ -13,13 +13,21 @@ import (
 
 var cryptoConn *grpc.ClientConn
 var cryptoClient CryptServiceClient
+var cryptoAPIKey string // 用于 iclouder 代理认证
 
+// InitGRPC 初始化 gRPC 连接（直连 cryptor 服务，无需 apiKey）
 func InitGRPC(address string) error {
+	return InitGRPCWithAPIKey(address, "")
+}
+
+// InitGRPCWithAPIKey 初始化 gRPC 连接（连接 iclouder 代理时需要 apiKey）
+func InitGRPCWithAPIKey(address, apiKey string) error {
 	var err error
 	if cryptoConn, err = grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
 		return err
 	}
 	cryptoClient = NewCryptServiceClient(cryptoConn)
+	cryptoAPIKey = apiKey
 	NewCryptor = NewCryptorGRPC
 	return nil
 }
@@ -27,6 +35,7 @@ func InitGRPC(address string) error {
 func NewCryptorGRPC() Cryptor {
 	crypt := &CryptorGRPC{
 		ClientId: uuid.NewV4().String(),
+		APIKey:   cryptoAPIKey,
 		Client:   cryptoClient,
 	}
 	return crypt
@@ -34,12 +43,17 @@ func NewCryptorGRPC() Cryptor {
 
 type CryptorGRPC struct {
 	ClientId string
+	APIKey   string // x-api-key for iclouder proxy
 	Client   CryptServiceClient
 }
 
 func (crypt *CryptorGRPC) metaContext() (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	md := metadata.Pairs("client_id", crypt.ClientId)
+	pairs := []string{"client_id", crypt.ClientId}
+	if crypt.APIKey != "" {
+		pairs = append(pairs, "x-api-key", crypt.APIKey)
+	}
+	md := metadata.Pairs(pairs...)
 	metactx := metadata.NewOutgoingContext(ctx, md)
 	return metactx, cancel
 }
