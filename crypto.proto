@@ -52,9 +52,10 @@ message Device {
 
 // 初始化类型枚举
 enum InitializeType {
-  AUTO   = 0;
-  ARCH64 = 1;
-  DRM32  = 2;
+  AUTO           = 0;
+  IOSARCH64      = 1;
+  IOSDRM32       = 2;
+  MACOSDISABLE15 = 4;
 }
 
 // 初始化请求

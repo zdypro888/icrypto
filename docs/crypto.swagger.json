@@ -1361,8 +1361,9 @@
       "type": "string",
       "enum": [
         "AUTO",
-        "ARCH64",
-        "DRM32"
+        "IOSARCH64",
+        "IOSDRM32",
+        "MACOSDISABLE15"
       ],
       "default": "AUTO",
       "title": "初始化类型枚举"
