@@ -5,199 +5,303 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/zdypro888/icrypto";
 
+// 操作系统类型枚举
 enum OSEnum {
-  All = 0;
-  macOS = 1;
-  iOS = 2;
-  Android = 3;
+  UNSPECIFIED = 0;
+  MACOS       = 1;
+  IOS         = 2;
+  ANDROID     = 3;
 }
 
+// 设备信息
 message Device {
-  OSEnum OStype = 1;
-  string SerialNumber = 2;
+  OSEnum os_type       = 1;
+  string serial_number = 2;
   // macOS
-  string Model = 3;
-  uint64 OSRevision = 4;
-  string OSVersion = 5;
-  string BoardId = 6;
-  string DiskId = 7;
-  string HardWareUUID = 8;
-  bytes MacAddress = 9;
-  bytes ROM = 10;
-  string MLB = 11;
-  bytes KGq3489ugfi = 12;
-  bytes KFyp98tpgj = 13;
-  bytes KkbjfrfpoJU = 14;
-  bytes KoycqAZloTNDm = 15;
-  bytes KabKPld1EcMni = 16;
+  string model         = 3;
+  uint64 os_revision   = 4;
+  string os_version    = 5;
+  string board_id      = 6;
+  string disk_id       = 7;
+  string hardwareUUID  = 8;
+  bytes  MACAddress    = 9;
+  bytes  ROM           = 10;
+  string MLB           = 11;
+  bytes  kGq3489ugfi   = 12;
+  bytes  kFyp98tpgj    = 13;
+  bytes  kkbjfrfpoJU   = 14;
+  bytes  koycqAZloTNDm = 15;
+  bytes  kabKPld1EcMni = 16;
   // iOS
-  string ProductType = 17;
-  string IMEI = 18;
-  uint64 UniqueChipID = 19;
-  string UniqueDeviceID = 20;
-  string WifiAddress = 21;
-  string BluetoothAddress = 26;
-  string SecureElementSN = 28;
+  string product_type      = 17;
+  string IMEI              = 18;
+  uint64 unique_chip_id    = 19;
+  string unique_device_id  = 20;
+  string wifi_address      = 21;
+  string bluetooth_address = 22;
+  string secure_elementSN  = 23;
   // Global
-  string BuildVersion = 29;
-  string ProductVersion = 30;
-  bytes FairplayKeyData = 33;
-  bytes ADI = 35;
-  bytes APTicket = 47;
-  bytes SUInfo = 50;
+  string          build_version     = 24;
+  string          product_version   = 25;
+  bytes           fairplay_key_data = 26;
+  bytes           ADI               = 27;
+  bytes           AP_ticket         = 28;
+  bytes           SUInfo            = 29;
+  repeated string iunios_controls   = 30;
 }
 
+// 初始化类型枚举
 enum InitializeType {
-  Auto   = 0;
-  Arch64 = 1;
+  AUTO   = 0;
+  ARCH64 = 1;
   DRM32  = 2;
 }
 
+// 初始化请求
 message InitializeRequest {
-  InitializeType Type = 1;
-  Device Device = 2;
-}
-message InitializeResponse {
-  Device Device = 2;
+  InitializeType type   = 1;
+  Device         device = 2;
 }
 
+// 初始化响应
+message InitializeResponse {
+  Device device = 1;
+}
+
+// 结束请求
 message FinalizeRequest {}
+
+// 结束响应
 message FinalizeResponse {}
 
+// DRM 激活握手请求
 message ActivationDRMHandshakeRequest {}
+
+// DRM 激活握手响应
 message ActivationDRMHandshakeResponse {
-  bytes CollectionBlob = 1;
-  bytes HandshakeRequestMessage = 2;
+  bytes collection_blob           = 1;
+  bytes handshake_request_message = 2;
 }
 
+// DRM 激活处理请求
 message ActivationDRMProcessRequest {
-  bytes SUInfo = 1;
-  bytes HandshakeResponseMessage = 2;
-  bytes serverKP = 3;
+  bytes SUInfo                     = 1;
+  bytes handshake_response_message = 2;
+  bytes serverKP                   = 3;
 }
+
+// DRM 激活处理响应
 message ActivationDRMProcessResponse {
   bytes UIK = 1;
-  bytes RK = 2;
+  bytes RK  = 2;
 }
 
-message ActivationDRMSignatureRequest { bytes ActivationInfoXML = 1; }
+// DRM 激活签名请求
+message ActivationDRMSignatureRequest {
+  bytes activation_info_xml = 1;
+}
+
+// DRM 激活签名响应
 message ActivationDRMSignatureResponse {
-  bytes FairPlayCertChain = 1;
-  bytes FairPlaySignature = 2;
-  bytes RKSignature = 3;
-  bytes SignActRequest = 4;
-  bytes ServerKP = 5;
+  bytes fairplay_cert_chain = 1;
+  bytes fairplay_signature  = 2;
+  bytes RKSignature         = 3;
+  bytes sign_act_request    = 4;
+  bytes serverKP            = 5;
 }
 
-message ActivationDeprecatedRequest { bytes ActivationInfoXML = 1; }
+// 旧版激活请求
+message ActivationDeprecatedRequest {
+  bytes activation_info_xml = 1;
+}
+
+// 旧版激活响应
 message ActivationDeprecatedResponse {
-  bytes Sign = 1;
-  bytes Cert = 2;
+  bytes sign = 1;
+  bytes cert = 2;
 }
 
+// 激活记录请求
 message ActivationRecordRequest {
-  bool Unbrick = 1;
-  bytes AccountTokenCertificate = 2;
-  bytes DeviceCertificate = 3;
-  bytes RegulatoryInfo = 4;
-  bytes FairPlayKeyData = 5;
-  bytes AccountToken = 6;
-  bytes AccountTokenSignature = 7;
-  bytes UniqueDeviceCertificate = 8;
-}
-message ActivationRecordResponse {
-  bytes SubCAKey = 1;
-  bytes AttestationKey = 2;
-  bytes UIK = 3;
-  bytes RK = 4;
-  bytes PSCSui = 5;
+  bool  unbrick                   = 1;
+  bytes account_token_certificate = 2;
+  bytes device_certificate        = 3;
+  bytes regulatory_info           = 4;
+  bytes fairplay_key_data         = 5;
+  bytes account_token             = 6;
+  bytes account_token_signature   = 7;
+  bytes unique_device_certificate = 8;
 }
 
+// 激活记录响应
+message ActivationRecordResponse {
+  bytes subCAKey        = 1;
+  bytes attestation_key = 2;
+  bytes UIK             = 3;
+  bytes RK              = 4;
+  bytes psc_sui         = 5;
+}
+
+// ADI 开始配置请求
 message ADIStartProvisioningRequest {
   int64 DSID = 1;
   bytes SPIM = 2;
 }
+
+// ADI 开始配置响应
 message ADIStartProvisioningResponse {
-  uint64 Session = 1;
-  bytes CPIM = 2;
+  uint64 session = 1;
+  bytes  CPIM    = 2;
 }
 
+// ADI 结束配置请求
 message ADIEndProvisioningRequest {
-  uint64 Session = 1;
-  int64 DSID = 2;
-  int64 RINFO = 3;
-  bytes PTM = 4;
-  bytes TK = 5;
-  bytes ADI = 10;
+  uint64 session = 1;
+  int64  DSID    = 2;
+  int64  RINFO   = 3;
+  bytes  PTM     = 4;
+  bytes  TK      = 5;
+  bytes  ADI     = 6;
 }
+
+// ADI 结束配置响应
 message ADIEndProvisioningResponse {
   bytes MID = 1;
   bytes OTP = 2;
-  bytes ADI = 10;
+  bytes ADI = 3;
 }
 
+// ADI 生成登录码请求
 message ADIGenerateLoginCodeRequest {
   int64 DSID = 1;
-  bytes ADI = 2;
+  bytes ADI  = 2;
 }
+
+// ADI 生成登录码响应
 message ADIGenerateLoginCodeResponse {
-  int32 Code = 1;
-  uint32 LoginCode = 2;
+  int32  code       = 1;
+  uint32 login_code = 2;
 }
 
-message AbsintheHelloRequest { int32 Mode = 1; }
-message AbsintheHelloResponse { bytes HelloMessage = 1; }
+// Absinthe Hello 请求
+message AbsintheHelloRequest {
+  int32 mode = 1;
+}
 
+// Absinthe Hello 响应
+message AbsintheHelloResponse {
+  bytes hello_message = 1;
+}
+
+// Absinthe 添加选项请求
 message AbsintheAddOptionRequest {
-  bytes BIKKey = 1;
-  bytes BAACert = 2;
-  bytes IntermediateRootCert = 3;
+  bytes bik_key                = 1;
+  bytes baa_cert               = 2;
+  bytes intermediate_root_cert = 3;
 }
+
+// Absinthe 添加选项响应
 message AbsintheAddOptionResponse {}
 
-message AbsintheAtivateSessionRequest {
-  bytes ValidationData = 1;
-  bytes ServerKey = 2;
+// Absinthe 激活会话请求
+message AbsintheActivateSessionRequest {
+  bytes validation_data = 1;
+  bytes server_key      = 2;
 }
-message AbsintheAtivateSessionResponse {}
 
-message AbsintheSignDataRequest { bytes SignData = 1; }
+// Absinthe 激活会话响应
+message AbsintheActivateSessionResponse {}
+
+// Absinthe 签名数据请求
+message AbsintheSignDataRequest {
+  bytes sign_data = 1;
+}
+
+// Absinthe 签名数据响应
 message AbsintheSignDataResponse {
-  bytes Signature = 1;
-  bytes OutServKey = 2;
+  bytes signature    = 1;
+  bytes out_serv_key = 2;
 }
 
-message IndentitySessionRequest { bytes Cert = 1; }
-message IndentitySessionResponse { bytes Request = 1; }
-
-message IndentityValidationRequest {
-  bytes Response = 1;
-  bytes SignData = 2;
+// Identity 会话请求
+message IdentitySessionRequest {
+  bytes cert = 1;
 }
-message IndentityValidationResponse { bytes VlidationData = 1; }
 
-message SAPExchangeRequest { bytes Data = 1; }
-message SAPExchangeResponse { bytes ExchangeData = 1; }
+// Identity 会话响应
+message IdentitySessionResponse {
+  bytes request = 1;
+}
 
-message SAPSignPrimeRequest { bytes SignData = 1; }
-message SAPSignPrimeResponse { bytes Signature = 1; }
+// Identity 验证请求
+message IdentityValidationRequest {
+  bytes response  = 1;
+  bytes sign_data = 2;
+}
 
-message SAPVerifyPrimeRequest { bytes Data = 1; }
+// Identity 验证响应
+message IdentityValidationResponse {
+  bytes validation_data = 1;
+}
+
+// SAP 交换请求
+message SAPExchangeRequest {
+  bytes data = 1;
+}
+
+// SAP 交换响应
+message SAPExchangeResponse {
+  bytes exchange_data = 1;
+}
+
+// SAP 质数签名请求
+message SAPSignPrimeRequest {
+  bytes sign_data = 1;
+}
+
+// SAP 质数签名响应
+message SAPSignPrimeResponse {
+  bytes signature = 1;
+}
+
+// SAP 质数验证请求
+message SAPVerifyPrimeRequest {
+  bytes data = 1;
+}
+
+// SAP 质数验证响应
 message SAPVerifyPrimeResponse {}
 
-message SAPSignRequest { bytes SignData = 1; }
-message SAPSignResponse { bytes Signature = 1; }
+// SAP 签名请求
+message SAPSignRequest {
+  bytes sign_data = 1;
+}
 
-message SAPVerifyRequest { bytes Data = 1; bytes Signature = 2; }
+// SAP 签名响应
+message SAPSignResponse {
+  bytes signature = 1;
+}
+
+// SAP 验证请求
+message SAPVerifyRequest {
+  bytes data      = 1;
+  bytes signature = 2;
+}
+
+// SAP 验证响应
 message SAPVerifyResponse {}
 
+// 加密服务
 service CryptService {
+  // 初始化
   rpc Initialize(InitializeRequest) returns (InitializeResponse) {
     option (google.api.http) = {
       post: "/initialize"
       body: "*"
     };
   }
+
+  // 结束
   rpc Finalize(FinalizeRequest) returns (FinalizeResponse) {
     option (google.api.http) = {
       post: "/finalize"
@@ -205,107 +309,119 @@ service CryptService {
     };
   }
 
-  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest)
-      returns (ActivationDRMHandshakeResponse) {
+  // DRM 激活握手
+  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest) returns (ActivationDRMHandshakeResponse) {
     option (google.api.http) = {
       post: "/activation/drm/handshake"
       body: "*"
     };
   }
-  rpc ActivationDRMProcess(ActivationDRMProcessRequest)
-      returns (ActivationDRMProcessResponse) {
+
+  // DRM 激活处理
+  rpc ActivationDRMProcess(ActivationDRMProcessRequest) returns (ActivationDRMProcessResponse) {
     option (google.api.http) = {
       post: "/activation/drm/process"
       body: "*"
     };
   }
-  rpc ActivationDRMSignature(ActivationDRMSignatureRequest)
-      returns (ActivationDRMSignatureResponse) {
+
+  // DRM 激活签名
+  rpc ActivationDRMSignature(ActivationDRMSignatureRequest) returns (ActivationDRMSignatureResponse) {
     option (google.api.http) = {
       post: "/activation/drm/signature"
       body: "*"
     };
   }
-  rpc ActivationDeprecated(ActivationDeprecatedRequest)
-      returns (ActivationDeprecatedResponse) {
+
+  // 旧版激活
+  rpc ActivationDeprecated(ActivationDeprecatedRequest) returns (ActivationDeprecatedResponse) {
     option (google.api.http) = {
       post: "/activation/deprecated"
       body: "*"
     };
   }
-  rpc ActivationRecord(ActivationRecordRequest)
-      returns (ActivationRecordResponse) {
+
+  // 激活记录
+  rpc ActivationRecord(ActivationRecordRequest) returns (ActivationRecordResponse) {
     option (google.api.http) = {
       post: "/activation/record"
       body: "*"
     };
   }
 
-  rpc ADIStartProvisioning(ADIStartProvisioningRequest)
-      returns (ADIStartProvisioningResponse) {
+  // ADI 开始配置
+  rpc ADIStartProvisioning(ADIStartProvisioningRequest) returns (ADIStartProvisioningResponse) {
     option (google.api.http) = {
       post: "/adi/start-provisioning"
       body: "*"
     };
   }
-  rpc ADIEndProvisioning(ADIEndProvisioningRequest)
-      returns (ADIEndProvisioningResponse) {
+
+  // ADI 结束配置
+  rpc ADIEndProvisioning(ADIEndProvisioningRequest) returns (ADIEndProvisioningResponse) {
     option (google.api.http) = {
       post: "/adi/end-provisioning"
       body: "*"
     };
   }
-  rpc ADIGenerateLoginCode(ADIGenerateLoginCodeRequest)
-      returns (ADIGenerateLoginCodeResponse) {
+
+  // ADI 生成登录码
+  rpc ADIGenerateLoginCode(ADIGenerateLoginCodeRequest) returns (ADIGenerateLoginCodeResponse) {
     option (google.api.http) = {
       post: "/adi/generate-login-code"
       body: "*"
     };
   }
 
+  // Absinthe Hello
   rpc AbsintheHello(AbsintheHelloRequest) returns (AbsintheHelloResponse) {
     option (google.api.http) = {
       post: "/absinthe/hello"
       body: "*"
     };
   }
-  rpc AbsintheAddOption(AbsintheAddOptionRequest)
-      returns (AbsintheAddOptionResponse) {
+
+  // Absinthe 添加选项
+  rpc AbsintheAddOption(AbsintheAddOptionRequest) returns (AbsintheAddOptionResponse) {
     option (google.api.http) = {
       post: "/absinthe/add-option"
       body: "*"
     };
   }
-  rpc AbsintheAtivateSession(AbsintheAtivateSessionRequest)
-      returns (AbsintheAtivateSessionResponse) {
+
+  // Absinthe 激活会话
+  rpc AbsintheActivateSession(AbsintheActivateSessionRequest) returns (AbsintheActivateSessionResponse) {
     option (google.api.http) = {
       post: "/absinthe/activate-session"
       body: "*"
     };
   }
-  rpc AbsintheSignData(AbsintheSignDataRequest)
-      returns (AbsintheSignDataResponse) {
+
+  // Absinthe 签名数据
+  rpc AbsintheSignData(AbsintheSignDataRequest) returns (AbsintheSignDataResponse) {
     option (google.api.http) = {
       post: "/absinthe/sign-data"
       body: "*"
     };
   }
 
-  rpc IndentitySession(IndentitySessionRequest)
-      returns (IndentitySessionResponse) {
+  // Identity 会话
+  rpc IdentitySession(IdentitySessionRequest) returns (IdentitySessionResponse) {
     option (google.api.http) = {
       post: "/identity/session"
       body: "*"
     };
   }
-  rpc IndentityValidation(IndentityValidationRequest)
-      returns (IndentityValidationResponse) {
+
+  // Identity 验证
+  rpc IdentityValidation(IdentityValidationRequest) returns (IdentityValidationResponse) {
     option (google.api.http) = {
       post: "/identity/validation"
       body: "*"
     };
   }
 
+  // SAP 交换
   rpc SAPExchange(SAPExchangeRequest) returns (SAPExchangeResponse) {
     option (google.api.http) = {
       post: "/sap/exchange"
@@ -313,24 +429,31 @@ service CryptService {
     };
   }
 
+  // SAP 质数签名
   rpc SAPSignPrime(SAPSignPrimeRequest) returns (SAPSignPrimeResponse) {
     option (google.api.http) = {
       post: "/sap/sign-prime"
       body: "*"
     };
   }
+
+  // SAP 质数验证
   rpc SAPVerifyPrime(SAPVerifyPrimeRequest) returns (SAPVerifyPrimeResponse) {
     option (google.api.http) = {
       post: "/sap/verify-prime"
       body: "*"
     };
   }
+
+  // SAP 签名
   rpc SAPSign(SAPSignRequest) returns (SAPSignResponse) {
     option (google.api.http) = {
       post: "/sap/sign"
       body: "*"
     };
   }
+
+  // SAP 验证
   rpc SAPVerify(SAPVerifyRequest) returns (SAPVerifyResponse) {
     option (google.api.http) = {
       post: "/sap/verify"

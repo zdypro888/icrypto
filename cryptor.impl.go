@@ -65,38 +65,7 @@ func (crypt *CryptorGRPC) Initialize(type_ InitializeType, device *Device) error
 	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Type: type_, Device: device}); err != nil {
 		return err
 	} else {
-		device.OStype = response.Device.OStype
-		device.SerialNumber = response.Device.SerialNumber
-		// macOS
-		device.Model = response.Device.Model
-		device.OSRevision = response.Device.OSRevision
-		device.OSVersion = response.Device.OSVersion
-		device.BoardId = response.Device.BoardId
-		device.DiskId = response.Device.DiskId
-		device.HardWareUUID = response.Device.HardWareUUID
-		device.MacAddress = response.Device.MacAddress
-		device.ROM = response.Device.ROM
-		device.MLB = response.Device.MLB
-		device.KGq3489Ugfi = response.Device.KGq3489Ugfi
-		device.KFyp98Tpgj = response.Device.KFyp98Tpgj
-		device.KkbjfrfpoJU = response.Device.KkbjfrfpoJU
-		device.KoycqAZloTNDm = response.Device.KoycqAZloTNDm
-		device.KabKPld1EcMni = response.Device.KabKPld1EcMni
-		// iOS
-		device.ProductType = response.Device.ProductType
-		device.IMEI = response.Device.IMEI
-		device.UniqueChipID = response.Device.UniqueChipID
-		device.UniqueDeviceID = response.Device.UniqueDeviceID
-		device.WifiAddress = response.Device.WifiAddress
-		device.BluetoothAddress = response.Device.BluetoothAddress
-		device.SecureElementSN = response.Device.SecureElementSN
-		// Global
-		device.BuildVersion = response.Device.BuildVersion
-		device.ProductVersion = response.Device.ProductVersion
-		device.FairplayKeyData = response.Device.FairplayKeyData
-		device.ADI = response.Device.ADI
-		device.APTicket = response.Device.APTicket
-		device.SUInfo = response.Device.SUInfo
+		*device = *response.Device
 	}
 	return nil
 }
@@ -141,10 +110,10 @@ func (crypt *CryptorGRPC) ActivationDRMSignature(activationXML []byte) ([]byte, 
 	defer cancel()
 	var err error
 	var response *ActivationDRMSignatureResponse
-	if response, err = crypt.Client.ActivationDRMSignature(ctx, &ActivationDRMSignatureRequest{ActivationInfoXML: activationXML}); err != nil {
+	if response, err = crypt.Client.ActivationDRMSignature(ctx, &ActivationDRMSignatureRequest{ActivationInfoXml: activationXML}); err != nil {
 		return nil, nil, nil, nil, nil, err
 	}
-	return response.FairPlaySignature, response.FairPlayCertChain, response.RKSignature, response.SignActRequest, response.ServerKP, nil
+	return response.FairplaySignature, response.FairplayCertChain, response.RKSignature, response.SignActRequest, response.ServerKP, nil
 }
 
 // ActivationDeprecated return [0]fairpalySign, [1]fairplayCert
@@ -153,7 +122,7 @@ func (crypt *CryptorGRPC) ActivationDeprecated(activationXML []byte) ([]byte, []
 	defer cancel()
 	var err error
 	var response *ActivationDeprecatedResponse
-	if response, err = crypt.Client.ActivationDeprecated(ctx, &ActivationDeprecatedRequest{ActivationInfoXML: activationXML}); err != nil {
+	if response, err = crypt.Client.ActivationDeprecated(ctx, &ActivationDeprecatedRequest{ActivationInfoXml: activationXML}); err != nil {
 		return nil, nil, err
 	}
 	return response.Sign, response.Cert, nil
@@ -170,14 +139,14 @@ func (crypt *CryptorGRPC) ActivationRecord(unbrick bool, AccountTokenCertificate
 		AccountTokenCertificate: AccountTokenCertificate,
 		DeviceCertificate:       DeviceCertificate,
 		RegulatoryInfo:          RegulatoryInfo,
-		FairPlayKeyData:         FairPlayKeyData,
+		FairplayKeyData:         FairPlayKeyData,
 		AccountToken:            AccountToken,
 		AccountTokenSignature:   AccountTokenSignature,
 		UniqueDeviceCertificate: UniqueDeviceCertificate,
 	}); err != nil {
 		return nil, nil, nil, nil, nil, err
 	}
-	return response.SubCAKey, response.AttestationKey, response.UIK, response.RK, response.PSCSui, nil
+	return response.SubCAKey, response.AttestationKey, response.UIK, response.RK, response.PscSui, nil
 }
 
 // ADIStartProvisioning 返回 CPIM Session Error
@@ -234,18 +203,18 @@ func (crypt *CryptorGRPC) AbsintheAddOption(BIKKey []byte, BAACert []byte, inter
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	if _, err = crypt.Client.AbsintheAddOption(ctx, &AbsintheAddOptionRequest{BIKKey: BIKKey, BAACert: BAACert, IntermediateRootCert: intermediateRootCert}); err != nil {
+	if _, err = crypt.Client.AbsintheAddOption(ctx, &AbsintheAddOptionRequest{BikKey: BIKKey, BaaCert: BAACert, IntermediateRootCert: intermediateRootCert}); err != nil {
 		return err
 	}
 	return nil
 }
 
-// AbsintheAtivateSession 设置 session 返回（absinthe-response）
-func (crypt *CryptorGRPC) AbsintheAtivateSession(validationData []byte, serverKey []byte) error {
+// AbsintheActivateSession 设置 session 返回（absinthe-response）
+func (crypt *CryptorGRPC) AbsintheActivateSession(validationData []byte, serverKey []byte) error {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	if _, err = crypt.Client.AbsintheAtivateSession(ctx, &AbsintheAtivateSessionRequest{ValidationData: validationData, ServerKey: serverKey}); err != nil {
+	if _, err = crypt.Client.AbsintheActivateSession(ctx, &AbsintheActivateSessionRequest{ValidationData: validationData, ServerKey: serverKey}); err != nil {
 		return err
 	}
 	return nil
@@ -263,28 +232,28 @@ func (crypt *CryptorGRPC) AbsintheSignData(dataToSign []byte) ([]byte, []byte, e
 	return response.Signature, response.OutServKey, nil
 }
 
-// IndentitySession 注册 SessionInfoRequest
-func (crypt *CryptorGRPC) IndentitySession(cert []byte) ([]byte, error) {
+// IdentitySession 注册 SessionInfoRequest
+func (crypt *CryptorGRPC) IdentitySession(cert []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	var response *IndentitySessionResponse
-	if response, err = crypt.Client.IndentitySession(ctx, &IndentitySessionRequest{Cert: cert}); err != nil {
+	var response *IdentitySessionResponse
+	if response, err = crypt.Client.IdentitySession(ctx, &IdentitySessionRequest{Cert: cert}); err != nil {
 		return nil, err
 	}
 	return response.Request, nil
 }
 
-// IndentityValidation 取得VD
-func (crypt *CryptorGRPC) IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error) {
+// IdentityValidation 取得VD
+func (crypt *CryptorGRPC) IdentityValidation(sessionInfo []byte, signData []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext()
 	defer cancel()
 	var err error
-	var response *IndentityValidationResponse
-	if response, err = crypt.Client.IndentityValidation(ctx, &IndentityValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
+	var response *IdentityValidationResponse
+	if response, err = crypt.Client.IdentityValidation(ctx, &IdentityValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
 		return nil, err
 	}
-	return response.VlidationData, nil
+	return response.ValidationData, nil
 }
 
 func (crypt *CryptorGRPC) SAPExchange(data []byte) ([]byte, error) {

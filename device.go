@@ -21,5 +21,5 @@ func (device *Device) ChipId() uint32 {
 
 // ChipString chipId = CPUID
 func (device *Device) ChipString() string {
-	return fmt.Sprintf("%08X-%016X", device.ChipId(), device.UniqueChipID)
+	return fmt.Sprintf("%08X-%016X", device.ChipId(), device.UniqueChipId)
 }

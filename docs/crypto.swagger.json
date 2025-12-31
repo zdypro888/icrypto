@@ -18,12 +18,13 @@
   "paths": {
     "/absinthe/activate-session": {
       "post": {
-        "operationId": "CryptService_AbsintheAtivateSession",
+        "summary": "Absinthe 激活会话",
+        "operationId": "CryptService_AbsintheActivateSession",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/icryptoAbsintheAtivateSessionResponse"
+              "$ref": "#/definitions/icryptoAbsintheActivateSessionResponse"
             }
           },
           "default": {
@@ -39,7 +40,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/icryptoAbsintheAtivateSessionRequest"
+              "$ref": "#/definitions/icryptoAbsintheActivateSessionRequest"
             }
           }
         ],
@@ -50,6 +51,7 @@
     },
     "/absinthe/add-option": {
       "post": {
+        "summary": "Absinthe 添加选项",
         "operationId": "CryptService_AbsintheAddOption",
         "responses": {
           "200": {
@@ -82,6 +84,7 @@
     },
     "/absinthe/hello": {
       "post": {
+        "summary": "Absinthe Hello",
         "operationId": "CryptService_AbsintheHello",
         "responses": {
           "200": {
@@ -114,6 +117,7 @@
     },
     "/absinthe/sign-data": {
       "post": {
+        "summary": "Absinthe 签名数据",
         "operationId": "CryptService_AbsintheSignData",
         "responses": {
           "200": {
@@ -146,6 +150,7 @@
     },
     "/activation/deprecated": {
       "post": {
+        "summary": "旧版激活",
         "operationId": "CryptService_ActivationDeprecated",
         "responses": {
           "200": {
@@ -178,6 +183,7 @@
     },
     "/activation/drm/handshake": {
       "post": {
+        "summary": "DRM 激活握手",
         "operationId": "CryptService_ActivationDRMHandshake",
         "responses": {
           "200": {
@@ -210,6 +216,7 @@
     },
     "/activation/drm/process": {
       "post": {
+        "summary": "DRM 激活处理",
         "operationId": "CryptService_ActivationDRMProcess",
         "responses": {
           "200": {
@@ -242,6 +249,7 @@
     },
     "/activation/drm/signature": {
       "post": {
+        "summary": "DRM 激活签名",
         "operationId": "CryptService_ActivationDRMSignature",
         "responses": {
           "200": {
@@ -274,6 +282,7 @@
     },
     "/activation/record": {
       "post": {
+        "summary": "激活记录",
         "operationId": "CryptService_ActivationRecord",
         "responses": {
           "200": {
@@ -306,6 +315,7 @@
     },
     "/adi/end-provisioning": {
       "post": {
+        "summary": "ADI 结束配置",
         "operationId": "CryptService_ADIEndProvisioning",
         "responses": {
           "200": {
@@ -338,6 +348,7 @@
     },
     "/adi/generate-login-code": {
       "post": {
+        "summary": "ADI 生成登录码",
         "operationId": "CryptService_ADIGenerateLoginCode",
         "responses": {
           "200": {
@@ -370,6 +381,7 @@
     },
     "/adi/start-provisioning": {
       "post": {
+        "summary": "ADI 开始配置",
         "operationId": "CryptService_ADIStartProvisioning",
         "responses": {
           "200": {
@@ -402,6 +414,7 @@
     },
     "/finalize": {
       "post": {
+        "summary": "结束",
         "operationId": "CryptService_Finalize",
         "responses": {
           "200": {
@@ -434,12 +447,13 @@
     },
     "/identity/session": {
       "post": {
-        "operationId": "CryptService_IndentitySession",
+        "summary": "Identity 会话",
+        "operationId": "CryptService_IdentitySession",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/icryptoIndentitySessionResponse"
+              "$ref": "#/definitions/icryptoIdentitySessionResponse"
             }
           },
           "default": {
@@ -455,7 +469,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/icryptoIndentitySessionRequest"
+              "$ref": "#/definitions/icryptoIdentitySessionRequest"
             }
           }
         ],
@@ -466,12 +480,13 @@
     },
     "/identity/validation": {
       "post": {
-        "operationId": "CryptService_IndentityValidation",
+        "summary": "Identity 验证",
+        "operationId": "CryptService_IdentityValidation",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/icryptoIndentityValidationResponse"
+              "$ref": "#/definitions/icryptoIdentityValidationResponse"
             }
           },
           "default": {
@@ -487,7 +502,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/icryptoIndentityValidationRequest"
+              "$ref": "#/definitions/icryptoIdentityValidationRequest"
             }
           }
         ],
@@ -498,6 +513,7 @@
     },
     "/initialize": {
       "post": {
+        "summary": "初始化",
         "operationId": "CryptService_Initialize",
         "responses": {
           "200": {
@@ -530,6 +546,7 @@
     },
     "/sap/exchange": {
       "post": {
+        "summary": "SAP 交换",
         "operationId": "CryptService_SAPExchange",
         "responses": {
           "200": {
@@ -562,6 +579,7 @@
     },
     "/sap/sign": {
       "post": {
+        "summary": "SAP 签名",
         "operationId": "CryptService_SAPSign",
         "responses": {
           "200": {
@@ -594,6 +612,7 @@
     },
     "/sap/sign-prime": {
       "post": {
+        "summary": "SAP 质数签名",
         "operationId": "CryptService_SAPSignPrime",
         "responses": {
           "200": {
@@ -626,6 +645,7 @@
     },
     "/sap/verify": {
       "post": {
+        "summary": "SAP 验证",
         "operationId": "CryptService_SAPVerify",
         "responses": {
           "200": {
@@ -658,6 +678,7 @@
     },
     "/sap/verify-prime": {
       "post": {
+        "summary": "SAP 质数验证",
         "operationId": "CryptService_SAPVerifyPrime",
         "responses": {
           "200": {
@@ -693,7 +714,7 @@
     "icryptoADIEndProvisioningRequest": {
       "type": "object",
       "properties": {
-        "Session": {
+        "session": {
           "type": "string",
           "format": "uint64"
         },
@@ -717,7 +738,8 @@
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "ADI 结束配置请求"
     },
     "icryptoADIEndProvisioningResponse": {
       "type": "object",
@@ -734,7 +756,8 @@
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "ADI 结束配置响应"
     },
     "icryptoADIGenerateLoginCodeRequest": {
       "type": "object",
@@ -747,20 +770,22 @@
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "ADI 生成登录码请求"
     },
     "icryptoADIGenerateLoginCodeResponse": {
       "type": "object",
       "properties": {
-        "Code": {
+        "code": {
           "type": "integer",
           "format": "int32"
         },
-        "LoginCode": {
+        "loginCode": {
           "type": "integer",
           "format": "int64"
         }
-      }
+      },
+      "title": "ADI 生成登录码响应"
     },
     "icryptoADIStartProvisioningRequest": {
       "type": "object",
@@ -773,12 +798,13 @@
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "ADI 开始配置请求"
     },
     "icryptoADIStartProvisioningResponse": {
       "type": "object",
       "properties": {
-        "Session": {
+        "session": {
           "type": "string",
           "format": "uint64"
         },
@@ -786,99 +812,110 @@
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "ADI 开始配置响应"
+    },
+    "icryptoAbsintheActivateSessionRequest": {
+      "type": "object",
+      "properties": {
+        "validationData": {
+          "type": "string",
+          "format": "byte"
+        },
+        "serverKey": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "Absinthe 激活会话请求"
+    },
+    "icryptoAbsintheActivateSessionResponse": {
+      "type": "object",
+      "title": "Absinthe 激活会话响应"
     },
     "icryptoAbsintheAddOptionRequest": {
       "type": "object",
       "properties": {
-        "BIKKey": {
+        "bikKey": {
           "type": "string",
           "format": "byte"
         },
-        "BAACert": {
+        "baaCert": {
           "type": "string",
           "format": "byte"
         },
-        "IntermediateRootCert": {
+        "intermediateRootCert": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Absinthe 添加选项请求"
     },
     "icryptoAbsintheAddOptionResponse": {
-      "type": "object"
-    },
-    "icryptoAbsintheAtivateSessionRequest": {
       "type": "object",
-      "properties": {
-        "ValidationData": {
-          "type": "string",
-          "format": "byte"
-        },
-        "ServerKey": {
-          "type": "string",
-          "format": "byte"
-        }
-      }
-    },
-    "icryptoAbsintheAtivateSessionResponse": {
-      "type": "object"
+      "title": "Absinthe 添加选项响应"
     },
     "icryptoAbsintheHelloRequest": {
       "type": "object",
       "properties": {
-        "Mode": {
+        "mode": {
           "type": "integer",
           "format": "int32"
         }
-      }
+      },
+      "title": "Absinthe Hello 请求"
     },
     "icryptoAbsintheHelloResponse": {
       "type": "object",
       "properties": {
-        "HelloMessage": {
+        "helloMessage": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Absinthe Hello 响应"
     },
     "icryptoAbsintheSignDataRequest": {
       "type": "object",
       "properties": {
-        "SignData": {
+        "signData": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Absinthe 签名数据请求"
     },
     "icryptoAbsintheSignDataResponse": {
       "type": "object",
       "properties": {
-        "Signature": {
+        "signature": {
           "type": "string",
           "format": "byte"
         },
-        "OutServKey": {
+        "outServKey": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Absinthe 签名数据响应"
     },
     "icryptoActivationDRMHandshakeRequest": {
-      "type": "object"
+      "type": "object",
+      "title": "DRM 激活握手请求"
     },
     "icryptoActivationDRMHandshakeResponse": {
       "type": "object",
       "properties": {
-        "CollectionBlob": {
+        "collectionBlob": {
           "type": "string",
           "format": "byte"
         },
-        "HandshakeRequestMessage": {
+        "handshakeRequestMessage": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "DRM 激活握手响应"
     },
     "icryptoActivationDRMProcessRequest": {
       "type": "object",
@@ -887,7 +924,7 @@
           "type": "string",
           "format": "byte"
         },
-        "HandshakeResponseMessage": {
+        "handshakeResponseMessage": {
           "type": "string",
           "format": "byte"
         },
@@ -895,7 +932,8 @@
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "DRM 激活处理请求"
     },
     "icryptoActivationDRMProcessResponse": {
       "type": "object",
@@ -908,25 +946,27 @@
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "DRM 激活处理响应"
     },
     "icryptoActivationDRMSignatureRequest": {
       "type": "object",
       "properties": {
-        "ActivationInfoXML": {
+        "activationInfoXml": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "DRM 激活签名请求"
     },
     "icryptoActivationDRMSignatureResponse": {
       "type": "object",
       "properties": {
-        "FairPlayCertChain": {
+        "fairplayCertChain": {
           "type": "string",
           "format": "byte"
         },
-        "FairPlaySignature": {
+        "fairplaySignature": {
           "type": "string",
           "format": "byte"
         },
@@ -934,82 +974,86 @@
           "type": "string",
           "format": "byte"
         },
-        "SignActRequest": {
+        "signActRequest": {
           "type": "string",
           "format": "byte"
         },
-        "ServerKP": {
+        "serverKP": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "DRM 激活签名响应"
     },
     "icryptoActivationDeprecatedRequest": {
       "type": "object",
       "properties": {
-        "ActivationInfoXML": {
+        "activationInfoXml": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "旧版激活请求"
     },
     "icryptoActivationDeprecatedResponse": {
       "type": "object",
       "properties": {
-        "Sign": {
+        "sign": {
           "type": "string",
           "format": "byte"
         },
-        "Cert": {
+        "cert": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "旧版激活响应"
     },
     "icryptoActivationRecordRequest": {
       "type": "object",
       "properties": {
-        "Unbrick": {
+        "unbrick": {
           "type": "boolean"
         },
-        "AccountTokenCertificate": {
+        "accountTokenCertificate": {
           "type": "string",
           "format": "byte"
         },
-        "DeviceCertificate": {
+        "deviceCertificate": {
           "type": "string",
           "format": "byte"
         },
-        "RegulatoryInfo": {
+        "regulatoryInfo": {
           "type": "string",
           "format": "byte"
         },
-        "FairPlayKeyData": {
+        "fairplayKeyData": {
           "type": "string",
           "format": "byte"
         },
-        "AccountToken": {
+        "accountToken": {
           "type": "string",
           "format": "byte"
         },
-        "AccountTokenSignature": {
+        "accountTokenSignature": {
           "type": "string",
           "format": "byte"
         },
-        "UniqueDeviceCertificate": {
+        "uniqueDeviceCertificate": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "激活记录请求"
     },
     "icryptoActivationRecordResponse": {
       "type": "object",
       "properties": {
-        "SubCAKey": {
+        "subCAKey": {
           "type": "string",
           "format": "byte"
         },
-        "AttestationKey": {
+        "attestationKey": {
           "type": "string",
           "format": "byte"
         },
@@ -1021,42 +1065,43 @@
           "type": "string",
           "format": "byte"
         },
-        "PSCSui": {
+        "pscSui": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "激活记录响应"
     },
     "icryptoDevice": {
       "type": "object",
       "properties": {
-        "OStype": {
+        "osType": {
           "$ref": "#/definitions/icryptoOSEnum"
         },
-        "SerialNumber": {
+        "serialNumber": {
           "type": "string"
         },
-        "Model": {
+        "model": {
           "type": "string",
           "title": "macOS"
         },
-        "OSRevision": {
+        "osRevision": {
           "type": "string",
           "format": "uint64"
         },
-        "OSVersion": {
+        "osVersion": {
           "type": "string"
         },
-        "BoardId": {
+        "boardId": {
           "type": "string"
         },
-        "DiskId": {
+        "diskId": {
           "type": "string"
         },
-        "HardWareUUID": {
+        "hardwareUUID": {
           "type": "string"
         },
-        "MacAddress": {
+        "MACAddress": {
           "type": "string",
           "format": "byte"
         },
@@ -1067,57 +1112,57 @@
         "MLB": {
           "type": "string"
         },
-        "KGq3489ugfi": {
+        "kGq3489ugfi": {
           "type": "string",
           "format": "byte"
         },
-        "KFyp98tpgj": {
+        "kFyp98tpgj": {
           "type": "string",
           "format": "byte"
         },
-        "KkbjfrfpoJU": {
+        "kkbjfrfpoJU": {
           "type": "string",
           "format": "byte"
         },
-        "KoycqAZloTNDm": {
+        "koycqAZloTNDm": {
           "type": "string",
           "format": "byte"
         },
-        "KabKPld1EcMni": {
+        "kabKPld1EcMni": {
           "type": "string",
           "format": "byte"
         },
-        "ProductType": {
+        "productType": {
           "type": "string",
           "title": "iOS"
         },
         "IMEI": {
           "type": "string"
         },
-        "UniqueChipID": {
+        "uniqueChipId": {
           "type": "string",
           "format": "uint64"
         },
-        "UniqueDeviceID": {
+        "uniqueDeviceId": {
           "type": "string"
         },
-        "WifiAddress": {
+        "wifiAddress": {
           "type": "string"
         },
-        "BluetoothAddress": {
+        "bluetoothAddress": {
           "type": "string"
         },
-        "SecureElementSN": {
+        "secureElementSN": {
           "type": "string"
         },
-        "BuildVersion": {
+        "buildVersion": {
           "type": "string",
           "title": "Global"
         },
-        "ProductVersion": {
+        "productVersion": {
           "type": "string"
         },
-        "FairplayKeyData": {
+        "fairplayKeyData": {
           "type": "string",
           "format": "byte"
         },
@@ -1132,174 +1177,201 @@
         "SUInfo": {
           "type": "string",
           "format": "byte"
+        },
+        "iuniosControls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
-      }
+      },
+      "title": "设备信息"
     },
     "icryptoFinalizeRequest": {
-      "type": "object"
+      "type": "object",
+      "title": "结束请求"
     },
     "icryptoFinalizeResponse": {
-      "type": "object"
+      "type": "object",
+      "title": "结束响应"
     },
-    "icryptoIndentitySessionRequest": {
+    "icryptoIdentitySessionRequest": {
       "type": "object",
       "properties": {
-        "Cert": {
+        "cert": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Identity 会话请求"
     },
-    "icryptoIndentitySessionResponse": {
+    "icryptoIdentitySessionResponse": {
       "type": "object",
       "properties": {
-        "Request": {
+        "request": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Identity 会话响应"
     },
-    "icryptoIndentityValidationRequest": {
+    "icryptoIdentityValidationRequest": {
       "type": "object",
       "properties": {
-        "Response": {
+        "response": {
           "type": "string",
           "format": "byte"
         },
-        "SignData": {
+        "signData": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Identity 验证请求"
     },
-    "icryptoIndentityValidationResponse": {
+    "icryptoIdentityValidationResponse": {
       "type": "object",
       "properties": {
-        "VlidationData": {
+        "validationData": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "Identity 验证响应"
     },
     "icryptoInitializeRequest": {
       "type": "object",
       "properties": {
-        "Type": {
+        "type": {
           "$ref": "#/definitions/icryptoInitializeType"
         },
-        "Device": {
+        "device": {
           "$ref": "#/definitions/icryptoDevice"
         }
-      }
+      },
+      "title": "初始化请求"
     },
     "icryptoInitializeResponse": {
       "type": "object",
       "properties": {
-        "Device": {
+        "device": {
           "$ref": "#/definitions/icryptoDevice"
         }
-      }
+      },
+      "title": "初始化响应"
     },
     "icryptoInitializeType": {
       "type": "string",
       "enum": [
-        "Auto",
-        "Arch64",
+        "AUTO",
+        "ARCH64",
         "DRM32"
       ],
-      "default": "Auto"
+      "default": "AUTO",
+      "title": "初始化类型枚举"
     },
     "icryptoOSEnum": {
       "type": "string",
       "enum": [
-        "All",
-        "macOS",
-        "iOS",
-        "Android"
+        "UNSPECIFIED",
+        "MACOS",
+        "IOS",
+        "ANDROID"
       ],
-      "default": "All"
+      "default": "UNSPECIFIED",
+      "title": "操作系统类型枚举"
     },
     "icryptoSAPExchangeRequest": {
       "type": "object",
       "properties": {
-        "Data": {
+        "data": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 交换请求"
     },
     "icryptoSAPExchangeResponse": {
       "type": "object",
       "properties": {
-        "ExchangeData": {
+        "exchangeData": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 交换响应"
     },
     "icryptoSAPSignPrimeRequest": {
       "type": "object",
       "properties": {
-        "SignData": {
+        "signData": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 质数签名请求"
     },
     "icryptoSAPSignPrimeResponse": {
       "type": "object",
       "properties": {
-        "Signature": {
+        "signature": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 质数签名响应"
     },
     "icryptoSAPSignRequest": {
       "type": "object",
       "properties": {
-        "SignData": {
+        "signData": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 签名请求"
     },
     "icryptoSAPSignResponse": {
       "type": "object",
       "properties": {
-        "Signature": {
+        "signature": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 签名响应"
     },
     "icryptoSAPVerifyPrimeRequest": {
       "type": "object",
       "properties": {
-        "Data": {
+        "data": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 质数验证请求"
     },
     "icryptoSAPVerifyPrimeResponse": {
-      "type": "object"
+      "type": "object",
+      "title": "SAP 质数验证响应"
     },
     "icryptoSAPVerifyRequest": {
       "type": "object",
       "properties": {
-        "Data": {
+        "data": {
           "type": "string",
           "format": "byte"
         },
-        "Signature": {
+        "signature": {
           "type": "string",
           "format": "byte"
         }
-      }
+      },
+      "title": "SAP 验证请求"
     },
     "icryptoSAPVerifyResponse": {
-      "type": "object"
+      "type": "object",
+      "title": "SAP 验证响应"
     },
     "protobufAny": {
       "type": "object",

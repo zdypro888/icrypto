@@ -42,15 +42,15 @@ type Cryptor interface {
 	AbsintheHello(mode int) ([]byte, error)
 	//AbsintheAddOption 添加 option
 	AbsintheAddOption(BIKKeyRef []byte, BAACert []byte, intermediateRootCert []byte) error
-	//AbsintheAtivateSession 设置 session 返回（absinthe-response）
-	AbsintheAtivateSession(validationData []byte, serverKey []byte) error
+	//AbsintheActivateSession 设置 session 返回（absinthe-response）
+	AbsintheActivateSession(validationData []byte, serverKey []byte) error
 	//AbsintheSignData signData 返回 signature outServKey
 	AbsintheSignData(dataToSign []byte) ([]byte, []byte, error)
 
-	//IndentitySession 注册 SessionInfoRequest
-	IndentitySession(cert []byte) ([]byte, error)
-	//IndentityValidation 取得VD
-	IndentityValidation(sessionInfo []byte, signData []byte) ([]byte, error)
+	//IdentitySession 注册 SessionInfoRequest
+	IdentitySession(cert []byte) ([]byte, error)
+	//IdentityValidation 取得VD
+	IdentityValidation(sessionInfo []byte, signData []byte) ([]byte, error)
 
 	//SAPExchange 交换数据
 	SAPExchange(data []byte) ([]byte, error)
