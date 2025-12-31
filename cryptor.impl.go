@@ -47,8 +47,8 @@ type CryptorGRPC struct {
 	Client   CryptServiceClient
 }
 
-func (crypt *CryptorGRPC) metaContext() (context.Context, context.CancelFunc) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+func (crypt *CryptorGRPC) metaContext(ctx context.Context) (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithTimeout(ctx, 60*time.Second)
 	pairs := []string{"client_id", crypt.ClientId}
 	if crypt.APIKey != "" {
 		pairs = append(pairs, "x-api-key", crypt.APIKey)
@@ -59,8 +59,8 @@ func (crypt *CryptorGRPC) metaContext() (context.Context, context.CancelFunc) {
 }
 
 // Initialize init crypto with device[see device struct]
-func (crypt *CryptorGRPC) Initialize(type_ InitializeType, device *Device) error {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, device *Device) error {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Type: type_, Device: device}); err != nil {
 		return err
@@ -71,8 +71,8 @@ func (crypt *CryptorGRPC) Initialize(type_ InitializeType, device *Device) error
 }
 
 // InitDevice finalize crypto
-func (crypt *CryptorGRPC) Finalize() error {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) Finalize(ctx context.Context) error {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	if _, err := crypt.Client.Finalize(ctx, &FinalizeRequest{}); err != nil {
 		return err
@@ -81,8 +81,8 @@ func (crypt *CryptorGRPC) Finalize() error {
 }
 
 // ActivationDRMHandshake generate [0]CollectionBlob and [1]handshakeRequestMessage
-func (crypt *CryptorGRPC) ActivationDRMHandshake() ([]byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ActivationDRMHandshake(ctx context.Context) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ActivationDRMHandshakeResponse
@@ -93,8 +93,8 @@ func (crypt *CryptorGRPC) ActivationDRMHandshake() ([]byte, []byte, error) {
 }
 
 // ActivationDRMProcess process handshake response and return [0]UIK [1]RK
-func (crypt *CryptorGRPC) ActivationDRMProcess(suinfo, handshakeResponseMessage, serverKP []byte) ([]byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ActivationDRMProcess(ctx context.Context, suinfo, handshakeResponseMessage, serverKP []byte) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ActivationDRMProcessResponse
@@ -105,8 +105,8 @@ func (crypt *CryptorGRPC) ActivationDRMProcess(suinfo, handshakeResponseMessage,
 }
 
 // ActivationDRMSignature sign activation xml and return [0]fairpalySign, [1]fairplayCert, [2]RKSignature, [3]signActRequest, [4]serverKP
-func (crypt *CryptorGRPC) ActivationDRMSignature(activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ActivationDRMSignature(ctx context.Context, activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ActivationDRMSignatureResponse
@@ -117,8 +117,8 @@ func (crypt *CryptorGRPC) ActivationDRMSignature(activationXML []byte) ([]byte, 
 }
 
 // ActivationDeprecated return [0]fairpalySign, [1]fairplayCert
-func (crypt *CryptorGRPC) ActivationDeprecated(activationXML []byte) ([]byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ActivationDeprecated(ctx context.Context, activationXML []byte) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ActivationDeprecatedResponse
@@ -129,8 +129,8 @@ func (crypt *CryptorGRPC) ActivationDeprecated(activationXML []byte) ([]byte, []
 }
 
 // ActivationRecord set activation response return [0]subCAKey, [1]attestationKey, [2]UIK, [3]RK, [4]psc.sui
-func (crypt *CryptorGRPC) ActivationRecord(unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ActivationRecord(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ActivationRecordResponse
@@ -150,8 +150,8 @@ func (crypt *CryptorGRPC) ActivationRecord(unbrick bool, AccountTokenCertificate
 }
 
 // ADIStartProvisioning 返回 CPIM Session Error
-func (crypt *CryptorGRPC) ADIStartProvisioning(dsid int64, spim []byte) ([]byte, uint64, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ADIStartProvisioning(ctx context.Context, dsid int64, spim []byte) ([]byte, uint64, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ADIStartProvisioningResponse
@@ -162,8 +162,8 @@ func (crypt *CryptorGRPC) ADIStartProvisioning(dsid int64, spim []byte) ([]byte,
 }
 
 // ADIEndProvisioning 返回 MID OTP ADI Error
-func (crypt *CryptorGRPC) ADIEndProvisioning(session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ADIEndProvisioning(ctx context.Context, session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ADIEndProvisioningResponse
@@ -174,8 +174,8 @@ func (crypt *CryptorGRPC) ADIEndProvisioning(session uint64, dsid int64, rinfo i
 }
 
 // ADIGenerateLoginCode 返回 loginCode
-func (crypt *CryptorGRPC) ADIGenerateLoginCode(dsid int64, adi []byte) (uint32, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) ADIGenerateLoginCode(ctx context.Context, dsid int64, adi []byte) (uint32, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *ADIGenerateLoginCodeResponse
@@ -188,8 +188,8 @@ func (crypt *CryptorGRPC) ADIGenerateLoginCode(dsid int64, adi []byte) (uint32, 
 	return response.LoginCode, nil
 }
 
-func (crypt *CryptorGRPC) AbsintheHello(mode int) ([]byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) AbsintheHello(ctx context.Context, mode int) ([]byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *AbsintheHelloResponse
@@ -199,8 +199,8 @@ func (crypt *CryptorGRPC) AbsintheHello(mode int) ([]byte, error) {
 	return response.HelloMessage, nil
 }
 
-func (crypt *CryptorGRPC) AbsintheAddOption(BIKKey []byte, BAACert []byte, intermediateRootCert []byte) error {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) AbsintheAddOption(ctx context.Context, BIKKey []byte, BAACert []byte, intermediateRootCert []byte) error {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.AbsintheAddOption(ctx, &AbsintheAddOptionRequest{BikKey: BIKKey, BaaCert: BAACert, IntermediateRootCert: intermediateRootCert}); err != nil {
@@ -210,8 +210,8 @@ func (crypt *CryptorGRPC) AbsintheAddOption(BIKKey []byte, BAACert []byte, inter
 }
 
 // AbsintheActivateSession 设置 session 返回（absinthe-response）
-func (crypt *CryptorGRPC) AbsintheActivateSession(validationData []byte, serverKey []byte) error {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) AbsintheActivateSession(ctx context.Context, validationData []byte, serverKey []byte) error {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.AbsintheActivateSession(ctx, &AbsintheActivateSessionRequest{ValidationData: validationData, ServerKey: serverKey}); err != nil {
@@ -221,8 +221,8 @@ func (crypt *CryptorGRPC) AbsintheActivateSession(validationData []byte, serverK
 }
 
 // AbsintheSignData signData 返回 signature outServKey
-func (crypt *CryptorGRPC) AbsintheSignData(dataToSign []byte) ([]byte, []byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) AbsintheSignData(ctx context.Context, dataToSign []byte) ([]byte, []byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *AbsintheSignDataResponse
@@ -233,8 +233,8 @@ func (crypt *CryptorGRPC) AbsintheSignData(dataToSign []byte) ([]byte, []byte, e
 }
 
 // IdentitySession 注册 SessionInfoRequest
-func (crypt *CryptorGRPC) IdentitySession(cert []byte) ([]byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) IdentitySession(ctx context.Context, cert []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *IdentitySessionResponse
@@ -245,8 +245,8 @@ func (crypt *CryptorGRPC) IdentitySession(cert []byte) ([]byte, error) {
 }
 
 // IdentityValidation 取得VD
-func (crypt *CryptorGRPC) IdentityValidation(sessionInfo []byte, signData []byte) ([]byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) IdentityValidation(ctx context.Context, sessionInfo []byte, signData []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *IdentityValidationResponse
@@ -256,8 +256,8 @@ func (crypt *CryptorGRPC) IdentityValidation(sessionInfo []byte, signData []byte
 	return response.ValidationData, nil
 }
 
-func (crypt *CryptorGRPC) SAPExchange(data []byte) ([]byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) SAPExchange(ctx context.Context, data []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *SAPExchangeResponse
@@ -267,8 +267,8 @@ func (crypt *CryptorGRPC) SAPExchange(data []byte) ([]byte, error) {
 	return response.ExchangeData, nil
 }
 
-func (crypt *CryptorGRPC) SAPSignPrime(signData []byte) ([]byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) SAPSignPrime(ctx context.Context, signData []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *SAPSignPrimeResponse
@@ -278,8 +278,8 @@ func (crypt *CryptorGRPC) SAPSignPrime(signData []byte) ([]byte, error) {
 	return response.Signature, nil
 }
 
-func (crypt *CryptorGRPC) SAPVerifyPrime(data []byte) error {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) SAPVerifyPrime(ctx context.Context, data []byte) error {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.SAPVerifyPrime(ctx, &SAPVerifyPrimeRequest{Data: data}); err != nil {
@@ -288,8 +288,8 @@ func (crypt *CryptorGRPC) SAPVerifyPrime(data []byte) error {
 	return nil
 }
 
-func (crypt *CryptorGRPC) SAPSign(signData []byte) ([]byte, error) {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) SAPSign(ctx context.Context, signData []byte) ([]byte, error) {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *SAPSignResponse
@@ -299,8 +299,8 @@ func (crypt *CryptorGRPC) SAPSign(signData []byte) ([]byte, error) {
 	return response.Signature, nil
 }
 
-func (crypt *CryptorGRPC) SAPVerify(data []byte, signature []byte) error {
-	ctx, cancel := crypt.metaContext()
+func (crypt *CryptorGRPC) SAPVerify(ctx context.Context, data []byte, signature []byte) error {
+	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	if _, err = crypt.Client.SAPVerify(ctx, &SAPVerifyRequest{Data: data, Signature: signature}); err != nil {
