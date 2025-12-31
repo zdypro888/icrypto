@@ -24,30 +24,30 @@ message Device {
   string board_id      = 6;
   string disk_id       = 7;
   string hardwareUUID  = 8;
-  bytes  MACAddress    = 9;
-  bytes  ROM           = 10;
-  string MLB           = 11;
-  bytes  kGq3489ugfi   = 12;
-  bytes  kFyp98tpgj    = 13;
-  bytes  kkbjfrfpoJU   = 14;
-  bytes  koycqAZloTNDm = 15;
-  bytes  kabKPld1EcMni = 16;
+  string bootUUID      = 9;
+  bytes  MACAddress    = 10;
+  bytes  ROM           = 11;
+  string MLB           = 12;
+  bytes  kGq3489ugfi   = 13;
+  bytes  kFyp98tpgj    = 14;
+  bytes  kkbjfrfpoJU   = 15;
+  bytes  koycqAZloTNDm = 16;
+  bytes  kabKPld1EcMni = 17;
   // iOS
-  string product_type      = 17;
-  string IMEI              = 18;
-  uint64 unique_chip_id    = 19;
-  string unique_device_id  = 20;
-  string wifi_address      = 21;
-  string bluetooth_address = 22;
-  string secure_elementSN  = 23;
+  string product_type      = 18;
+  string IMEI              = 19;
+  uint64 unique_chip_id    = 20;
+  string unique_device_id  = 21;
+  string wifi_address      = 22;
+  string bluetooth_address = 23;
+  string secure_elementSN  = 24;
   // Global
-  string          build_version     = 24;
-  string          product_version   = 25;
-  bytes           fairplay_key_data = 26;
-  bytes           ADI               = 27;
-  bytes           AP_ticket         = 28;
-  bytes           SUInfo            = 29;
-  repeated string iunios_controls   = 30;
+  string build_version     = 25;
+  string product_version   = 26;
+  bytes  fairplay_key_data = 27;
+  bytes  ADI               = 28;
+  bytes  AP_ticket         = 29;
+  bytes  SUInfo            = 30;
 }
 
 // 初始化类型枚举
@@ -59,8 +59,9 @@ enum InitializeType {
 
 // 初始化请求
 message InitializeRequest {
-  InitializeType type   = 1;
-  Device         device = 2;
+  InitializeType  type     = 1;
+  Device          device   = 2;
+  repeated string controls = 3;
 }
 
 // 初始化响应
@@ -69,13 +70,17 @@ message InitializeResponse {
 }
 
 // 结束请求
-message FinalizeRequest {}
+message FinalizeRequest {
+  repeated string controls = 1;
+}
 
 // 结束响应
 message FinalizeResponse {}
 
 // DRM 激活握手请求
-message ActivationDRMHandshakeRequest {}
+message ActivationDRMHandshakeRequest {
+  repeated string controls = 1;
+}
 
 // DRM 激活握手响应
 message ActivationDRMHandshakeResponse {
@@ -85,9 +90,10 @@ message ActivationDRMHandshakeResponse {
 
 // DRM 激活处理请求
 message ActivationDRMProcessRequest {
-  bytes SUInfo                     = 1;
-  bytes handshake_response_message = 2;
-  bytes serverKP                   = 3;
+  bytes           SUInfo                     = 1;
+  bytes           handshake_response_message = 2;
+  bytes           serverKP                   = 3;
+  repeated string controls                   = 4;
 }
 
 // DRM 激活处理响应
@@ -98,7 +104,8 @@ message ActivationDRMProcessResponse {
 
 // DRM 激活签名请求
 message ActivationDRMSignatureRequest {
-  bytes activation_info_xml = 1;
+  bytes           activation_info_xml = 1;
+  repeated string controls            = 2;
 }
 
 // DRM 激活签名响应
@@ -112,7 +119,8 @@ message ActivationDRMSignatureResponse {
 
 // 旧版激活请求
 message ActivationDeprecatedRequest {
-  bytes activation_info_xml = 1;
+  bytes           activation_info_xml = 1;
+  repeated string controls            = 2;
 }
 
 // 旧版激活响应
@@ -123,14 +131,15 @@ message ActivationDeprecatedResponse {
 
 // 激活记录请求
 message ActivationRecordRequest {
-  bool  unbrick                   = 1;
-  bytes account_token_certificate = 2;
-  bytes device_certificate        = 3;
-  bytes regulatory_info           = 4;
-  bytes fairplay_key_data         = 5;
-  bytes account_token             = 6;
-  bytes account_token_signature   = 7;
-  bytes unique_device_certificate = 8;
+  bool            unbrick                   = 1;
+  bytes           account_token_certificate = 2;
+  bytes           device_certificate        = 3;
+  bytes           regulatory_info           = 4;
+  bytes           fairplay_key_data         = 5;
+  bytes           account_token             = 6;
+  bytes           account_token_signature   = 7;
+  bytes           unique_device_certificate = 8;
+  repeated string controls                  = 9;
 }
 
 // 激活记录响应
@@ -144,8 +153,9 @@ message ActivationRecordResponse {
 
 // ADI 开始配置请求
 message ADIStartProvisioningRequest {
-  int64 DSID = 1;
-  bytes SPIM = 2;
+  int64           DSID     = 1;
+  bytes           SPIM     = 2;
+  repeated string controls = 3;
 }
 
 // ADI 开始配置响应
@@ -156,12 +166,13 @@ message ADIStartProvisioningResponse {
 
 // ADI 结束配置请求
 message ADIEndProvisioningRequest {
-  uint64 session = 1;
-  int64  DSID    = 2;
-  int64  RINFO   = 3;
-  bytes  PTM     = 4;
-  bytes  TK      = 5;
-  bytes  ADI     = 6;
+  uint64          session  = 1;
+  int64           DSID     = 2;
+  int64           RINFO    = 3;
+  bytes           PTM      = 4;
+  bytes           TK       = 5;
+  bytes           ADI      = 6;
+  repeated string controls = 7;
 }
 
 // ADI 结束配置响应
@@ -173,8 +184,9 @@ message ADIEndProvisioningResponse {
 
 // ADI 生成登录码请求
 message ADIGenerateLoginCodeRequest {
-  int64 DSID = 1;
-  bytes ADI  = 2;
+  int64           DSID     = 1;
+  bytes           ADI      = 2;
+  repeated string controls = 3;
 }
 
 // ADI 生成登录码响应
@@ -185,7 +197,8 @@ message ADIGenerateLoginCodeResponse {
 
 // Absinthe Hello 请求
 message AbsintheHelloRequest {
-  int32 mode = 1;
+  int32           mode     = 1;
+  repeated string controls = 2;
 }
 
 // Absinthe Hello 响应
@@ -195,9 +208,10 @@ message AbsintheHelloResponse {
 
 // Absinthe 添加选项请求
 message AbsintheAddOptionRequest {
-  bytes bik_key                = 1;
-  bytes baa_cert               = 2;
-  bytes intermediate_root_cert = 3;
+  bytes           bik_key                = 1;
+  bytes           baa_cert               = 2;
+  bytes           intermediate_root_cert = 3;
+  repeated string controls               = 4;
 }
 
 // Absinthe 添加选项响应
@@ -205,8 +219,9 @@ message AbsintheAddOptionResponse {}
 
 // Absinthe 激活会话请求
 message AbsintheActivateSessionRequest {
-  bytes validation_data = 1;
-  bytes server_key      = 2;
+  bytes           validation_data = 1;
+  bytes           server_key      = 2;
+  repeated string controls        = 3;
 }
 
 // Absinthe 激活会话响应
@@ -214,7 +229,8 @@ message AbsintheActivateSessionResponse {}
 
 // Absinthe 签名数据请求
 message AbsintheSignDataRequest {
-  bytes sign_data = 1;
+  bytes           sign_data = 1;
+  repeated string controls  = 2;
 }
 
 // Absinthe 签名数据响应
@@ -225,7 +241,8 @@ message AbsintheSignDataResponse {
 
 // Identity 会话请求
 message IdentitySessionRequest {
-  bytes cert = 1;
+  bytes           cert     = 1;
+  repeated string controls = 2;
 }
 
 // Identity 会话响应
@@ -235,8 +252,9 @@ message IdentitySessionResponse {
 
 // Identity 验证请求
 message IdentityValidationRequest {
-  bytes response  = 1;
-  bytes sign_data = 2;
+  bytes           response  = 1;
+  bytes           sign_data = 2;
+  repeated string controls  = 3;
 }
 
 // Identity 验证响应
@@ -246,7 +264,8 @@ message IdentityValidationResponse {
 
 // SAP 交换请求
 message SAPExchangeRequest {
-  bytes data = 1;
+  bytes           data     = 1;
+  repeated string controls = 2;
 }
 
 // SAP 交换响应
@@ -256,7 +275,8 @@ message SAPExchangeResponse {
 
 // SAP 质数签名请求
 message SAPSignPrimeRequest {
-  bytes sign_data = 1;
+  bytes           sign_data = 1;
+  repeated string controls  = 2;
 }
 
 // SAP 质数签名响应
@@ -266,7 +286,8 @@ message SAPSignPrimeResponse {
 
 // SAP 质数验证请求
 message SAPVerifyPrimeRequest {
-  bytes data = 1;
+  bytes           data     = 1;
+  repeated string controls = 2;
 }
 
 // SAP 质数验证响应
@@ -274,7 +295,8 @@ message SAPVerifyPrimeResponse {}
 
 // SAP 签名请求
 message SAPSignRequest {
-  bytes sign_data = 1;
+  bytes           sign_data = 1;
+  repeated string controls  = 2;
 }
 
 // SAP 签名响应
@@ -284,8 +306,9 @@ message SAPSignResponse {
 
 // SAP 验证请求
 message SAPVerifyRequest {
-  bytes data      = 1;
-  bytes signature = 2;
+  bytes           data      = 1;
+  bytes           signature = 2;
+  repeated string controls  = 3;
 }
 
 // SAP 验证响应

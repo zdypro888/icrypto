@@ -737,6 +737,12 @@
         "ADI": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "ADI 结束配置请求"
@@ -769,6 +775,12 @@
         "ADI": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "ADI 生成登录码请求"
@@ -797,6 +809,12 @@
         "SPIM": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "ADI 开始配置请求"
@@ -825,6 +843,12 @@
         "serverKey": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "Absinthe 激活会话请求"
@@ -847,6 +871,12 @@
         "intermediateRootCert": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "Absinthe 添加选项请求"
@@ -861,6 +891,12 @@
         "mode": {
           "type": "integer",
           "format": "int32"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "Absinthe Hello 请求"
@@ -881,6 +917,12 @@
         "signData": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "Absinthe 签名数据请求"
@@ -901,6 +943,14 @@
     },
     "icryptoActivationDRMHandshakeRequest": {
       "type": "object",
+      "properties": {
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
       "title": "DRM 激活握手请求"
     },
     "icryptoActivationDRMHandshakeResponse": {
@@ -931,6 +981,12 @@
         "serverKP": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "DRM 激活处理请求"
@@ -955,6 +1011,12 @@
         "activationInfoXml": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "DRM 激活签名请求"
@@ -991,6 +1053,12 @@
         "activationInfoXml": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "旧版激活请求"
@@ -1042,6 +1110,12 @@
         "uniqueDeviceCertificate": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "激活记录请求"
@@ -1099,6 +1173,9 @@
           "type": "string"
         },
         "hardwareUUID": {
+          "type": "string"
+        },
+        "bootUUID": {
           "type": "string"
         },
         "MACAddress": {
@@ -1177,18 +1254,20 @@
         "SUInfo": {
           "type": "string",
           "format": "byte"
-        },
-        "iuniosControls": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       },
       "title": "设备信息"
     },
     "icryptoFinalizeRequest": {
       "type": "object",
+      "properties": {
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
       "title": "结束请求"
     },
     "icryptoFinalizeResponse": {
@@ -1201,6 +1280,12 @@
         "cert": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "Identity 会话请求"
@@ -1225,6 +1310,12 @@
         "signData": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "Identity 验证请求"
@@ -1247,6 +1338,12 @@
         },
         "device": {
           "$ref": "#/definitions/icryptoDevice"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "初始化请求"
@@ -1287,6 +1384,12 @@
         "data": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "SAP 交换请求"
@@ -1307,6 +1410,12 @@
         "signData": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "SAP 质数签名请求"
@@ -1327,6 +1436,12 @@
         "signData": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "SAP 签名请求"
@@ -1347,6 +1462,12 @@
         "data": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "SAP 质数验证请求"
@@ -1365,6 +1486,12 @@
         "signature": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "SAP 验证请求"

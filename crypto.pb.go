@@ -137,30 +137,30 @@ type Device struct {
 	BoardId       string `protobuf:"bytes,6,opt,name=board_id,json=boardId,proto3" json:"board_id,omitempty"`
 	DiskId        string `protobuf:"bytes,7,opt,name=disk_id,json=diskId,proto3" json:"disk_id,omitempty"`
 	HardwareUUID  string `protobuf:"bytes,8,opt,name=hardwareUUID,proto3" json:"hardwareUUID,omitempty"`
-	MACAddress    []byte `protobuf:"bytes,9,opt,name=MACAddress,proto3" json:"MACAddress,omitempty"`
-	ROM           []byte `protobuf:"bytes,10,opt,name=ROM,proto3" json:"ROM,omitempty"`
-	MLB           string `protobuf:"bytes,11,opt,name=MLB,proto3" json:"MLB,omitempty"`
-	KGq3489Ugfi   []byte `protobuf:"bytes,12,opt,name=kGq3489ugfi,proto3" json:"kGq3489ugfi,omitempty"`
-	KFyp98Tpgj    []byte `protobuf:"bytes,13,opt,name=kFyp98tpgj,proto3" json:"kFyp98tpgj,omitempty"`
-	KkbjfrfpoJU   []byte `protobuf:"bytes,14,opt,name=kkbjfrfpoJU,proto3" json:"kkbjfrfpoJU,omitempty"`
-	KoycqAZloTNDm []byte `protobuf:"bytes,15,opt,name=koycqAZloTNDm,proto3" json:"koycqAZloTNDm,omitempty"`
-	KabKPld1EcMni []byte `protobuf:"bytes,16,opt,name=kabKPld1EcMni,proto3" json:"kabKPld1EcMni,omitempty"`
+	BootUUID      string `protobuf:"bytes,9,opt,name=bootUUID,proto3" json:"bootUUID,omitempty"`
+	MACAddress    []byte `protobuf:"bytes,10,opt,name=MACAddress,proto3" json:"MACAddress,omitempty"`
+	ROM           []byte `protobuf:"bytes,11,opt,name=ROM,proto3" json:"ROM,omitempty"`
+	MLB           string `protobuf:"bytes,12,opt,name=MLB,proto3" json:"MLB,omitempty"`
+	KGq3489Ugfi   []byte `protobuf:"bytes,13,opt,name=kGq3489ugfi,proto3" json:"kGq3489ugfi,omitempty"`
+	KFyp98Tpgj    []byte `protobuf:"bytes,14,opt,name=kFyp98tpgj,proto3" json:"kFyp98tpgj,omitempty"`
+	KkbjfrfpoJU   []byte `protobuf:"bytes,15,opt,name=kkbjfrfpoJU,proto3" json:"kkbjfrfpoJU,omitempty"`
+	KoycqAZloTNDm []byte `protobuf:"bytes,16,opt,name=koycqAZloTNDm,proto3" json:"koycqAZloTNDm,omitempty"`
+	KabKPld1EcMni []byte `protobuf:"bytes,17,opt,name=kabKPld1EcMni,proto3" json:"kabKPld1EcMni,omitempty"`
 	// iOS
-	ProductType      string `protobuf:"bytes,17,opt,name=product_type,json=productType,proto3" json:"product_type,omitempty"`
-	IMEI             string `protobuf:"bytes,18,opt,name=IMEI,proto3" json:"IMEI,omitempty"`
-	UniqueChipId     uint64 `protobuf:"varint,19,opt,name=unique_chip_id,json=uniqueChipId,proto3" json:"unique_chip_id,omitempty"`
-	UniqueDeviceId   string `protobuf:"bytes,20,opt,name=unique_device_id,json=uniqueDeviceId,proto3" json:"unique_device_id,omitempty"`
-	WifiAddress      string `protobuf:"bytes,21,opt,name=wifi_address,json=wifiAddress,proto3" json:"wifi_address,omitempty"`
-	BluetoothAddress string `protobuf:"bytes,22,opt,name=bluetooth_address,json=bluetoothAddress,proto3" json:"bluetooth_address,omitempty"`
-	SecureElementSN  string `protobuf:"bytes,23,opt,name=secure_elementSN,json=secureElementSN,proto3" json:"secure_elementSN,omitempty"`
+	ProductType      string `protobuf:"bytes,18,opt,name=product_type,json=productType,proto3" json:"product_type,omitempty"`
+	IMEI             string `protobuf:"bytes,19,opt,name=IMEI,proto3" json:"IMEI,omitempty"`
+	UniqueChipId     uint64 `protobuf:"varint,20,opt,name=unique_chip_id,json=uniqueChipId,proto3" json:"unique_chip_id,omitempty"`
+	UniqueDeviceId   string `protobuf:"bytes,21,opt,name=unique_device_id,json=uniqueDeviceId,proto3" json:"unique_device_id,omitempty"`
+	WifiAddress      string `protobuf:"bytes,22,opt,name=wifi_address,json=wifiAddress,proto3" json:"wifi_address,omitempty"`
+	BluetoothAddress string `protobuf:"bytes,23,opt,name=bluetooth_address,json=bluetoothAddress,proto3" json:"bluetooth_address,omitempty"`
+	SecureElementSN  string `protobuf:"bytes,24,opt,name=secure_elementSN,json=secureElementSN,proto3" json:"secure_elementSN,omitempty"`
 	// Global
-	BuildVersion    string   `protobuf:"bytes,24,opt,name=build_version,json=buildVersion,proto3" json:"build_version,omitempty"`
-	ProductVersion  string   `protobuf:"bytes,25,opt,name=product_version,json=productVersion,proto3" json:"product_version,omitempty"`
-	FairplayKeyData []byte   `protobuf:"bytes,26,opt,name=fairplay_key_data,json=fairplayKeyData,proto3" json:"fairplay_key_data,omitempty"`
-	ADI             []byte   `protobuf:"bytes,27,opt,name=ADI,proto3" json:"ADI,omitempty"`
-	APTicket        []byte   `protobuf:"bytes,28,opt,name=AP_ticket,json=APTicket,proto3" json:"AP_ticket,omitempty"`
-	SUInfo          []byte   `protobuf:"bytes,29,opt,name=SUInfo,proto3" json:"SUInfo,omitempty"`
-	IuniosControls  []string `protobuf:"bytes,30,rep,name=iunios_controls,json=iuniosControls,proto3" json:"iunios_controls,omitempty"`
+	BuildVersion    string `protobuf:"bytes,25,opt,name=build_version,json=buildVersion,proto3" json:"build_version,omitempty"`
+	ProductVersion  string `protobuf:"bytes,26,opt,name=product_version,json=productVersion,proto3" json:"product_version,omitempty"`
+	FairplayKeyData []byte `protobuf:"bytes,27,opt,name=fairplay_key_data,json=fairplayKeyData,proto3" json:"fairplay_key_data,omitempty"`
+	ADI             []byte `protobuf:"bytes,28,opt,name=ADI,proto3" json:"ADI,omitempty"`
+	APTicket        []byte `protobuf:"bytes,29,opt,name=AP_ticket,json=APTicket,proto3" json:"AP_ticket,omitempty"`
+	SUInfo          []byte `protobuf:"bytes,30,opt,name=SUInfo,proto3" json:"SUInfo,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -247,6 +247,13 @@ func (x *Device) GetDiskId() string {
 func (x *Device) GetHardwareUUID() string {
 	if x != nil {
 		return x.HardwareUUID
+	}
+	return ""
+}
+
+func (x *Device) GetBootUUID() string {
+	if x != nil {
+		return x.BootUUID
 	}
 	return ""
 }
@@ -398,18 +405,12 @@ func (x *Device) GetSUInfo() []byte {
 	return nil
 }
 
-func (x *Device) GetIuniosControls() []string {
-	if x != nil {
-		return x.IuniosControls
-	}
-	return nil
-}
-
 // 初始化请求
 type InitializeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Type          InitializeType         `protobuf:"varint,1,opt,name=type,proto3,enum=icrypto.InitializeType" json:"type,omitempty"`
 	Device        *Device                `protobuf:"bytes,2,opt,name=device,proto3" json:"device,omitempty"`
+	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -454,6 +455,13 @@ func (x *InitializeRequest) GetType() InitializeType {
 func (x *InitializeRequest) GetDevice() *Device {
 	if x != nil {
 		return x.Device
+	}
+	return nil
+}
+
+func (x *InitializeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -506,6 +514,7 @@ func (x *InitializeResponse) GetDevice() *Device {
 // 结束请求
 type FinalizeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Controls      []string               `protobuf:"bytes,1,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -538,6 +547,13 @@ func (x *FinalizeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use FinalizeRequest.ProtoReflect.Descriptor instead.
 func (*FinalizeRequest) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *FinalizeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
 }
 
 // 结束响应
@@ -580,6 +596,7 @@ func (*FinalizeResponse) Descriptor() ([]byte, []int) {
 // DRM 激活握手请求
 type ActivationDRMHandshakeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Controls      []string               `protobuf:"bytes,1,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -612,6 +629,13 @@ func (x *ActivationDRMHandshakeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ActivationDRMHandshakeRequest.ProtoReflect.Descriptor instead.
 func (*ActivationDRMHandshakeRequest) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ActivationDRMHandshakeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
 }
 
 // DRM 激活握手响应
@@ -673,6 +697,7 @@ type ActivationDRMProcessRequest struct {
 	SUInfo                   []byte                 `protobuf:"bytes,1,opt,name=SUInfo,proto3" json:"SUInfo,omitempty"`
 	HandshakeResponseMessage []byte                 `protobuf:"bytes,2,opt,name=handshake_response_message,json=handshakeResponseMessage,proto3" json:"handshake_response_message,omitempty"`
 	ServerKP                 []byte                 `protobuf:"bytes,3,opt,name=serverKP,proto3" json:"serverKP,omitempty"`
+	Controls                 []string               `protobuf:"bytes,4,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -724,6 +749,13 @@ func (x *ActivationDRMProcessRequest) GetHandshakeResponseMessage() []byte {
 func (x *ActivationDRMProcessRequest) GetServerKP() []byte {
 	if x != nil {
 		return x.ServerKP
+	}
+	return nil
+}
+
+func (x *ActivationDRMProcessRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -785,6 +817,7 @@ func (x *ActivationDRMProcessResponse) GetRK() []byte {
 type ActivationDRMSignatureRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	ActivationInfoXml []byte                 `protobuf:"bytes,1,opt,name=activation_info_xml,json=activationInfoXml,proto3" json:"activation_info_xml,omitempty"`
+	Controls          []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -822,6 +855,13 @@ func (*ActivationDRMSignatureRequest) Descriptor() ([]byte, []int) {
 func (x *ActivationDRMSignatureRequest) GetActivationInfoXml() []byte {
 	if x != nil {
 		return x.ActivationInfoXml
+	}
+	return nil
+}
+
+func (x *ActivationDRMSignatureRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -907,6 +947,7 @@ func (x *ActivationDRMSignatureResponse) GetServerKP() []byte {
 type ActivationDeprecatedRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	ActivationInfoXml []byte                 `protobuf:"bytes,1,opt,name=activation_info_xml,json=activationInfoXml,proto3" json:"activation_info_xml,omitempty"`
+	Controls          []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -944,6 +985,13 @@ func (*ActivationDeprecatedRequest) Descriptor() ([]byte, []int) {
 func (x *ActivationDeprecatedRequest) GetActivationInfoXml() []byte {
 	if x != nil {
 		return x.ActivationInfoXml
+	}
+	return nil
+}
+
+func (x *ActivationDeprecatedRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -1012,6 +1060,7 @@ type ActivationRecordRequest struct {
 	AccountToken            []byte                 `protobuf:"bytes,6,opt,name=account_token,json=accountToken,proto3" json:"account_token,omitempty"`
 	AccountTokenSignature   []byte                 `protobuf:"bytes,7,opt,name=account_token_signature,json=accountTokenSignature,proto3" json:"account_token_signature,omitempty"`
 	UniqueDeviceCertificate []byte                 `protobuf:"bytes,8,opt,name=unique_device_certificate,json=uniqueDeviceCertificate,proto3" json:"unique_device_certificate,omitempty"`
+	Controls                []string               `protobuf:"bytes,9,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
 }
@@ -1102,6 +1151,13 @@ func (x *ActivationRecordRequest) GetUniqueDeviceCertificate() []byte {
 	return nil
 }
 
+func (x *ActivationRecordRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
+}
+
 // 激活记录响应
 type ActivationRecordResponse struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
@@ -1184,6 +1240,7 @@ type ADIStartProvisioningRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DSID          int64                  `protobuf:"varint,1,opt,name=DSID,proto3" json:"DSID,omitempty"`
 	SPIM          []byte                 `protobuf:"bytes,2,opt,name=SPIM,proto3" json:"SPIM,omitempty"`
+	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1228,6 +1285,13 @@ func (x *ADIStartProvisioningRequest) GetDSID() int64 {
 func (x *ADIStartProvisioningRequest) GetSPIM() []byte {
 	if x != nil {
 		return x.SPIM
+	}
+	return nil
+}
+
+func (x *ADIStartProvisioningRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -1294,6 +1358,7 @@ type ADIEndProvisioningRequest struct {
 	PTM           []byte                 `protobuf:"bytes,4,opt,name=PTM,proto3" json:"PTM,omitempty"`
 	TK            []byte                 `protobuf:"bytes,5,opt,name=TK,proto3" json:"TK,omitempty"`
 	ADI           []byte                 `protobuf:"bytes,6,opt,name=ADI,proto3" json:"ADI,omitempty"`
+	Controls      []string               `protobuf:"bytes,7,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1370,6 +1435,13 @@ func (x *ADIEndProvisioningRequest) GetADI() []byte {
 	return nil
 }
 
+func (x *ADIEndProvisioningRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
+}
+
 // ADI 结束配置响应
 type ADIEndProvisioningResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1436,6 +1508,7 @@ type ADIGenerateLoginCodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DSID          int64                  `protobuf:"varint,1,opt,name=DSID,proto3" json:"DSID,omitempty"`
 	ADI           []byte                 `protobuf:"bytes,2,opt,name=ADI,proto3" json:"ADI,omitempty"`
+	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1480,6 +1553,13 @@ func (x *ADIGenerateLoginCodeRequest) GetDSID() int64 {
 func (x *ADIGenerateLoginCodeRequest) GetADI() []byte {
 	if x != nil {
 		return x.ADI
+	}
+	return nil
+}
+
+func (x *ADIGenerateLoginCodeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -1541,6 +1621,7 @@ func (x *ADIGenerateLoginCodeResponse) GetLoginCode() uint32 {
 type AbsintheHelloRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Mode          int32                  `protobuf:"varint,1,opt,name=mode,proto3" json:"mode,omitempty"`
+	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1580,6 +1661,13 @@ func (x *AbsintheHelloRequest) GetMode() int32 {
 		return x.Mode
 	}
 	return 0
+}
+
+func (x *AbsintheHelloRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
 }
 
 // Absinthe Hello 响应
@@ -1633,6 +1721,7 @@ type AbsintheAddOptionRequest struct {
 	BikKey               []byte                 `protobuf:"bytes,1,opt,name=bik_key,json=bikKey,proto3" json:"bik_key,omitempty"`
 	BaaCert              []byte                 `protobuf:"bytes,2,opt,name=baa_cert,json=baaCert,proto3" json:"baa_cert,omitempty"`
 	IntermediateRootCert []byte                 `protobuf:"bytes,3,opt,name=intermediate_root_cert,json=intermediateRootCert,proto3" json:"intermediate_root_cert,omitempty"`
+	Controls             []string               `protobuf:"bytes,4,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -1688,6 +1777,13 @@ func (x *AbsintheAddOptionRequest) GetIntermediateRootCert() []byte {
 	return nil
 }
 
+func (x *AbsintheAddOptionRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
+}
+
 // Absinthe 添加选项响应
 type AbsintheAddOptionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1730,6 +1826,7 @@ type AbsintheActivateSessionRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	ValidationData []byte                 `protobuf:"bytes,1,opt,name=validation_data,json=validationData,proto3" json:"validation_data,omitempty"`
 	ServerKey      []byte                 `protobuf:"bytes,2,opt,name=server_key,json=serverKey,proto3" json:"server_key,omitempty"`
+	Controls       []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -1778,6 +1875,13 @@ func (x *AbsintheActivateSessionRequest) GetServerKey() []byte {
 	return nil
 }
 
+func (x *AbsintheActivateSessionRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
+}
+
 // Absinthe 激活会话响应
 type AbsintheActivateSessionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1819,6 +1923,7 @@ func (*AbsintheActivateSessionResponse) Descriptor() ([]byte, []int) {
 type AbsintheSignDataRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SignData      []byte                 `protobuf:"bytes,1,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
+	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1856,6 +1961,13 @@ func (*AbsintheSignDataRequest) Descriptor() ([]byte, []int) {
 func (x *AbsintheSignDataRequest) GetSignData() []byte {
 	if x != nil {
 		return x.SignData
+	}
+	return nil
+}
+
+func (x *AbsintheSignDataRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -1917,6 +2029,7 @@ func (x *AbsintheSignDataResponse) GetOutServKey() []byte {
 type IdentitySessionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Cert          []byte                 `protobuf:"bytes,1,opt,name=cert,proto3" json:"cert,omitempty"`
+	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1954,6 +2067,13 @@ func (*IdentitySessionRequest) Descriptor() ([]byte, []int) {
 func (x *IdentitySessionRequest) GetCert() []byte {
 	if x != nil {
 		return x.Cert
+	}
+	return nil
+}
+
+func (x *IdentitySessionRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -2008,6 +2128,7 @@ type IdentityValidationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Response      []byte                 `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
 	SignData      []byte                 `protobuf:"bytes,2,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
+	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2052,6 +2173,13 @@ func (x *IdentityValidationRequest) GetResponse() []byte {
 func (x *IdentityValidationRequest) GetSignData() []byte {
 	if x != nil {
 		return x.SignData
+	}
+	return nil
+}
+
+func (x *IdentityValidationRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -2105,6 +2233,7 @@ func (x *IdentityValidationResponse) GetValidationData() []byte {
 type SAPExchangeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2142,6 +2271,13 @@ func (*SAPExchangeRequest) Descriptor() ([]byte, []int) {
 func (x *SAPExchangeRequest) GetData() []byte {
 	if x != nil {
 		return x.Data
+	}
+	return nil
+}
+
+func (x *SAPExchangeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -2195,6 +2331,7 @@ func (x *SAPExchangeResponse) GetExchangeData() []byte {
 type SAPSignPrimeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SignData      []byte                 `protobuf:"bytes,1,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
+	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2232,6 +2369,13 @@ func (*SAPSignPrimeRequest) Descriptor() ([]byte, []int) {
 func (x *SAPSignPrimeRequest) GetSignData() []byte {
 	if x != nil {
 		return x.SignData
+	}
+	return nil
+}
+
+func (x *SAPSignPrimeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -2285,6 +2429,7 @@ func (x *SAPSignPrimeResponse) GetSignature() []byte {
 type SAPVerifyPrimeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2322,6 +2467,13 @@ func (*SAPVerifyPrimeRequest) Descriptor() ([]byte, []int) {
 func (x *SAPVerifyPrimeRequest) GetData() []byte {
 	if x != nil {
 		return x.Data
+	}
+	return nil
+}
+
+func (x *SAPVerifyPrimeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -2367,6 +2519,7 @@ func (*SAPVerifyPrimeResponse) Descriptor() ([]byte, []int) {
 type SAPSignRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SignData      []byte                 `protobuf:"bytes,1,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
+	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2404,6 +2557,13 @@ func (*SAPSignRequest) Descriptor() ([]byte, []int) {
 func (x *SAPSignRequest) GetSignData() []byte {
 	if x != nil {
 		return x.SignData
+	}
+	return nil
+}
+
+func (x *SAPSignRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -2458,6 +2618,7 @@ type SAPVerifyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	Signature     []byte                 `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"`
+	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2506,6 +2667,13 @@ func (x *SAPVerifyRequest) GetSignature() []byte {
 	return nil
 }
 
+func (x *SAPVerifyRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
+	}
+	return nil
+}
+
 // SAP 验证响应
 type SAPVerifyResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -2547,7 +2715,7 @@ var File_crypto_proto protoreflect.FileDescriptor
 
 const file_crypto_proto_rawDesc = "" +
 	"\n" +
-	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"\xe5\a\n" +
+	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"\xd8\a\n" +
 	"\x06Device\x12(\n" +
 	"\aos_type\x18\x01 \x01(\x0e2\x0f.icrypto.OSEnumR\x06osType\x12#\n" +
 	"\rserial_number\x18\x02 \x01(\tR\fserialNumber\x12\x14\n" +
@@ -2558,65 +2726,71 @@ const file_crypto_proto_rawDesc = "" +
 	"os_version\x18\x05 \x01(\tR\tosVersion\x12\x19\n" +
 	"\bboard_id\x18\x06 \x01(\tR\aboardId\x12\x17\n" +
 	"\adisk_id\x18\a \x01(\tR\x06diskId\x12\"\n" +
-	"\fhardwareUUID\x18\b \x01(\tR\fhardwareUUID\x12\x1e\n" +
+	"\fhardwareUUID\x18\b \x01(\tR\fhardwareUUID\x12\x1a\n" +
+	"\bbootUUID\x18\t \x01(\tR\bbootUUID\x12\x1e\n" +
 	"\n" +
-	"MACAddress\x18\t \x01(\fR\n" +
+	"MACAddress\x18\n" +
+	" \x01(\fR\n" +
 	"MACAddress\x12\x10\n" +
-	"\x03ROM\x18\n" +
-	" \x01(\fR\x03ROM\x12\x10\n" +
-	"\x03MLB\x18\v \x01(\tR\x03MLB\x12 \n" +
-	"\vkGq3489ugfi\x18\f \x01(\fR\vkGq3489ugfi\x12\x1e\n" +
+	"\x03ROM\x18\v \x01(\fR\x03ROM\x12\x10\n" +
+	"\x03MLB\x18\f \x01(\tR\x03MLB\x12 \n" +
+	"\vkGq3489ugfi\x18\r \x01(\fR\vkGq3489ugfi\x12\x1e\n" +
 	"\n" +
-	"kFyp98tpgj\x18\r \x01(\fR\n" +
+	"kFyp98tpgj\x18\x0e \x01(\fR\n" +
 	"kFyp98tpgj\x12 \n" +
-	"\vkkbjfrfpoJU\x18\x0e \x01(\fR\vkkbjfrfpoJU\x12$\n" +
-	"\rkoycqAZloTNDm\x18\x0f \x01(\fR\rkoycqAZloTNDm\x12$\n" +
-	"\rkabKPld1EcMni\x18\x10 \x01(\fR\rkabKPld1EcMni\x12!\n" +
-	"\fproduct_type\x18\x11 \x01(\tR\vproductType\x12\x12\n" +
-	"\x04IMEI\x18\x12 \x01(\tR\x04IMEI\x12$\n" +
-	"\x0eunique_chip_id\x18\x13 \x01(\x04R\funiqueChipId\x12(\n" +
-	"\x10unique_device_id\x18\x14 \x01(\tR\x0euniqueDeviceId\x12!\n" +
-	"\fwifi_address\x18\x15 \x01(\tR\vwifiAddress\x12+\n" +
-	"\x11bluetooth_address\x18\x16 \x01(\tR\x10bluetoothAddress\x12)\n" +
-	"\x10secure_elementSN\x18\x17 \x01(\tR\x0fsecureElementSN\x12#\n" +
-	"\rbuild_version\x18\x18 \x01(\tR\fbuildVersion\x12'\n" +
-	"\x0fproduct_version\x18\x19 \x01(\tR\x0eproductVersion\x12*\n" +
-	"\x11fairplay_key_data\x18\x1a \x01(\fR\x0ffairplayKeyData\x12\x10\n" +
-	"\x03ADI\x18\x1b \x01(\fR\x03ADI\x12\x1b\n" +
-	"\tAP_ticket\x18\x1c \x01(\fR\bAPTicket\x12\x16\n" +
-	"\x06SUInfo\x18\x1d \x01(\fR\x06SUInfo\x12'\n" +
-	"\x0fiunios_controls\x18\x1e \x03(\tR\x0eiuniosControls\"i\n" +
+	"\vkkbjfrfpoJU\x18\x0f \x01(\fR\vkkbjfrfpoJU\x12$\n" +
+	"\rkoycqAZloTNDm\x18\x10 \x01(\fR\rkoycqAZloTNDm\x12$\n" +
+	"\rkabKPld1EcMni\x18\x11 \x01(\fR\rkabKPld1EcMni\x12!\n" +
+	"\fproduct_type\x18\x12 \x01(\tR\vproductType\x12\x12\n" +
+	"\x04IMEI\x18\x13 \x01(\tR\x04IMEI\x12$\n" +
+	"\x0eunique_chip_id\x18\x14 \x01(\x04R\funiqueChipId\x12(\n" +
+	"\x10unique_device_id\x18\x15 \x01(\tR\x0euniqueDeviceId\x12!\n" +
+	"\fwifi_address\x18\x16 \x01(\tR\vwifiAddress\x12+\n" +
+	"\x11bluetooth_address\x18\x17 \x01(\tR\x10bluetoothAddress\x12)\n" +
+	"\x10secure_elementSN\x18\x18 \x01(\tR\x0fsecureElementSN\x12#\n" +
+	"\rbuild_version\x18\x19 \x01(\tR\fbuildVersion\x12'\n" +
+	"\x0fproduct_version\x18\x1a \x01(\tR\x0eproductVersion\x12*\n" +
+	"\x11fairplay_key_data\x18\x1b \x01(\fR\x0ffairplayKeyData\x12\x10\n" +
+	"\x03ADI\x18\x1c \x01(\fR\x03ADI\x12\x1b\n" +
+	"\tAP_ticket\x18\x1d \x01(\fR\bAPTicket\x12\x16\n" +
+	"\x06SUInfo\x18\x1e \x01(\fR\x06SUInfo\"\x85\x01\n" +
 	"\x11InitializeRequest\x12+\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x17.icrypto.InitializeTypeR\x04type\x12'\n" +
-	"\x06device\x18\x02 \x01(\v2\x0f.icrypto.DeviceR\x06device\"=\n" +
+	"\x06device\x18\x02 \x01(\v2\x0f.icrypto.DeviceR\x06device\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"=\n" +
 	"\x12InitializeResponse\x12'\n" +
-	"\x06device\x18\x01 \x01(\v2\x0f.icrypto.DeviceR\x06device\"\x11\n" +
-	"\x0fFinalizeRequest\"\x12\n" +
-	"\x10FinalizeResponse\"\x1f\n" +
-	"\x1dActivationDRMHandshakeRequest\"\x85\x01\n" +
+	"\x06device\x18\x01 \x01(\v2\x0f.icrypto.DeviceR\x06device\"-\n" +
+	"\x0fFinalizeRequest\x12\x1a\n" +
+	"\bcontrols\x18\x01 \x03(\tR\bcontrols\"\x12\n" +
+	"\x10FinalizeResponse\";\n" +
+	"\x1dActivationDRMHandshakeRequest\x12\x1a\n" +
+	"\bcontrols\x18\x01 \x03(\tR\bcontrols\"\x85\x01\n" +
 	"\x1eActivationDRMHandshakeResponse\x12'\n" +
 	"\x0fcollection_blob\x18\x01 \x01(\fR\x0ecollectionBlob\x12:\n" +
-	"\x19handshake_request_message\x18\x02 \x01(\fR\x17handshakeRequestMessage\"\x8f\x01\n" +
+	"\x19handshake_request_message\x18\x02 \x01(\fR\x17handshakeRequestMessage\"\xab\x01\n" +
 	"\x1bActivationDRMProcessRequest\x12\x16\n" +
 	"\x06SUInfo\x18\x01 \x01(\fR\x06SUInfo\x12<\n" +
 	"\x1ahandshake_response_message\x18\x02 \x01(\fR\x18handshakeResponseMessage\x12\x1a\n" +
-	"\bserverKP\x18\x03 \x01(\fR\bserverKP\"@\n" +
+	"\bserverKP\x18\x03 \x01(\fR\bserverKP\x12\x1a\n" +
+	"\bcontrols\x18\x04 \x03(\tR\bcontrols\"@\n" +
 	"\x1cActivationDRMProcessResponse\x12\x10\n" +
 	"\x03UIK\x18\x01 \x01(\fR\x03UIK\x12\x0e\n" +
-	"\x02RK\x18\x02 \x01(\fR\x02RK\"O\n" +
+	"\x02RK\x18\x02 \x01(\fR\x02RK\"k\n" +
 	"\x1dActivationDRMSignatureRequest\x12.\n" +
-	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXml\"\xe7\x01\n" +
+	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXml\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"\xe7\x01\n" +
 	"\x1eActivationDRMSignatureResponse\x12.\n" +
 	"\x13fairplay_cert_chain\x18\x01 \x01(\fR\x11fairplayCertChain\x12-\n" +
 	"\x12fairplay_signature\x18\x02 \x01(\fR\x11fairplaySignature\x12 \n" +
 	"\vRKSignature\x18\x03 \x01(\fR\vRKSignature\x12(\n" +
 	"\x10sign_act_request\x18\x04 \x01(\fR\x0esignActRequest\x12\x1a\n" +
-	"\bserverKP\x18\x05 \x01(\fR\bserverKP\"M\n" +
+	"\bserverKP\x18\x05 \x01(\fR\bserverKP\"i\n" +
 	"\x1bActivationDeprecatedRequest\x12.\n" +
-	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXml\"F\n" +
+	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXml\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"F\n" +
 	"\x1cActivationDeprecatedResponse\x12\x12\n" +
 	"\x04sign\x18\x01 \x01(\fR\x04sign\x12\x12\n" +
-	"\x04cert\x18\x02 \x01(\fR\x04cert\"\x8c\x03\n" +
+	"\x04cert\x18\x02 \x01(\fR\x04cert\"\xa8\x03\n" +
 	"\x17ActivationRecordRequest\x12\x18\n" +
 	"\aunbrick\x18\x01 \x01(\bR\aunbrick\x12:\n" +
 	"\x19account_token_certificate\x18\x02 \x01(\fR\x17accountTokenCertificate\x12-\n" +
@@ -2625,84 +2799,99 @@ const file_crypto_proto_rawDesc = "" +
 	"\x11fairplay_key_data\x18\x05 \x01(\fR\x0ffairplayKeyData\x12#\n" +
 	"\raccount_token\x18\x06 \x01(\fR\faccountToken\x126\n" +
 	"\x17account_token_signature\x18\a \x01(\fR\x15accountTokenSignature\x12:\n" +
-	"\x19unique_device_certificate\x18\b \x01(\fR\x17uniqueDeviceCertificate\"\x9a\x01\n" +
+	"\x19unique_device_certificate\x18\b \x01(\fR\x17uniqueDeviceCertificate\x12\x1a\n" +
+	"\bcontrols\x18\t \x03(\tR\bcontrols\"\x9a\x01\n" +
 	"\x18ActivationRecordResponse\x12\x1a\n" +
 	"\bsubCAKey\x18\x01 \x01(\fR\bsubCAKey\x12'\n" +
 	"\x0fattestation_key\x18\x02 \x01(\fR\x0eattestationKey\x12\x10\n" +
 	"\x03UIK\x18\x03 \x01(\fR\x03UIK\x12\x0e\n" +
 	"\x02RK\x18\x04 \x01(\fR\x02RK\x12\x17\n" +
-	"\apsc_sui\x18\x05 \x01(\fR\x06pscSui\"E\n" +
+	"\apsc_sui\x18\x05 \x01(\fR\x06pscSui\"a\n" +
 	"\x1bADIStartProvisioningRequest\x12\x12\n" +
 	"\x04DSID\x18\x01 \x01(\x03R\x04DSID\x12\x12\n" +
-	"\x04SPIM\x18\x02 \x01(\fR\x04SPIM\"L\n" +
+	"\x04SPIM\x18\x02 \x01(\fR\x04SPIM\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"L\n" +
 	"\x1cADIStartProvisioningResponse\x12\x18\n" +
 	"\asession\x18\x01 \x01(\x04R\asession\x12\x12\n" +
-	"\x04CPIM\x18\x02 \x01(\fR\x04CPIM\"\x93\x01\n" +
+	"\x04CPIM\x18\x02 \x01(\fR\x04CPIM\"\xaf\x01\n" +
 	"\x19ADIEndProvisioningRequest\x12\x18\n" +
 	"\asession\x18\x01 \x01(\x04R\asession\x12\x12\n" +
 	"\x04DSID\x18\x02 \x01(\x03R\x04DSID\x12\x14\n" +
 	"\x05RINFO\x18\x03 \x01(\x03R\x05RINFO\x12\x10\n" +
 	"\x03PTM\x18\x04 \x01(\fR\x03PTM\x12\x0e\n" +
 	"\x02TK\x18\x05 \x01(\fR\x02TK\x12\x10\n" +
-	"\x03ADI\x18\x06 \x01(\fR\x03ADI\"R\n" +
+	"\x03ADI\x18\x06 \x01(\fR\x03ADI\x12\x1a\n" +
+	"\bcontrols\x18\a \x03(\tR\bcontrols\"R\n" +
 	"\x1aADIEndProvisioningResponse\x12\x10\n" +
 	"\x03MID\x18\x01 \x01(\fR\x03MID\x12\x10\n" +
 	"\x03OTP\x18\x02 \x01(\fR\x03OTP\x12\x10\n" +
-	"\x03ADI\x18\x03 \x01(\fR\x03ADI\"C\n" +
+	"\x03ADI\x18\x03 \x01(\fR\x03ADI\"_\n" +
 	"\x1bADIGenerateLoginCodeRequest\x12\x12\n" +
 	"\x04DSID\x18\x01 \x01(\x03R\x04DSID\x12\x10\n" +
-	"\x03ADI\x18\x02 \x01(\fR\x03ADI\"Q\n" +
+	"\x03ADI\x18\x02 \x01(\fR\x03ADI\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"Q\n" +
 	"\x1cADIGenerateLoginCodeResponse\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x1d\n" +
 	"\n" +
-	"login_code\x18\x02 \x01(\rR\tloginCode\"*\n" +
+	"login_code\x18\x02 \x01(\rR\tloginCode\"F\n" +
 	"\x14AbsintheHelloRequest\x12\x12\n" +
-	"\x04mode\x18\x01 \x01(\x05R\x04mode\"<\n" +
+	"\x04mode\x18\x01 \x01(\x05R\x04mode\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"<\n" +
 	"\x15AbsintheHelloResponse\x12#\n" +
-	"\rhello_message\x18\x01 \x01(\fR\fhelloMessage\"\x84\x01\n" +
+	"\rhello_message\x18\x01 \x01(\fR\fhelloMessage\"\xa0\x01\n" +
 	"\x18AbsintheAddOptionRequest\x12\x17\n" +
 	"\abik_key\x18\x01 \x01(\fR\x06bikKey\x12\x19\n" +
 	"\bbaa_cert\x18\x02 \x01(\fR\abaaCert\x124\n" +
-	"\x16intermediate_root_cert\x18\x03 \x01(\fR\x14intermediateRootCert\"\x1b\n" +
-	"\x19AbsintheAddOptionResponse\"h\n" +
+	"\x16intermediate_root_cert\x18\x03 \x01(\fR\x14intermediateRootCert\x12\x1a\n" +
+	"\bcontrols\x18\x04 \x03(\tR\bcontrols\"\x1b\n" +
+	"\x19AbsintheAddOptionResponse\"\x84\x01\n" +
 	"\x1eAbsintheActivateSessionRequest\x12'\n" +
 	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\x12\x1d\n" +
 	"\n" +
-	"server_key\x18\x02 \x01(\fR\tserverKey\"!\n" +
-	"\x1fAbsintheActivateSessionResponse\"6\n" +
+	"server_key\x18\x02 \x01(\fR\tserverKey\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"!\n" +
+	"\x1fAbsintheActivateSessionResponse\"R\n" +
 	"\x17AbsintheSignDataRequest\x12\x1b\n" +
-	"\tsign_data\x18\x01 \x01(\fR\bsignData\"Z\n" +
+	"\tsign_data\x18\x01 \x01(\fR\bsignData\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"Z\n" +
 	"\x18AbsintheSignDataResponse\x12\x1c\n" +
 	"\tsignature\x18\x01 \x01(\fR\tsignature\x12 \n" +
 	"\fout_serv_key\x18\x02 \x01(\fR\n" +
-	"outServKey\",\n" +
+	"outServKey\"H\n" +
 	"\x16IdentitySessionRequest\x12\x12\n" +
-	"\x04cert\x18\x01 \x01(\fR\x04cert\"3\n" +
+	"\x04cert\x18\x01 \x01(\fR\x04cert\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"3\n" +
 	"\x17IdentitySessionResponse\x12\x18\n" +
-	"\arequest\x18\x01 \x01(\fR\arequest\"T\n" +
+	"\arequest\x18\x01 \x01(\fR\arequest\"p\n" +
 	"\x19IdentityValidationRequest\x12\x1a\n" +
 	"\bresponse\x18\x01 \x01(\fR\bresponse\x12\x1b\n" +
-	"\tsign_data\x18\x02 \x01(\fR\bsignData\"E\n" +
+	"\tsign_data\x18\x02 \x01(\fR\bsignData\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"E\n" +
 	"\x1aIdentityValidationResponse\x12'\n" +
-	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\"(\n" +
+	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\"D\n" +
 	"\x12SAPExchangeRequest\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\":\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\":\n" +
 	"\x13SAPExchangeResponse\x12#\n" +
-	"\rexchange_data\x18\x01 \x01(\fR\fexchangeData\"2\n" +
+	"\rexchange_data\x18\x01 \x01(\fR\fexchangeData\"N\n" +
 	"\x13SAPSignPrimeRequest\x12\x1b\n" +
-	"\tsign_data\x18\x01 \x01(\fR\bsignData\"4\n" +
+	"\tsign_data\x18\x01 \x01(\fR\bsignData\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"4\n" +
 	"\x14SAPSignPrimeResponse\x12\x1c\n" +
-	"\tsignature\x18\x01 \x01(\fR\tsignature\"+\n" +
+	"\tsignature\x18\x01 \x01(\fR\tsignature\"G\n" +
 	"\x15SAPVerifyPrimeRequest\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\"\x18\n" +
-	"\x16SAPVerifyPrimeResponse\"-\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"\x18\n" +
+	"\x16SAPVerifyPrimeResponse\"I\n" +
 	"\x0eSAPSignRequest\x12\x1b\n" +
-	"\tsign_data\x18\x01 \x01(\fR\bsignData\"/\n" +
+	"\tsign_data\x18\x01 \x01(\fR\bsignData\x12\x1a\n" +
+	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"/\n" +
 	"\x0fSAPSignResponse\x12\x1c\n" +
-	"\tsignature\x18\x01 \x01(\fR\tsignature\"D\n" +
+	"\tsignature\x18\x01 \x01(\fR\tsignature\"`\n" +
 	"\x10SAPVerifyRequest\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1c\n" +
-	"\tsignature\x18\x02 \x01(\fR\tsignature\"\x13\n" +
+	"\tsignature\x18\x02 \x01(\fR\tsignature\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"\x13\n" +
 	"\x11SAPVerifyResponse*:\n" +
 	"\x06OSEnum\x12\x0f\n" +
 	"\vUNSPECIFIED\x10\x00\x12\t\n" +
