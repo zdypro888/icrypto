@@ -53,8 +53,8 @@ message Device {
 // 初始化类型枚举
 enum InitializeType {
   AUTO           = 0;
-  IOSARCH64      = 1;
-  IOSDRM32       = 2;
+  WITH_ABSINTHE  = 1;
+  WITH_DRM       = 2;
   MACOSDISABLE15 = 4;
 }
 

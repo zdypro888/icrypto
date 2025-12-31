@@ -80,8 +80,8 @@ type InitializeType int32
 
 const (
 	InitializeType_AUTO           InitializeType = 0
-	InitializeType_IOSARCH64      InitializeType = 1
-	InitializeType_IOSDRM32       InitializeType = 2
+	InitializeType_WITH_ABSINTHE  InitializeType = 1
+	InitializeType_WITH_DRM       InitializeType = 2
 	InitializeType_MACOSDISABLE15 InitializeType = 4
 )
 
@@ -89,14 +89,14 @@ const (
 var (
 	InitializeType_name = map[int32]string{
 		0: "AUTO",
-		1: "IOSARCH64",
-		2: "IOSDRM32",
+		1: "WITH_ABSINTHE",
+		2: "WITH_DRM",
 		4: "MACOSDISABLE15",
 	}
 	InitializeType_value = map[string]int32{
 		"AUTO":           0,
-		"IOSARCH64":      1,
-		"IOSDRM32":       2,
+		"WITH_ABSINTHE":  1,
+		"WITH_DRM":       2,
 		"MACOSDISABLE15": 4,
 	}
 )
@@ -2900,11 +2900,11 @@ const file_crypto_proto_rawDesc = "" +
 	"\vUNSPECIFIED\x10\x00\x12\t\n" +
 	"\x05MACOS\x10\x01\x12\a\n" +
 	"\x03IOS\x10\x02\x12\v\n" +
-	"\aANDROID\x10\x03*K\n" +
+	"\aANDROID\x10\x03*O\n" +
 	"\x0eInitializeType\x12\b\n" +
-	"\x04AUTO\x10\x00\x12\r\n" +
-	"\tIOSARCH64\x10\x01\x12\f\n" +
-	"\bIOSDRM32\x10\x02\x12\x12\n" +
+	"\x04AUTO\x10\x00\x12\x11\n" +
+	"\rWITH_ABSINTHE\x10\x01\x12\f\n" +
+	"\bWITH_DRM\x10\x02\x12\x12\n" +
 	"\x0eMACOSDISABLE15\x10\x042\xe3\x13\n" +
 	"\fCryptService\x12]\n" +
 	"\n" +

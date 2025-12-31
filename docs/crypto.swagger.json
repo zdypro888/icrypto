@@ -1361,8 +1361,8 @@
       "type": "string",
       "enum": [
         "AUTO",
-        "IOSARCH64",
-        "IOSDRM32",
+        "WITH_ABSINTHE",
+        "WITH_DRM",
         "MACOSDISABLE15"
       ],
       "default": "AUTO",
