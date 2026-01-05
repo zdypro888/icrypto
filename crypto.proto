@@ -265,8 +265,9 @@ message IdentityValidationResponse {
 
 // SAP 交换请求
 message SAPExchangeRequest {
-  bytes           data     = 1;
-  repeated string controls = 2;
+  int32           version  = 1;
+  bytes           data     = 2;
+  repeated string controls = 3;
 }
 
 // SAP 交换响应

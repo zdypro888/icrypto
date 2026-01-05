@@ -256,12 +256,12 @@ func (crypt *CryptorGRPC) IdentityValidation(ctx context.Context, sessionInfo []
 	return response.ValidationData, nil
 }
 
-func (crypt *CryptorGRPC) SAPExchange(ctx context.Context, data []byte) ([]byte, error) {
+func (crypt *CryptorGRPC) SAPExchange(ctx context.Context, version int, data []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
 	var response *SAPExchangeResponse
-	if response, err = crypt.Client.SAPExchange(ctx, &SAPExchangeRequest{Data: data}); err != nil {
+	if response, err = crypt.Client.SAPExchange(ctx, &SAPExchangeRequest{Version: int32(version), Data: data}); err != nil {
 		return nil, err
 	}
 	return response.ExchangeData, nil

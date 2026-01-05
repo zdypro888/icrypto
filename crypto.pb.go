@@ -2235,8 +2235,9 @@ func (x *IdentityValidationResponse) GetValidationData() []byte {
 // SAP 交换请求
 type SAPExchangeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
+	Version       int32                  `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2269,6 +2270,13 @@ func (x *SAPExchangeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SAPExchangeRequest.ProtoReflect.Descriptor instead.
 func (*SAPExchangeRequest) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *SAPExchangeRequest) GetVersion() int32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
 }
 
 func (x *SAPExchangeRequest) GetData() []byte {
@@ -2871,10 +2879,11 @@ const file_crypto_proto_rawDesc = "" +
 	"\tsign_data\x18\x02 \x01(\fR\bsignData\x12\x1a\n" +
 	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"E\n" +
 	"\x1aIdentityValidationResponse\x12'\n" +
-	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\"D\n" +
-	"\x12SAPExchangeRequest\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\":\n" +
+	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\"^\n" +
+	"\x12SAPExchangeRequest\x12\x18\n" +
+	"\aversion\x18\x01 \x01(\x05R\aversion\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\":\n" +
 	"\x13SAPExchangeResponse\x12#\n" +
 	"\rexchange_data\x18\x01 \x01(\fR\fexchangeData\"N\n" +
 	"\x13SAPSignPrimeRequest\x12\x1b\n" +

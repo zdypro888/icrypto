@@ -1382,6 +1382,10 @@
     "icryptoSAPExchangeRequest": {
       "type": "object",
       "properties": {
+        "version": {
+          "type": "integer",
+          "format": "int32"
+        },
         "data": {
           "type": "string",
           "format": "byte"

@@ -54,7 +54,7 @@ type Cryptor interface {
 	IdentityValidation(ctx context.Context, sessionInfo []byte, signData []byte) ([]byte, error)
 
 	//SAPExchange 交换数据
-	SAPExchange(ctx context.Context, data []byte) ([]byte, error)
+	SAPExchange(ctx context.Context, version int, data []byte) ([]byte, error)
 	//SAPSignPrime 签名 prime
 	SAPSignPrime(ctx context.Context, signData []byte) ([]byte, error)
 	//SAPVerifyPrime 验证 prime
