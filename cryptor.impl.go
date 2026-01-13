@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/proto"
 )
 
 var cryptoConn *grpc.ClientConn
@@ -65,7 +66,8 @@ func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, 
 	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Type: type_, Device: device}); err != nil {
 		return err
 	} else {
-		*device = *response.Device
+		proto.Reset(device)
+		proto.Merge(device, response.Device)
 	}
 	return nil
 }
