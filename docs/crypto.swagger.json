@@ -1146,118 +1146,6 @@
       },
       "title": "激活记录响应"
     },
-    "icryptoDevice": {
-      "type": "object",
-      "properties": {
-        "osType": {
-          "$ref": "#/definitions/icryptoOSEnum"
-        },
-        "serialNumber": {
-          "type": "string"
-        },
-        "model": {
-          "type": "string",
-          "title": "macOS"
-        },
-        "osRevision": {
-          "type": "string",
-          "format": "uint64"
-        },
-        "osVersion": {
-          "type": "string"
-        },
-        "boardId": {
-          "type": "string"
-        },
-        "diskId": {
-          "type": "string"
-        },
-        "hardwareUUID": {
-          "type": "string"
-        },
-        "bootUUID": {
-          "type": "string"
-        },
-        "MACAddress": {
-          "type": "string",
-          "format": "byte"
-        },
-        "ROM": {
-          "type": "string",
-          "format": "byte"
-        },
-        "MLB": {
-          "type": "string"
-        },
-        "kGq3489ugfi": {
-          "type": "string",
-          "format": "byte"
-        },
-        "kFyp98tpgj": {
-          "type": "string",
-          "format": "byte"
-        },
-        "kkbjfrfpoJU": {
-          "type": "string",
-          "format": "byte"
-        },
-        "koycqAZloTNDm": {
-          "type": "string",
-          "format": "byte"
-        },
-        "kabKPld1EcMni": {
-          "type": "string",
-          "format": "byte"
-        },
-        "productType": {
-          "type": "string",
-          "title": "iOS"
-        },
-        "IMEI": {
-          "type": "string"
-        },
-        "uniqueChipId": {
-          "type": "string",
-          "format": "uint64"
-        },
-        "uniqueDeviceId": {
-          "type": "string"
-        },
-        "wifiAddress": {
-          "type": "string"
-        },
-        "bluetoothAddress": {
-          "type": "string"
-        },
-        "secureElementSN": {
-          "type": "string"
-        },
-        "buildVersion": {
-          "type": "string",
-          "title": "Global"
-        },
-        "productVersion": {
-          "type": "string"
-        },
-        "fairplayKeyData": {
-          "type": "string",
-          "format": "byte"
-        },
-        "ADI": {
-          "type": "string",
-          "format": "byte"
-        },
-        "APTicket": {
-          "type": "string",
-          "format": "byte"
-        },
-        "SUInfo": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "设备信息"
-    },
     "icryptoFinalizeRequest": {
       "type": "object",
       "properties": {
@@ -1337,7 +1225,8 @@
           "$ref": "#/definitions/icryptoInitializeType"
         },
         "device": {
-          "$ref": "#/definitions/icryptoDevice"
+          "type": "string",
+          "format": "byte"
         },
         "controls": {
           "type": "array",
@@ -1352,7 +1241,8 @@
       "type": "object",
       "properties": {
         "device": {
-          "$ref": "#/definitions/icryptoDevice"
+          "type": "string",
+          "format": "byte"
         }
       },
       "title": "初始化响应"
@@ -1367,17 +1257,6 @@
       ],
       "default": "AUTO",
       "title": "初始化类型枚举"
-    },
-    "icryptoOSEnum": {
-      "type": "string",
-      "enum": [
-        "UNSPECIFIED",
-        "MACOS",
-        "IOS",
-        "ANDROID"
-      ],
-      "default": "UNSPECIFIED",
-      "title": "操作系统类型枚举"
     },
     "icryptoSAPExchangeRequest": {
       "type": "object",

@@ -17,7 +17,7 @@ func (ce *CryptoError) Error() string {
 
 type Cryptor interface {
 	//Initialize with device plist data
-	Initialize(ctx context.Context, type_ InitializeType, device *Device) error
+	Initialize(ctx context.Context, type_ InitializeType, device []byte) ([]byte, error)
 	//Finalize finalize object
 	Finalize(ctx context.Context) error
 

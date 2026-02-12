@@ -5,51 +5,6 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/zdypro888/icrypto";
 
-// 操作系统类型枚举
-enum OSEnum {
-  UNSPECIFIED = 0;
-  MACOS       = 1;
-  IOS         = 2;
-  ANDROID     = 3;
-}
-
-// 设备信息
-message Device {
-  OSEnum os_type       = 1;
-  string serial_number = 2;
-  // macOS
-  string model         = 3;
-  uint64 os_revision   = 4;
-  string os_version    = 5;
-  string board_id      = 6;
-  string disk_id       = 7;
-  string hardwareUUID  = 8;
-  string bootUUID      = 9;
-  bytes  MACAddress    = 10;
-  bytes  ROM           = 11;
-  string MLB           = 12;
-  bytes  kGq3489ugfi   = 13;
-  bytes  kFyp98tpgj    = 14;
-  bytes  kkbjfrfpoJU   = 15;
-  bytes  koycqAZloTNDm = 16;
-  bytes  kabKPld1EcMni = 17;
-  // iOS
-  string product_type      = 18;
-  string IMEI              = 19;
-  uint64 unique_chip_id    = 20;
-  string unique_device_id  = 21;
-  string wifi_address      = 22;
-  string bluetooth_address = 23;
-  string secure_elementSN  = 24;
-  // Global
-  string build_version     = 25;
-  string product_version   = 26;
-  bytes  fairplay_key_data = 27;
-  bytes  ADI               = 28;
-  bytes  AP_ticket         = 29;
-  bytes  SUInfo            = 30;
-}
-
 // 初始化类型枚举
 enum InitializeType {
   AUTO           = 0;
@@ -61,13 +16,13 @@ enum InitializeType {
 // 初始化请求
 message InitializeRequest {
   InitializeType  type     = 1;
-  Device          device   = 2;
+  bytes           device   = 2;
   repeated string controls = 3;
 }
 
 // 初始化响应
 message InitializeResponse {
-  Device device = 1;
+  bytes device = 1;
 }
 
 // 结束请求
