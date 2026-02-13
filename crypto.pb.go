@@ -27,8 +27,6 @@ type InitializeType int32
 
 const (
 	InitializeType_AUTO           InitializeType = 0
-	InitializeType_WITH_ABSINTHE  InitializeType = 1
-	InitializeType_WITH_DRM       InitializeType = 2
 	InitializeType_MACOSDISABLE15 InitializeType = 4
 )
 
@@ -36,14 +34,10 @@ const (
 var (
 	InitializeType_name = map[int32]string{
 		0: "AUTO",
-		1: "WITH_ABSINTHE",
-		2: "WITH_DRM",
 		4: "MACOSDISABLE15",
 	}
 	InitializeType_value = map[string]int32{
 		"AUTO":           0,
-		"WITH_ABSINTHE":  1,
-		"WITH_DRM":       2,
 		"MACOSDISABLE15": 4,
 	}
 )
@@ -2533,11 +2527,9 @@ const file_crypto_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1c\n" +
 	"\tsignature\x18\x02 \x01(\fR\tsignature\x12\x1a\n" +
 	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"\x13\n" +
-	"\x11SAPVerifyResponse*O\n" +
+	"\x11SAPVerifyResponse*.\n" +
 	"\x0eInitializeType\x12\b\n" +
-	"\x04AUTO\x10\x00\x12\x11\n" +
-	"\rWITH_ABSINTHE\x10\x01\x12\f\n" +
-	"\bWITH_DRM\x10\x02\x12\x12\n" +
+	"\x04AUTO\x10\x00\x12\x12\n" +
 	"\x0eMACOSDISABLE15\x10\x042\xe3\x13\n" +
 	"\fCryptService\x12]\n" +
 	"\n" +

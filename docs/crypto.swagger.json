@@ -1251,8 +1251,6 @@
       "type": "string",
       "enum": [
         "AUTO",
-        "WITH_ABSINTHE",
-        "WITH_DRM",
         "MACOSDISABLE15"
       ],
       "default": "AUTO",

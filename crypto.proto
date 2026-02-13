@@ -8,8 +8,6 @@ option go_package = "github.com/zdypro888/icrypto";
 // 初始化类型枚举
 enum InitializeType {
   AUTO           = 0;
-  WITH_ABSINTHE  = 1;
-  WITH_DRM       = 2;
   MACOSDISABLE15 = 4;
 }
 
