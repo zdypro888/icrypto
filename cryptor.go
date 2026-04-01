@@ -15,9 +15,14 @@ func (ce *CryptoError) Error() string {
 	return fmt.Sprintf("method: %s code: %d", ce.Method, ce.Code)
 }
 
+type IPlistObject interface {
+	Marshal() ([]byte, error)
+	Unmarshal(data []byte) error
+}
+
 type Cryptor interface {
 	//Initialize with device plist data
-	Initialize(ctx context.Context, type_ InitializeType, device []byte) ([]byte, error)
+	Initialize(ctx context.Context, type_ InitializeType, device IPlistObject, infos ...IPlistObject) error
 	//Finalize finalize object
 	Finalize(ctx context.Context) error
 

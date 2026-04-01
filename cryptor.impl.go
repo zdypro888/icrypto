@@ -6,6 +6,7 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
+	"github.com/zdypro888/go-plist"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -59,13 +60,27 @@ func (crypt *CryptorGRPC) metaContext(ctx context.Context) (context.Context, con
 }
 
 // Initialize init crypto with device[see device struct]
-func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, device []byte) ([]byte, error) {
+func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, device IPlistObject, infos ...IPlistObject) error {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
-	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Type: type_, Device: device}); err != nil {
-		return nil, err
+	devicePlist, err := plist.Marshal(device, plist.BinaryFormat)
+	if err != nil {
+		return err
+	}
+	if response, err := crypt.Client.Initialize(ctx, &InitializeRequest{Type: type_, Device: devicePlist}); err != nil {
+		return err
+	} else if err := device.Unmarshal(response.Device); err != nil {
+		return err
 	} else {
-		return response.Device, nil
+		for i, info := range infos {
+			if i >= len(response.Infos) {
+				break
+			}
+			if err := info.Unmarshal(response.Infos[i]); err != nil {
+				return err
+			}
+		}
+		return nil
 	}
 }
 

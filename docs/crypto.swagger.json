@@ -1243,6 +1243,13 @@
         "device": {
           "type": "string",
           "format": "byte"
+        },
+        "infos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          }
         }
       },
       "title": "初始化响应"
