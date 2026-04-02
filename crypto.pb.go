@@ -77,6 +77,7 @@ type InitializeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Type          InitializeType         `protobuf:"varint,1,opt,name=type,proto3,enum=icrypto.InitializeType" json:"type,omitempty"`
 	Device        []byte                 `protobuf:"bytes,2,opt,name=device,proto3" json:"device,omitempty"`
+	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -121,6 +122,13 @@ func (x *InitializeRequest) GetType() InitializeType {
 func (x *InitializeRequest) GetDevice() []byte {
 	if x != nil {
 		return x.Device
+	}
+	return nil
+}
+
+func (x *InitializeRequest) GetControls() []string {
+	if x != nil {
+		return x.Controls
 	}
 	return nil
 }
@@ -819,14 +827,13 @@ func (x *ActivationRecordRequest) GetControls() []string {
 
 // 激活记录响应
 type ActivationRecordResponse struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	SubCAKey       []byte                 `protobuf:"bytes,1,opt,name=subCAKey,proto3" json:"subCAKey,omitempty"`
-	AttestationKey []byte                 `protobuf:"bytes,2,opt,name=attestation_key,json=attestationKey,proto3" json:"attestation_key,omitempty"`
-	UIK            []byte                 `protobuf:"bytes,3,opt,name=UIK,proto3" json:"UIK,omitempty"`
-	RK             []byte                 `protobuf:"bytes,4,opt,name=RK,proto3" json:"RK,omitempty"`
-	PscSui         []byte                 `protobuf:"bytes,5,opt,name=psc_sui,json=pscSui,proto3" json:"psc_sui,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionKey    []byte                 `protobuf:"bytes,1,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty"`
+	SigningKey    []byte                 `protobuf:"bytes,2,opt,name=signing_key,json=signingKey,proto3" json:"signing_key,omitempty"`
+	RefKey        []byte                 `protobuf:"bytes,3,opt,name=ref_key,json=refKey,proto3" json:"ref_key,omitempty"`
+	PscSui        []byte                 `protobuf:"bytes,4,opt,name=psc_sui,json=pscSui,proto3" json:"psc_sui,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ActivationRecordResponse) Reset() {
@@ -859,30 +866,23 @@ func (*ActivationRecordResponse) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *ActivationRecordResponse) GetSubCAKey() []byte {
+func (x *ActivationRecordResponse) GetSessionKey() []byte {
 	if x != nil {
-		return x.SubCAKey
+		return x.SessionKey
 	}
 	return nil
 }
 
-func (x *ActivationRecordResponse) GetAttestationKey() []byte {
+func (x *ActivationRecordResponse) GetSigningKey() []byte {
 	if x != nil {
-		return x.AttestationKey
+		return x.SigningKey
 	}
 	return nil
 }
 
-func (x *ActivationRecordResponse) GetUIK() []byte {
+func (x *ActivationRecordResponse) GetRefKey() []byte {
 	if x != nil {
-		return x.UIK
-	}
-	return nil
-}
-
-func (x *ActivationRecordResponse) GetRK() []byte {
-	if x != nil {
-		return x.RK
+		return x.RefKey
 	}
 	return nil
 }
@@ -2382,10 +2382,11 @@ var File_crypto_proto protoreflect.FileDescriptor
 
 const file_crypto_proto_rawDesc = "" +
 	"\n" +
-	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"X\n" +
+	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"t\n" +
 	"\x11InitializeRequest\x12+\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x17.icrypto.InitializeTypeR\x04type\x12\x16\n" +
-	"\x06device\x18\x02 \x01(\fR\x06device\",\n" +
+	"\x06device\x18\x02 \x01(\fR\x06device\x12\x1a\n" +
+	"\bcontrols\x18\x03 \x03(\tR\bcontrols\",\n" +
 	"\x12InitializeResponse\x12\x16\n" +
 	"\x06device\x18\x01 \x01(\fR\x06device\"-\n" +
 	"\x0fFinalizeRequest\x12\x1a\n" +
@@ -2428,13 +2429,14 @@ const file_crypto_proto_rawDesc = "" +
 	"\raccount_token\x18\x06 \x01(\fR\faccountToken\x126\n" +
 	"\x17account_token_signature\x18\a \x01(\fR\x15accountTokenSignature\x12:\n" +
 	"\x19unique_device_certificate\x18\b \x01(\fR\x17uniqueDeviceCertificate\x12\x1a\n" +
-	"\bcontrols\x18\t \x03(\tR\bcontrols\"\x9a\x01\n" +
-	"\x18ActivationRecordResponse\x12\x1a\n" +
-	"\bsubCAKey\x18\x01 \x01(\fR\bsubCAKey\x12'\n" +
-	"\x0fattestation_key\x18\x02 \x01(\fR\x0eattestationKey\x12\x10\n" +
-	"\x03UIK\x18\x03 \x01(\fR\x03UIK\x12\x0e\n" +
-	"\x02RK\x18\x04 \x01(\fR\x02RK\x12\x17\n" +
-	"\apsc_sui\x18\x05 \x01(\fR\x06pscSui\"a\n" +
+	"\bcontrols\x18\t \x03(\tR\bcontrols\"\x8e\x01\n" +
+	"\x18ActivationRecordResponse\x12\x1f\n" +
+	"\vsession_key\x18\x01 \x01(\fR\n" +
+	"sessionKey\x12\x1f\n" +
+	"\vsigning_key\x18\x02 \x01(\fR\n" +
+	"signingKey\x12\x17\n" +
+	"\aref_key\x18\x03 \x01(\fR\x06refKey\x12\x17\n" +
+	"\apsc_sui\x18\x04 \x01(\fR\x06pscSui\"a\n" +
 	"\x1bADIStartProvisioningRequest\x12\x12\n" +
 	"\x04DSID\x18\x01 \x01(\x03R\x04DSID\x12\x12\n" +
 	"\x04SPIM\x18\x02 \x01(\fR\x04SPIM\x12\x1a\n" +

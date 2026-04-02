@@ -14,13 +14,14 @@ enum InitializeType {
 
 // 初始化请求
 message InitializeRequest {
-  InitializeType type   = 1;
-  bytes          device = 2;
+  InitializeType  type     = 1;
+  bytes           device   = 2;
+  repeated string controls = 3;
 }
 
 // 初始化响应
 message InitializeResponse {
-  bytes          device = 1;
+  bytes device = 1;
 }
 
 // 结束请求
@@ -98,11 +99,10 @@ message ActivationRecordRequest {
 
 // 激活记录响应
 message ActivationRecordResponse {
-  bytes subCAKey        = 1;
-  bytes attestation_key = 2;
-  bytes UIK             = 3;
-  bytes RK              = 4;
-  bytes psc_sui         = 5;
+  bytes session_key = 1;
+  bytes signing_key = 2;
+  bytes ref_key     = 3;
+  bytes psc_sui     = 4;
 }
 
 // ADI 开始配置请求

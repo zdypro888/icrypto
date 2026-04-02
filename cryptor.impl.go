@@ -135,8 +135,8 @@ func (crypt *CryptorGRPC) ActivationDeprecated(ctx context.Context, activationXM
 	return response.Sign, response.Cert, nil
 }
 
-// ActivationRecord set activation response return [0]subCAKey, [1]attestationKey, [2]UIK, [3]RK, [4]psc.sui
-func (crypt *CryptorGRPC) ActivationRecord(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
+// ActivationRecord set activation response return SessionKey SigningKey RefKey psc.sui
+func (crypt *CryptorGRPC) ActivationRecord(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
@@ -151,9 +151,9 @@ func (crypt *CryptorGRPC) ActivationRecord(ctx context.Context, unbrick bool, Ac
 		AccountTokenSignature:   AccountTokenSignature,
 		UniqueDeviceCertificate: UniqueDeviceCertificate,
 	}); err != nil {
-		return nil, nil, nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
-	return response.SubCAKey, response.AttestationKey, response.UIK, response.RK, response.PscSui, nil
+	return response.SessionKey, response.SigningKey, response.RefKey, response.PscSui, nil
 }
 
 // ADIStartProvisioning 返回 CPIM Session Error

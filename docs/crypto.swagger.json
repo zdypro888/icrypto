@@ -1123,19 +1123,15 @@
     "icryptoActivationRecordResponse": {
       "type": "object",
       "properties": {
-        "subCAKey": {
+        "sessionKey": {
           "type": "string",
           "format": "byte"
         },
-        "attestationKey": {
+        "signingKey": {
           "type": "string",
           "format": "byte"
         },
-        "UIK": {
-          "type": "string",
-          "format": "byte"
-        },
-        "RK": {
+        "refKey": {
           "type": "string",
           "format": "byte"
         },
@@ -1227,6 +1223,12 @@
         "device": {
           "type": "string",
           "format": "byte"
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "title": "初始化请求"

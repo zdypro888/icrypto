@@ -34,8 +34,8 @@ type Cryptor interface {
 	ActivationDRMSignature(ctx context.Context, activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error)
 	//ActivationDeprecated return [0]fairpalySign, [1]fairplayCert
 	ActivationDeprecated(ctx context.Context, activationXML []byte) ([]byte, []byte, error)
-	//ActivationRecord set activation response return [0]subCAKey, [1]attestationKey, [2]UIK, [3]RK, [4]psc.sui
-	ActivationRecord(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, []byte, error)
+	//ActivationRecord set activation response return SessionKey SigningKey RefKey psc.sui
+	ActivationRecord(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, []byte, []byte, []byte, error)
 
 	//ADIStartProvisioning 返回 CPIM Session Error
 	ADIStartProvisioning(ctx context.Context, dsid int64, spim []byte) ([]byte, uint64, error)
