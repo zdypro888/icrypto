@@ -1227,12 +1227,6 @@
         "device": {
           "type": "string",
           "format": "byte"
-        },
-        "controls": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       },
       "title": "初始化请求"
@@ -1258,6 +1252,7 @@
       "type": "string",
       "enum": [
         "AUTO",
+        "IOSDRM",
         "MACOSDISABLE15"
       ],
       "default": "AUTO",

@@ -27,6 +27,7 @@ type InitializeType int32
 
 const (
 	InitializeType_AUTO           InitializeType = 0
+	InitializeType_IOSDRM         InitializeType = 1
 	InitializeType_MACOSDISABLE15 InitializeType = 4
 )
 
@@ -34,10 +35,12 @@ const (
 var (
 	InitializeType_name = map[int32]string{
 		0: "AUTO",
+		1: "IOSDRM",
 		4: "MACOSDISABLE15",
 	}
 	InitializeType_value = map[string]int32{
 		"AUTO":           0,
+		"IOSDRM":         1,
 		"MACOSDISABLE15": 4,
 	}
 )
@@ -74,7 +77,6 @@ type InitializeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Type          InitializeType         `protobuf:"varint,1,opt,name=type,proto3,enum=icrypto.InitializeType" json:"type,omitempty"`
 	Device        []byte                 `protobuf:"bytes,2,opt,name=device,proto3" json:"device,omitempty"`
-	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -119,13 +121,6 @@ func (x *InitializeRequest) GetType() InitializeType {
 func (x *InitializeRequest) GetDevice() []byte {
 	if x != nil {
 		return x.Device
-	}
-	return nil
-}
-
-func (x *InitializeRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -2395,11 +2390,10 @@ var File_crypto_proto protoreflect.FileDescriptor
 
 const file_crypto_proto_rawDesc = "" +
 	"\n" +
-	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"t\n" +
+	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"X\n" +
 	"\x11InitializeRequest\x12+\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x17.icrypto.InitializeTypeR\x04type\x12\x16\n" +
-	"\x06device\x18\x02 \x01(\fR\x06device\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"B\n" +
+	"\x06device\x18\x02 \x01(\fR\x06device\"B\n" +
 	"\x12InitializeResponse\x12\x16\n" +
 	"\x06device\x18\x01 \x01(\fR\x06device\x12\x14\n" +
 	"\x05infos\x18\x02 \x03(\fR\x05infos\"-\n" +
@@ -2536,9 +2530,11 @@ const file_crypto_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1c\n" +
 	"\tsignature\x18\x02 \x01(\fR\tsignature\x12\x1a\n" +
 	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"\x13\n" +
-	"\x11SAPVerifyResponse*.\n" +
+	"\x11SAPVerifyResponse*:\n" +
 	"\x0eInitializeType\x12\b\n" +
-	"\x04AUTO\x10\x00\x12\x12\n" +
+	"\x04AUTO\x10\x00\x12\n" +
+	"\n" +
+	"\x06IOSDRM\x10\x01\x12\x12\n" +
 	"\x0eMACOSDISABLE15\x10\x042\xe3\x13\n" +
 	"\fCryptService\x12]\n" +
 	"\n" +

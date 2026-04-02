@@ -8,20 +8,20 @@ option go_package = "github.com/zdypro888/icrypto";
 // 初始化类型枚举
 enum InitializeType {
   AUTO           = 0;
+  IOSDRM         = 1;
   MACOSDISABLE15 = 4;
 }
 
 // 初始化请求
 message InitializeRequest {
-  InitializeType  type     = 1;
-  bytes           device   = 2;
-  repeated string controls = 3;
+  InitializeType type   = 1;
+  bytes          device = 2;
 }
 
 // 初始化响应
 message InitializeResponse {
-  bytes device = 1;
-  repeated bytes infos = 2;
+  bytes          device = 1;
+  repeated bytes infos  = 2;
 }
 
 // 结束请求
