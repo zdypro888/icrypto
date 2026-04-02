@@ -129,7 +129,6 @@ func (x *InitializeRequest) GetDevice() []byte {
 type InitializeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Device        []byte                 `protobuf:"bytes,1,opt,name=device,proto3" json:"device,omitempty"`
-	Infos         [][]byte               `protobuf:"bytes,2,rep,name=infos,proto3" json:"infos,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -167,13 +166,6 @@ func (*InitializeResponse) Descriptor() ([]byte, []int) {
 func (x *InitializeResponse) GetDevice() []byte {
 	if x != nil {
 		return x.Device
-	}
-	return nil
-}
-
-func (x *InitializeResponse) GetInfos() [][]byte {
-	if x != nil {
-		return x.Infos
 	}
 	return nil
 }
@@ -2393,10 +2385,9 @@ const file_crypto_proto_rawDesc = "" +
 	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"X\n" +
 	"\x11InitializeRequest\x12+\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x17.icrypto.InitializeTypeR\x04type\x12\x16\n" +
-	"\x06device\x18\x02 \x01(\fR\x06device\"B\n" +
+	"\x06device\x18\x02 \x01(\fR\x06device\",\n" +
 	"\x12InitializeResponse\x12\x16\n" +
-	"\x06device\x18\x01 \x01(\fR\x06device\x12\x14\n" +
-	"\x05infos\x18\x02 \x03(\fR\x05infos\"-\n" +
+	"\x06device\x18\x01 \x01(\fR\x06device\"-\n" +
 	"\x0fFinalizeRequest\x12\x1a\n" +
 	"\bcontrols\x18\x01 \x03(\tR\bcontrols\"\x12\n" +
 	"\x10FinalizeResponse\";\n" +

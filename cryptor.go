@@ -22,7 +22,7 @@ type IPlistObject interface {
 
 type Cryptor interface {
 	//Initialize with device plist data, return infos array
-	Initialize(ctx context.Context, type_ InitializeType, device IPlistObject) ([][]byte, error)
+	Initialize(ctx context.Context, type_ InitializeType, device IPlistObject) error
 	//Finalize finalize object
 	Finalize(ctx context.Context) error
 

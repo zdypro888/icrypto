@@ -60,20 +60,20 @@ func (crypt *CryptorGRPC) metaContext(ctx context.Context) (context.Context, con
 }
 
 // Initialize init crypto with device[see device struct]
-func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, device IPlistObject) ([][]byte, error) {
+func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, device IPlistObject) error {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	devicePlist, err := plist.Marshal(device, plist.BinaryFormat)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	request := &InitializeRequest{Type: type_, Device: devicePlist}
 	if response, err := crypt.Client.Initialize(ctx, request); err != nil {
-		return nil, err
+		return err
 	} else if err := device.Unmarshal(response.Device); err != nil {
-		return nil, err
+		return err
 	} else {
-		return response.Infos, nil
+		return nil
 	}
 }
 

@@ -21,7 +21,6 @@ message InitializeRequest {
 // 初始化响应
 message InitializeResponse {
   bytes          device = 1;
-  repeated bytes infos  = 2;
 }
 
 // 结束请求
