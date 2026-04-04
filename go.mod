@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.28.0
 	github.com/satori/go.uuid v1.2.0
-	github.com/zdypro888/go-plist v1.60.3
+	github.com/zdypro888/go-plist v1.60.4
 	google.golang.org/genproto/googleapis/api v0.0.0-20260401024825-9d38bb4040a9
 	google.golang.org/grpc v1.80.0
 	google.golang.org/protobuf v1.36.11
