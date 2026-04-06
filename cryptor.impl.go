@@ -24,7 +24,13 @@ func InitGRPC(address string) error {
 // InitGRPCWithAPIKey 初始化 gRPC 连接（连接 iclouder 代理时需要 apiKey）
 func InitGRPCWithAPIKey(address, apiKey string) error {
 	var err error
-	if cryptoConn, err = grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
+	if cryptoConn, err = grpc.NewClient(address,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultCallOptions(
+			grpc.MaxCallRecvMsgSize(64*1024*1024),
+			grpc.MaxCallSendMsgSize(64*1024*1024),
+		),
+	); err != nil {
 		return err
 	}
 	cryptoClient = NewCryptServiceClient(cryptoConn)
