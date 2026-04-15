@@ -1123,18 +1123,6 @@
     "icryptoActivationRecordResponse": {
       "type": "object",
       "properties": {
-        "sessionKey": {
-          "type": "string",
-          "format": "byte"
-        },
-        "signingKey": {
-          "type": "string",
-          "format": "byte"
-        },
-        "refKey": {
-          "type": "string",
-          "format": "byte"
-        },
         "pscSui": {
           "type": "string",
           "format": "byte"

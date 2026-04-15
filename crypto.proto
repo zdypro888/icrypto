@@ -99,10 +99,7 @@ message ActivationRecordRequest {
 
 // 激活记录响应
 message ActivationRecordResponse {
-  bytes session_key = 1;
-  bytes signing_key = 2;
-  bytes ref_key     = 3;
-  bytes psc_sui     = 4;
+  bytes psc_sui     = 1;
 }
 
 // ADI 开始配置请求

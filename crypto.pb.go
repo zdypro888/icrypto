@@ -828,10 +828,7 @@ func (x *ActivationRecordRequest) GetControls() []string {
 // 激活记录响应
 type ActivationRecordResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionKey    []byte                 `protobuf:"bytes,1,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty"`
-	SigningKey    []byte                 `protobuf:"bytes,2,opt,name=signing_key,json=signingKey,proto3" json:"signing_key,omitempty"`
-	RefKey        []byte                 `protobuf:"bytes,3,opt,name=ref_key,json=refKey,proto3" json:"ref_key,omitempty"`
-	PscSui        []byte                 `protobuf:"bytes,4,opt,name=psc_sui,json=pscSui,proto3" json:"psc_sui,omitempty"`
+	PscSui        []byte                 `protobuf:"bytes,1,opt,name=psc_sui,json=pscSui,proto3" json:"psc_sui,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -864,27 +861,6 @@ func (x *ActivationRecordResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ActivationRecordResponse.ProtoReflect.Descriptor instead.
 func (*ActivationRecordResponse) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *ActivationRecordResponse) GetSessionKey() []byte {
-	if x != nil {
-		return x.SessionKey
-	}
-	return nil
-}
-
-func (x *ActivationRecordResponse) GetSigningKey() []byte {
-	if x != nil {
-		return x.SigningKey
-	}
-	return nil
-}
-
-func (x *ActivationRecordResponse) GetRefKey() []byte {
-	if x != nil {
-		return x.RefKey
-	}
-	return nil
 }
 
 func (x *ActivationRecordResponse) GetPscSui() []byte {
@@ -2429,14 +2405,9 @@ const file_crypto_proto_rawDesc = "" +
 	"\raccount_token\x18\x06 \x01(\fR\faccountToken\x126\n" +
 	"\x17account_token_signature\x18\a \x01(\fR\x15accountTokenSignature\x12:\n" +
 	"\x19unique_device_certificate\x18\b \x01(\fR\x17uniqueDeviceCertificate\x12\x1a\n" +
-	"\bcontrols\x18\t \x03(\tR\bcontrols\"\x8e\x01\n" +
-	"\x18ActivationRecordResponse\x12\x1f\n" +
-	"\vsession_key\x18\x01 \x01(\fR\n" +
-	"sessionKey\x12\x1f\n" +
-	"\vsigning_key\x18\x02 \x01(\fR\n" +
-	"signingKey\x12\x17\n" +
-	"\aref_key\x18\x03 \x01(\fR\x06refKey\x12\x17\n" +
-	"\apsc_sui\x18\x04 \x01(\fR\x06pscSui\"a\n" +
+	"\bcontrols\x18\t \x03(\tR\bcontrols\"3\n" +
+	"\x18ActivationRecordResponse\x12\x17\n" +
+	"\apsc_sui\x18\x01 \x01(\fR\x06pscSui\"a\n" +
 	"\x1bADIStartProvisioningRequest\x12\x12\n" +
 	"\x04DSID\x18\x01 \x01(\x03R\x04DSID\x12\x12\n" +
 	"\x04SPIM\x18\x02 \x01(\fR\x04SPIM\x12\x1a\n" +
