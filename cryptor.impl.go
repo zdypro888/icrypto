@@ -8,6 +8,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/zdypro888/go-plist"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 )
@@ -16,16 +17,40 @@ var cryptoConn *grpc.ClientConn
 var cryptoClient CryptServiceClient
 var cryptoAPIKey string // 用于 iclouder 代理认证
 
-// InitGRPC 初始化 gRPC 连接（直连 cryptor 服务，无需 apiKey）
+// InitGRPC 初始化 gRPC 连接（直连 cryptor 服务，无需 apiKey）。
+// 警告：使用明文传输，仅适用于回环地址或可信子进程。
 func InitGRPC(address string) error {
 	return InitGRPCWithAPIKey(address, "")
 }
 
-// InitGRPCWithAPIKey 初始化 gRPC 连接（连接 iclouder 代理时需要 apiKey）
+// InitGRPCWithAPIKey 初始化 gRPC 连接（连接 iclouder 代理时需要 apiKey）。
+// 警告：使用明文传输，仅适用于回环地址或可信子进程。
 func InitGRPCWithAPIKey(address, apiKey string) error {
 	var err error
 	if cryptoConn, err = grpc.NewClient(address,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultCallOptions(
+			grpc.MaxCallRecvMsgSize(64*1024*1024),
+			grpc.MaxCallSendMsgSize(64*1024*1024),
+		),
+	); err != nil {
+		return err
+	}
+	cryptoClient = NewCryptServiceClient(cryptoConn)
+	cryptoAPIKey = apiKey
+	NewCryptor = NewCryptorGRPC
+	return nil
+}
+
+// InitGRPCWithCreds 初始化 gRPC 连接，支持自定义传输凭证。
+// 若 creds 为 nil，则退回使用明文传输（insecure）。
+func InitGRPCWithCreds(address, apiKey string, creds credentials.TransportCredentials) error {
+	if creds == nil {
+		creds = insecure.NewCredentials()
+	}
+	var err error
+	if cryptoConn, err = grpc.NewClient(address,
+		grpc.WithTransportCredentials(creds),
 		grpc.WithDefaultCallOptions(
 			grpc.MaxCallRecvMsgSize(64*1024*1024),
 			grpc.MaxCallSendMsgSize(64*1024*1024),
