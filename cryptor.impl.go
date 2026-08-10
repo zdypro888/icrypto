@@ -108,6 +108,25 @@ func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, 
 	}
 }
 
+// SyncDevice synchronizes state acquired after Initialize (for example an AP
+// ticket requested with hardware identifiers returned by Initialize). It is a
+// state merge on the server; it must not rebuild the remote cryptor.
+func (crypt *CryptorGRPC) SyncDevice(ctx context.Context, device IPlistObject) error {
+	if device == nil {
+		return fmt.Errorf("sync device: nil device")
+	}
+	devicePlist, err := plist.Marshal(device, plist.BinaryFormat)
+	if err != nil {
+		return fmt.Errorf("sync device: marshal device: %w", err)
+	}
+	ctx, cancel := crypt.metaContext(ctx)
+	defer cancel()
+	if _, err := crypt.Client.SyncDevice(ctx, &SyncDeviceRequest{Device: devicePlist}); err != nil {
+		return fmt.Errorf("sync device: %w", err)
+	}
+	return nil
+}
+
 // InitDevice finalize crypto
 func (crypt *CryptorGRPC) Finalize(ctx context.Context) error {
 	ctx, cancel := crypt.metaContext(ctx)

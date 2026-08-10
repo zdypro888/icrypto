@@ -20,6 +20,14 @@ type IPlistObject interface {
 	Unmarshal(data []byte) error
 }
 
+// DeviceSynchronizer is an optional capability for cryptors that can merge
+// device state discovered after Initialize without rebuilding the backend.
+// It intentionally remains separate from Cryptor so existing implementations
+// of the public Cryptor interface remain source-compatible.
+type DeviceSynchronizer interface {
+	SyncDevice(ctx context.Context, device IPlistObject) error
+}
+
 type Cryptor interface {
 	//Initialize with device plist data, return infos array
 	Initialize(ctx context.Context, type_ InitializeType, device IPlistObject) error

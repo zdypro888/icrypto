@@ -24,6 +24,16 @@ message InitializeResponse {
   bytes device = 1;
 }
 
+// 同步已初始化 cryptor 使用的设备状态。
+//
+// Initialize 可能先从真实硬件补全设备标识，调用方随后才取得依赖这些
+// 标识的票据。该 RPC 只合并设备数据，不重建 VM、SEP 或 guest session。
+message SyncDeviceRequest {
+  bytes device = 1;
+}
+
+message SyncDeviceResponse {}
+
 // 结束请求
 message FinalizeRequest {
   repeated string controls = 1;
@@ -272,6 +282,14 @@ service CryptService {
   rpc Initialize(InitializeRequest) returns (InitializeResponse) {
     option (google.api.http) = {
       post: "/initialize"
+      body: "*"
+    };
+  }
+
+  // 同步设备状态，但不重新初始化 cryptor
+  rpc SyncDevice(SyncDeviceRequest) returns (SyncDeviceResponse) {
+    option (google.api.http) = {
+      post: "/device/sync"
       body: "*"
     };
   }
