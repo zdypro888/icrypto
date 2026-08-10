@@ -7,7 +7,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/zdypro888/go-plist v1.60.4
 	google.golang.org/genproto/googleapis/api v0.0.0-20260608224507-4308a22a1bab
-	google.golang.org/grpc v1.81.1
+	google.golang.org/grpc v1.82.1
 	google.golang.org/protobuf v1.36.11
 )
 
