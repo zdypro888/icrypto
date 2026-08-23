@@ -108,7 +108,7 @@ func run() (err error) {
 	if err != nil {
 		return fmt.Errorf("create DRM handshake: %w", err)
 	}
-	_, _ = collectionBlob, handshakeRequest
+	fmt.Printf("collection blob: %d bytes, handshake request: %d bytes\n", len(collectionBlob), len(handshakeRequest))
 	return nil
 }
 ```
