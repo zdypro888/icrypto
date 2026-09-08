@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 	"github.com/zdypro888/go-plist"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -66,7 +66,7 @@ func InitGRPCWithCreds(address, apiKey string, creds credentials.TransportCreden
 
 func NewCryptorGRPC() Cryptor {
 	crypt := &CryptorGRPC{
-		ClientId: uuid.NewV4().String(),
+		ClientId: uuid.NewString(),
 		APIKey:   cryptoAPIKey,
 		Client:   cryptoClient,
 	}
@@ -81,11 +81,15 @@ type CryptorGRPC struct {
 
 func (crypt *CryptorGRPC) metaContext(ctx context.Context) (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithTimeout(ctx, 60*time.Second)
-	pairs := []string{"client_id", crypt.ClientId}
+	// Previously NewOutgoingContext replaced all caller metadata, dropping
+	// tracing/routing/authentication fields. Copy it, then replace only the
+	// identity fields owned by this cryptor so duplicate IDs cannot survive.
+	md, _ := metadata.FromOutgoingContext(ctx)
+	md = md.Copy()
+	md.Set("client_id", crypt.ClientId)
 	if crypt.APIKey != "" {
-		pairs = append(pairs, "x-api-key", crypt.APIKey)
+		md.Set("x-api-key", crypt.APIKey)
 	}
-	md := metadata.Pairs(pairs...)
 	metactx := metadata.NewOutgoingContext(ctx, md)
 	return metactx, cancel
 }
