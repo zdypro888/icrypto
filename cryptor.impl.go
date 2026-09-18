@@ -2,7 +2,10 @@ package icrypto
 
 import (
 	context "context"
+	"errors"
 	"fmt"
+	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,9 +16,24 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-var cryptoConn *grpc.ClientConn
-var cryptoClient CryptServiceClient
-var cryptoAPIKey string // 用于 iclouder 代理认证
+// grpcState is one consistent (conn, client, apiKey) triple. It is published
+// atomically so NewCryptorGRPC can never pair the client of one Init call with
+// the API key of another.
+type grpcState struct {
+	conn   *grpc.ClientConn
+	client CryptServiceClient
+	apiKey string // 用于 iclouder 代理认证
+}
+
+var (
+	cryptoState atomic.Pointer[grpcState]
+
+	cryptoMu sync.Mutex
+	// cryptoConns holds every connection opened by Init*, including ones that a
+	// later Init superseded: cryptors created earlier keep using them, so they
+	// are only released by CloseGRPC.
+	cryptoConns []*grpc.ClientConn
+)
 
 // InitGRPC 初始化 gRPC 连接（直连 cryptor 服务，无需 apiKey）。
 // 警告：使用明文传输，仅适用于回环地址或可信子进程。
@@ -26,20 +44,7 @@ func InitGRPC(address string) error {
 // InitGRPCWithAPIKey 初始化 gRPC 连接（连接 iclouder 代理时需要 apiKey）。
 // 警告：使用明文传输，仅适用于回环地址或可信子进程。
 func InitGRPCWithAPIKey(address, apiKey string) error {
-	var err error
-	if cryptoConn, err = grpc.NewClient(address,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithDefaultCallOptions(
-			grpc.MaxCallRecvMsgSize(64*1024*1024),
-			grpc.MaxCallSendMsgSize(64*1024*1024),
-		),
-	); err != nil {
-		return err
-	}
-	cryptoClient = NewCryptServiceClient(cryptoConn)
-	cryptoAPIKey = apiKey
-	NewCryptor = NewCryptorGRPC
-	return nil
+	return initGRPC(address, apiKey, insecure.NewCredentials())
 }
 
 // InitGRPCWithCreds 初始化 gRPC 连接，支持自定义传输凭证。
@@ -48,27 +53,49 @@ func InitGRPCWithCreds(address, apiKey string, creds credentials.TransportCreden
 	if creds == nil {
 		creds = insecure.NewCredentials()
 	}
-	var err error
-	if cryptoConn, err = grpc.NewClient(address,
+	return initGRPC(address, apiKey, creds)
+}
+
+func initGRPC(address, apiKey string, creds credentials.TransportCredentials) error {
+	conn, err := grpc.NewClient(address,
 		grpc.WithTransportCredentials(creds),
 		grpc.WithDefaultCallOptions(
 			grpc.MaxCallRecvMsgSize(64*1024*1024),
 			grpc.MaxCallSendMsgSize(64*1024*1024),
 		),
-	); err != nil {
+	)
+	if err != nil {
 		return err
 	}
-	cryptoClient = NewCryptServiceClient(cryptoConn)
-	cryptoAPIKey = apiKey
+	cryptoMu.Lock()
+	defer cryptoMu.Unlock()
+	cryptoConns = append(cryptoConns, conn)
+	cryptoState.Store(&grpcState{conn: conn, client: NewCryptServiceClient(conn), apiKey: apiKey})
 	NewCryptor = NewCryptorGRPC
 	return nil
 }
 
+// CloseGRPC closes every connection opened by InitGRPC*. Cryptors created
+// before the call stop working; call it only on shutdown.
+func CloseGRPC() error {
+	cryptoMu.Lock()
+	defer cryptoMu.Unlock()
+	cryptoState.Store(nil)
+	var errs []error
+	for _, conn := range cryptoConns {
+		if err := conn.Close(); err != nil {
+			errs = append(errs, err)
+		}
+	}
+	cryptoConns = nil
+	return errors.Join(errs...)
+}
+
 func NewCryptorGRPC() Cryptor {
-	crypt := &CryptorGRPC{
-		ClientId: uuid.NewString(),
-		APIKey:   cryptoAPIKey,
-		Client:   cryptoClient,
+	crypt := &CryptorGRPC{ClientId: uuid.NewString()}
+	if state := cryptoState.Load(); state != nil {
+		crypt.APIKey = state.apiKey
+		crypt.Client = state.client
 	}
 	return crypt
 }
