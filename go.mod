@@ -5,7 +5,7 @@ go 1.27.0
 require (
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.30.0
-	github.com/zdypro888/go-plist v1.60.5-0.20260919032847-21de1da0a4fa
+	github.com/zdypro888/go-plist v1.60.5-0.20260919045646-76befdc190f8
 	google.golang.org/genproto/googleapis/api v0.0.0-20260908043556-f8649ddbbfe6
 	google.golang.org/grpc v1.83.2
 	google.golang.org/protobuf v1.36.12
