@@ -121,15 +121,21 @@ func (crypt *CryptorGRPC) metaContext(ctx context.Context) (context.Context, con
 	return metactx, cancel
 }
 
-// Initialize init crypto with device[see device struct]
-func (crypt *CryptorGRPC) Initialize(ctx context.Context, type_ InitializeType, device IPlistObject) error {
+// Initialize 创建远端计算会话，并将后端返回的设备状态写入传入对象。
+func (crypt *CryptorGRPC) Initialize(ctx context.Context, options InitializeOptions, device IPlistObject) error {
+	if err := options.Validate(); err != nil {
+		return err
+	}
+	if device == nil {
+		return fmt.Errorf("initialize: nil device")
+	}
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	devicePlist, err := plist.Marshal(device, plist.BinaryFormat)
 	if err != nil {
 		return err
 	}
-	request := &InitializeRequest{Type: type_, Device: devicePlist}
+	request := &InitializeRequest{IosDrm: options.IOSDRM, MacosRuntime: options.MacOSRuntime, Device: devicePlist}
 	if response, err := crypt.Client.Initialize(ctx, request); err != nil {
 		return err
 	} else if err := device.Unmarshal(response.Device); err != nil {
@@ -168,7 +174,7 @@ func (crypt *CryptorGRPC) Finalize(ctx context.Context) error {
 	return nil
 }
 
-// ActivationDRMHandshake generate [0]CollectionBlob and [1]handshakeRequestMessage
+// ActivationDRMHandshake 开始 DRM 激活握手，返回采集数据和握手请求。
 func (crypt *CryptorGRPC) ActivationDRMHandshake(ctx context.Context) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -180,7 +186,7 @@ func (crypt *CryptorGRPC) ActivationDRMHandshake(ctx context.Context) ([]byte, [
 	return response.CollectionBlob, response.HandshakeRequestMessage, nil
 }
 
-// ActivationDRMProcess process handshake response and return [0]UIK [1]RK
+// ActivationDRMProcess 处理 DRM 握手响应，返回 UIK 与 RK。
 func (crypt *CryptorGRPC) ActivationDRMProcess(ctx context.Context, suinfo, handshakeResponseMessage, serverKP []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -192,7 +198,7 @@ func (crypt *CryptorGRPC) ActivationDRMProcess(ctx context.Context, suinfo, hand
 	return response.UIK, response.RK, nil
 }
 
-// ActivationDRMSignature sign activation xml and return [0]fairpalySign, [1]fairplayCert, [2]RKSignature, [3]signActRequest, [4]serverKP
+// ActivationDRMSignature 签署激活 XML，返回签名、证书、RK 签名、激活请求和服务器密钥。
 func (crypt *CryptorGRPC) ActivationDRMSignature(ctx context.Context, activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -204,7 +210,7 @@ func (crypt *CryptorGRPC) ActivationDRMSignature(ctx context.Context, activation
 	return response.FairplaySignature, response.FairplayCertChain, response.RKSignature, response.SignActRequest, response.ServerKP, nil
 }
 
-// ActivationDeprecated return [0]fairpalySign, [1]fairplayCert
+// ActivationDeprecated 使用当前会话计算传统激活签名及证书；独立签名优先使用 ActivationSign。
 func (crypt *CryptorGRPC) ActivationDeprecated(ctx context.Context, activationXML []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -216,7 +222,7 @@ func (crypt *CryptorGRPC) ActivationDeprecated(ctx context.Context, activationXM
 	return response.Sign, response.Cert, nil
 }
 
-// ActivationRecord set activation response return psc.sui
+// ActivationRecord 向 DRM 会话提供激活记录并导出 psc.sui。
 func (crypt *CryptorGRPC) ActivationRecord(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -237,7 +243,7 @@ func (crypt *CryptorGRPC) ActivationRecord(ctx context.Context, unbrick bool, Ac
 	return response.PscSui, nil
 }
 
-// ADIStartProvisioning 返回 CPIM Session Error
+// ADIStartProvisioning 开始 ADI 配置，返回 CPIM 和当前实例的会话句柄。
 func (crypt *CryptorGRPC) ADIStartProvisioning(ctx context.Context, dsid int64, spim []byte) ([]byte, uint64, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -249,7 +255,7 @@ func (crypt *CryptorGRPC) ADIStartProvisioning(ctx context.Context, dsid int64, 
 	return response.CPIM, response.Session, nil
 }
 
-// ADIEndProvisioning 返回 MID OTP ADI Error
+// ADIEndProvisioning 完成配置或复用 ADI，返回 MID、OTP 和更新后的 ADI 状态。
 func (crypt *CryptorGRPC) ADIEndProvisioning(ctx context.Context, session uint64, dsid int64, rinfo int64, ptm []byte, tk []byte, adi []byte) ([]byte, []byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -261,7 +267,7 @@ func (crypt *CryptorGRPC) ADIEndProvisioning(ctx context.Context, session uint64
 	return response.MID, response.OTP, response.ADI, nil
 }
 
-// ADIGenerateLoginCode 返回 loginCode
+// ADIGenerateLoginCode 从 ADI 配置生成登录码。
 func (crypt *CryptorGRPC) ADIGenerateLoginCode(ctx context.Context, dsid int64, adi []byte) (uint32, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -297,7 +303,7 @@ func (crypt *CryptorGRPC) AbsintheAddOption(ctx context.Context, BIKKey []byte, 
 	return nil
 }
 
-// AbsintheActivateSession 设置 session 返回（absinthe-response）
+// AbsintheActivateSession 使用服务器响应推进当前 Absinthe 会话。
 func (crypt *CryptorGRPC) AbsintheActivateSession(ctx context.Context, validationData []byte, serverKey []byte) error {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -308,7 +314,7 @@ func (crypt *CryptorGRPC) AbsintheActivateSession(ctx context.Context, validatio
 	return nil
 }
 
-// AbsintheSignData signData 返回 signature outServKey
+// AbsintheSignData 使用 Absinthe 会话签名，返回签名和输出服务器密钥。
 func (crypt *CryptorGRPC) AbsintheSignData(ctx context.Context, dataToSign []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -320,7 +326,7 @@ func (crypt *CryptorGRPC) AbsintheSignData(ctx context.Context, dataToSign []byt
 	return response.Signature, response.OutServKey, nil
 }
 
-// IdentitySession 注册 SessionInfoRequest
+// IdentitySession 生成 Validation 握手请求。
 func (crypt *CryptorGRPC) IdentitySession(ctx context.Context, cert []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -332,7 +338,7 @@ func (crypt *CryptorGRPC) IdentitySession(ctx context.Context, cert []byte) ([]b
 	return response.Request, nil
 }
 
-// IdentityValidation 取得VD
+// IdentityValidation 处理 Validation 握手响应并生成 validation-data。
 func (crypt *CryptorGRPC) IdentityValidation(ctx context.Context, sessionInfo []byte, signData []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
@@ -395,4 +401,25 @@ func (crypt *CryptorGRPC) SAPVerify(ctx context.Context, data []byte, signature 
 		return err
 	}
 	return nil
+}
+
+// ActivationSign 将签名实现限制在单次 RPC，不能把 Legacy 当作全局初始化模式。
+func (crypt *CryptorGRPC) ActivationSign(ctx context.Context, profile ActivationSigningProfile, macOSRuntime MacOSRuntime, device IPlistObject, activationXML []byte) ([]byte, []byte, error) {
+	if err := ValidateMacOSRuntime(macOSRuntime); err != nil {
+		return nil, nil, err
+	}
+	if device == nil {
+		return nil, nil, fmt.Errorf("activation device is nil")
+	}
+	ctx, cancel := crypt.metaContext(ctx)
+	defer cancel()
+	data, err := device.Marshal()
+	if err != nil {
+		return nil, nil, err
+	}
+	response, err := crypt.Client.ActivationSign(ctx, &ActivationSignRequest{Profile: profile, MacosRuntime: macOSRuntime, Device: data, ActivationInfoXml: activationXML})
+	if err != nil {
+		return nil, nil, err
+	}
+	return response.Sign, response.Cert, nil
 }

@@ -22,62 +22,106 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// 初始化类型枚举
-type InitializeType int32
+// macOS 计算镜像偏好，不改变对外声明的设备系统版本。
+type MacOSRuntime int32
 
 const (
-	InitializeType_AUTO           InitializeType = 0
-	InitializeType_IOSDRM         InitializeType = 1
-	InitializeType_MACOSDISABLE15 InitializeType = 4
+	MacOSRuntime_MACOS_AUTO       MacOSRuntime = 0
+	MacOSRuntime_MACOS_COMPATIBLE MacOSRuntime = 1
 )
 
-// Enum value maps for InitializeType.
+// Enum value maps for MacOSRuntime.
 var (
-	InitializeType_name = map[int32]string{
-		0: "AUTO",
-		1: "IOSDRM",
-		4: "MACOSDISABLE15",
+	MacOSRuntime_name = map[int32]string{
+		0: "MACOS_AUTO",
+		1: "MACOS_COMPATIBLE",
 	}
-	InitializeType_value = map[string]int32{
-		"AUTO":           0,
-		"IOSDRM":         1,
-		"MACOSDISABLE15": 4,
+	MacOSRuntime_value = map[string]int32{
+		"MACOS_AUTO":       0,
+		"MACOS_COMPATIBLE": 1,
 	}
 )
 
-func (x InitializeType) Enum() *InitializeType {
-	p := new(InitializeType)
+func (x MacOSRuntime) Enum() *MacOSRuntime {
+	p := new(MacOSRuntime)
 	*p = x
 	return p
 }
 
-func (x InitializeType) String() string {
+func (x MacOSRuntime) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (InitializeType) Descriptor() protoreflect.EnumDescriptor {
+func (MacOSRuntime) Descriptor() protoreflect.EnumDescriptor {
 	return file_crypto_proto_enumTypes[0].Descriptor()
 }
 
-func (InitializeType) Type() protoreflect.EnumType {
+func (MacOSRuntime) Type() protoreflect.EnumType {
 	return &file_crypto_proto_enumTypes[0]
 }
 
-func (x InitializeType) Number() protoreflect.EnumNumber {
+func (x MacOSRuntime) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use InitializeType.Descriptor instead.
-func (InitializeType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use MacOSRuntime.Descriptor instead.
+func (MacOSRuntime) EnumDescriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{0}
 }
 
-// 初始化请求
+// 只选择本次传统激活签名的实现，不改变 ADI/Validation 会话。
+type ActivationSigningProfile int32
+
+const (
+	ActivationSigningProfile_ACTIVATION_SIGNING_CURRENT     ActivationSigningProfile = 0
+	ActivationSigningProfile_ACTIVATION_SIGNING_LEGACY_IOS9 ActivationSigningProfile = 1
+)
+
+// Enum value maps for ActivationSigningProfile.
+var (
+	ActivationSigningProfile_name = map[int32]string{
+		0: "ACTIVATION_SIGNING_CURRENT",
+		1: "ACTIVATION_SIGNING_LEGACY_IOS9",
+	}
+	ActivationSigningProfile_value = map[string]int32{
+		"ACTIVATION_SIGNING_CURRENT":     0,
+		"ACTIVATION_SIGNING_LEGACY_IOS9": 1,
+	}
+)
+
+func (x ActivationSigningProfile) Enum() *ActivationSigningProfile {
+	p := new(ActivationSigningProfile)
+	*p = x
+	return p
+}
+
+func (x ActivationSigningProfile) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ActivationSigningProfile) Descriptor() protoreflect.EnumDescriptor {
+	return file_crypto_proto_enumTypes[1].Descriptor()
+}
+
+func (ActivationSigningProfile) Type() protoreflect.EnumType {
+	return &file_crypto_proto_enumTypes[1]
+}
+
+func (x ActivationSigningProfile) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ActivationSigningProfile.Descriptor instead.
+func (ActivationSigningProfile) EnumDescriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{1}
+}
+
+// 初始化参数分离 DRM 能力和 macOS 镜像偏好，不能再按位组合。
 type InitializeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Type          InitializeType         `protobuf:"varint,1,opt,name=type,proto3,enum=icrypto.InitializeType" json:"type,omitempty"`
 	Device        []byte                 `protobuf:"bytes,2,opt,name=device,proto3" json:"device,omitempty"`
-	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
+	IosDrm        bool                   `protobuf:"varint,4,opt,name=ios_drm,json=iosDrm,proto3" json:"ios_drm,omitempty"`
+	MacosRuntime  MacOSRuntime           `protobuf:"varint,5,opt,name=macos_runtime,json=macosRuntime,proto3,enum=icrypto.MacOSRuntime" json:"macos_runtime,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -112,13 +156,6 @@ func (*InitializeRequest) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *InitializeRequest) GetType() InitializeType {
-	if x != nil {
-		return x.Type
-	}
-	return InitializeType_AUTO
-}
-
 func (x *InitializeRequest) GetDevice() []byte {
 	if x != nil {
 		return x.Device
@@ -126,11 +163,18 @@ func (x *InitializeRequest) GetDevice() []byte {
 	return nil
 }
 
-func (x *InitializeRequest) GetControls() []string {
+func (x *InitializeRequest) GetIosDrm() bool {
 	if x != nil {
-		return x.Controls
+		return x.IosDrm
 	}
-	return nil
+	return false
+}
+
+func (x *InitializeRequest) GetMacosRuntime() MacOSRuntime {
+	if x != nil {
+		return x.MacosRuntime
+	}
+	return MacOSRuntime_MACOS_AUTO
 }
 
 // 初始化响应
@@ -265,7 +309,6 @@ func (*SyncDeviceResponse) Descriptor() ([]byte, []int) {
 // 结束请求
 type FinalizeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Controls      []string               `protobuf:"bytes,1,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -298,13 +341,6 @@ func (x *FinalizeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use FinalizeRequest.ProtoReflect.Descriptor instead.
 func (*FinalizeRequest) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *FinalizeRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
 }
 
 // 结束响应
@@ -347,7 +383,6 @@ func (*FinalizeResponse) Descriptor() ([]byte, []int) {
 // DRM 激活握手请求
 type ActivationDRMHandshakeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Controls      []string               `protobuf:"bytes,1,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -380,13 +415,6 @@ func (x *ActivationDRMHandshakeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ActivationDRMHandshakeRequest.ProtoReflect.Descriptor instead.
 func (*ActivationDRMHandshakeRequest) Descriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *ActivationDRMHandshakeRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
 }
 
 // DRM 激活握手响应
@@ -448,7 +476,6 @@ type ActivationDRMProcessRequest struct {
 	SUInfo                   []byte                 `protobuf:"bytes,1,opt,name=SUInfo,proto3" json:"SUInfo,omitempty"`
 	HandshakeResponseMessage []byte                 `protobuf:"bytes,2,opt,name=handshake_response_message,json=handshakeResponseMessage,proto3" json:"handshake_response_message,omitempty"`
 	ServerKP                 []byte                 `protobuf:"bytes,3,opt,name=serverKP,proto3" json:"serverKP,omitempty"`
-	Controls                 []string               `protobuf:"bytes,4,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -500,13 +527,6 @@ func (x *ActivationDRMProcessRequest) GetHandshakeResponseMessage() []byte {
 func (x *ActivationDRMProcessRequest) GetServerKP() []byte {
 	if x != nil {
 		return x.ServerKP
-	}
-	return nil
-}
-
-func (x *ActivationDRMProcessRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -568,7 +588,6 @@ func (x *ActivationDRMProcessResponse) GetRK() []byte {
 type ActivationDRMSignatureRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	ActivationInfoXml []byte                 `protobuf:"bytes,1,opt,name=activation_info_xml,json=activationInfoXml,proto3" json:"activation_info_xml,omitempty"`
-	Controls          []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -606,13 +625,6 @@ func (*ActivationDRMSignatureRequest) Descriptor() ([]byte, []int) {
 func (x *ActivationDRMSignatureRequest) GetActivationInfoXml() []byte {
 	if x != nil {
 		return x.ActivationInfoXml
-	}
-	return nil
-}
-
-func (x *ActivationDRMSignatureRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -694,18 +706,86 @@ func (x *ActivationDRMSignatureResponse) GetServerKP() []byte {
 	return nil
 }
 
+// 一次性签名：不要求 Initialize，不写回设备，不占用调用方现有会话。
+type ActivationSignRequest struct {
+	state             protoimpl.MessageState   `protogen:"open.v1"`
+	Profile           ActivationSigningProfile `protobuf:"varint,1,opt,name=profile,proto3,enum=icrypto.ActivationSigningProfile" json:"profile,omitempty"`
+	MacosRuntime      MacOSRuntime             `protobuf:"varint,5,opt,name=macos_runtime,json=macosRuntime,proto3,enum=icrypto.MacOSRuntime" json:"macos_runtime,omitempty"`
+	Device            []byte                   `protobuf:"bytes,3,opt,name=device,proto3" json:"device,omitempty"`
+	ActivationInfoXml []byte                   `protobuf:"bytes,4,opt,name=activation_info_xml,json=activationInfoXml,proto3" json:"activation_info_xml,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *ActivationSignRequest) Reset() {
+	*x = ActivationSignRequest{}
+	mi := &file_crypto_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActivationSignRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActivationSignRequest) ProtoMessage() {}
+
+func (x *ActivationSignRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_crypto_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActivationSignRequest.ProtoReflect.Descriptor instead.
+func (*ActivationSignRequest) Descriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ActivationSignRequest) GetProfile() ActivationSigningProfile {
+	if x != nil {
+		return x.Profile
+	}
+	return ActivationSigningProfile_ACTIVATION_SIGNING_CURRENT
+}
+
+func (x *ActivationSignRequest) GetMacosRuntime() MacOSRuntime {
+	if x != nil {
+		return x.MacosRuntime
+	}
+	return MacOSRuntime_MACOS_AUTO
+}
+
+func (x *ActivationSignRequest) GetDevice() []byte {
+	if x != nil {
+		return x.Device
+	}
+	return nil
+}
+
+func (x *ActivationSignRequest) GetActivationInfoXml() []byte {
+	if x != nil {
+		return x.ActivationInfoXml
+	}
+	return nil
+}
+
 // 旧版激活请求
 type ActivationDeprecatedRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	ActivationInfoXml []byte                 `protobuf:"bytes,1,opt,name=activation_info_xml,json=activationInfoXml,proto3" json:"activation_info_xml,omitempty"`
-	Controls          []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ActivationDeprecatedRequest) Reset() {
 	*x = ActivationDeprecatedRequest{}
-	mi := &file_crypto_proto_msgTypes[12]
+	mi := &file_crypto_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -717,7 +797,7 @@ func (x *ActivationDeprecatedRequest) String() string {
 func (*ActivationDeprecatedRequest) ProtoMessage() {}
 
 func (x *ActivationDeprecatedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[12]
+	mi := &file_crypto_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -730,19 +810,12 @@ func (x *ActivationDeprecatedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivationDeprecatedRequest.ProtoReflect.Descriptor instead.
 func (*ActivationDeprecatedRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{12}
+	return file_crypto_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ActivationDeprecatedRequest) GetActivationInfoXml() []byte {
 	if x != nil {
 		return x.ActivationInfoXml
-	}
-	return nil
-}
-
-func (x *ActivationDeprecatedRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -758,7 +831,7 @@ type ActivationDeprecatedResponse struct {
 
 func (x *ActivationDeprecatedResponse) Reset() {
 	*x = ActivationDeprecatedResponse{}
-	mi := &file_crypto_proto_msgTypes[13]
+	mi := &file_crypto_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -770,7 +843,7 @@ func (x *ActivationDeprecatedResponse) String() string {
 func (*ActivationDeprecatedResponse) ProtoMessage() {}
 
 func (x *ActivationDeprecatedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[13]
+	mi := &file_crypto_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -783,7 +856,7 @@ func (x *ActivationDeprecatedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivationDeprecatedResponse.ProtoReflect.Descriptor instead.
 func (*ActivationDeprecatedResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{13}
+	return file_crypto_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ActivationDeprecatedResponse) GetSign() []byte {
@@ -811,14 +884,13 @@ type ActivationRecordRequest struct {
 	AccountToken            []byte                 `protobuf:"bytes,6,opt,name=account_token,json=accountToken,proto3" json:"account_token,omitempty"`
 	AccountTokenSignature   []byte                 `protobuf:"bytes,7,opt,name=account_token_signature,json=accountTokenSignature,proto3" json:"account_token_signature,omitempty"`
 	UniqueDeviceCertificate []byte                 `protobuf:"bytes,8,opt,name=unique_device_certificate,json=uniqueDeviceCertificate,proto3" json:"unique_device_certificate,omitempty"`
-	Controls                []string               `protobuf:"bytes,9,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
 }
 
 func (x *ActivationRecordRequest) Reset() {
 	*x = ActivationRecordRequest{}
-	mi := &file_crypto_proto_msgTypes[14]
+	mi := &file_crypto_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -830,7 +902,7 @@ func (x *ActivationRecordRequest) String() string {
 func (*ActivationRecordRequest) ProtoMessage() {}
 
 func (x *ActivationRecordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[14]
+	mi := &file_crypto_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -843,7 +915,7 @@ func (x *ActivationRecordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivationRecordRequest.ProtoReflect.Descriptor instead.
 func (*ActivationRecordRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{14}
+	return file_crypto_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ActivationRecordRequest) GetUnbrick() bool {
@@ -902,13 +974,6 @@ func (x *ActivationRecordRequest) GetUniqueDeviceCertificate() []byte {
 	return nil
 }
 
-func (x *ActivationRecordRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // 激活记录响应
 type ActivationRecordResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -919,7 +984,7 @@ type ActivationRecordResponse struct {
 
 func (x *ActivationRecordResponse) Reset() {
 	*x = ActivationRecordResponse{}
-	mi := &file_crypto_proto_msgTypes[15]
+	mi := &file_crypto_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -931,7 +996,7 @@ func (x *ActivationRecordResponse) String() string {
 func (*ActivationRecordResponse) ProtoMessage() {}
 
 func (x *ActivationRecordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[15]
+	mi := &file_crypto_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -944,7 +1009,7 @@ func (x *ActivationRecordResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivationRecordResponse.ProtoReflect.Descriptor instead.
 func (*ActivationRecordResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{15}
+	return file_crypto_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ActivationRecordResponse) GetPscSui() []byte {
@@ -959,14 +1024,13 @@ type ADIStartProvisioningRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DSID          int64                  `protobuf:"varint,1,opt,name=DSID,proto3" json:"DSID,omitempty"`
 	SPIM          []byte                 `protobuf:"bytes,2,opt,name=SPIM,proto3" json:"SPIM,omitempty"`
-	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ADIStartProvisioningRequest) Reset() {
 	*x = ADIStartProvisioningRequest{}
-	mi := &file_crypto_proto_msgTypes[16]
+	mi := &file_crypto_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -978,7 +1042,7 @@ func (x *ADIStartProvisioningRequest) String() string {
 func (*ADIStartProvisioningRequest) ProtoMessage() {}
 
 func (x *ADIStartProvisioningRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[16]
+	mi := &file_crypto_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -991,7 +1055,7 @@ func (x *ADIStartProvisioningRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ADIStartProvisioningRequest.ProtoReflect.Descriptor instead.
 func (*ADIStartProvisioningRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{16}
+	return file_crypto_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ADIStartProvisioningRequest) GetDSID() int64 {
@@ -1008,13 +1072,6 @@ func (x *ADIStartProvisioningRequest) GetSPIM() []byte {
 	return nil
 }
 
-func (x *ADIStartProvisioningRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // ADI 开始配置响应
 type ADIStartProvisioningResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1026,7 +1083,7 @@ type ADIStartProvisioningResponse struct {
 
 func (x *ADIStartProvisioningResponse) Reset() {
 	*x = ADIStartProvisioningResponse{}
-	mi := &file_crypto_proto_msgTypes[17]
+	mi := &file_crypto_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1038,7 +1095,7 @@ func (x *ADIStartProvisioningResponse) String() string {
 func (*ADIStartProvisioningResponse) ProtoMessage() {}
 
 func (x *ADIStartProvisioningResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[17]
+	mi := &file_crypto_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1051,7 +1108,7 @@ func (x *ADIStartProvisioningResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ADIStartProvisioningResponse.ProtoReflect.Descriptor instead.
 func (*ADIStartProvisioningResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{17}
+	return file_crypto_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *ADIStartProvisioningResponse) GetSession() uint64 {
@@ -1077,14 +1134,13 @@ type ADIEndProvisioningRequest struct {
 	PTM           []byte                 `protobuf:"bytes,4,opt,name=PTM,proto3" json:"PTM,omitempty"`
 	TK            []byte                 `protobuf:"bytes,5,opt,name=TK,proto3" json:"TK,omitempty"`
 	ADI           []byte                 `protobuf:"bytes,6,opt,name=ADI,proto3" json:"ADI,omitempty"`
-	Controls      []string               `protobuf:"bytes,7,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ADIEndProvisioningRequest) Reset() {
 	*x = ADIEndProvisioningRequest{}
-	mi := &file_crypto_proto_msgTypes[18]
+	mi := &file_crypto_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1096,7 +1152,7 @@ func (x *ADIEndProvisioningRequest) String() string {
 func (*ADIEndProvisioningRequest) ProtoMessage() {}
 
 func (x *ADIEndProvisioningRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[18]
+	mi := &file_crypto_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1109,7 +1165,7 @@ func (x *ADIEndProvisioningRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ADIEndProvisioningRequest.ProtoReflect.Descriptor instead.
 func (*ADIEndProvisioningRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{18}
+	return file_crypto_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ADIEndProvisioningRequest) GetSession() uint64 {
@@ -1154,13 +1210,6 @@ func (x *ADIEndProvisioningRequest) GetADI() []byte {
 	return nil
 }
 
-func (x *ADIEndProvisioningRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // ADI 结束配置响应
 type ADIEndProvisioningResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1173,7 +1222,7 @@ type ADIEndProvisioningResponse struct {
 
 func (x *ADIEndProvisioningResponse) Reset() {
 	*x = ADIEndProvisioningResponse{}
-	mi := &file_crypto_proto_msgTypes[19]
+	mi := &file_crypto_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1185,7 +1234,7 @@ func (x *ADIEndProvisioningResponse) String() string {
 func (*ADIEndProvisioningResponse) ProtoMessage() {}
 
 func (x *ADIEndProvisioningResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[19]
+	mi := &file_crypto_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1198,7 +1247,7 @@ func (x *ADIEndProvisioningResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ADIEndProvisioningResponse.ProtoReflect.Descriptor instead.
 func (*ADIEndProvisioningResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{19}
+	return file_crypto_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ADIEndProvisioningResponse) GetMID() []byte {
@@ -1227,14 +1276,13 @@ type ADIGenerateLoginCodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DSID          int64                  `protobuf:"varint,1,opt,name=DSID,proto3" json:"DSID,omitempty"`
 	ADI           []byte                 `protobuf:"bytes,2,opt,name=ADI,proto3" json:"ADI,omitempty"`
-	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ADIGenerateLoginCodeRequest) Reset() {
 	*x = ADIGenerateLoginCodeRequest{}
-	mi := &file_crypto_proto_msgTypes[20]
+	mi := &file_crypto_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1246,7 +1294,7 @@ func (x *ADIGenerateLoginCodeRequest) String() string {
 func (*ADIGenerateLoginCodeRequest) ProtoMessage() {}
 
 func (x *ADIGenerateLoginCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[20]
+	mi := &file_crypto_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1259,7 +1307,7 @@ func (x *ADIGenerateLoginCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ADIGenerateLoginCodeRequest.ProtoReflect.Descriptor instead.
 func (*ADIGenerateLoginCodeRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{20}
+	return file_crypto_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ADIGenerateLoginCodeRequest) GetDSID() int64 {
@@ -1276,13 +1324,6 @@ func (x *ADIGenerateLoginCodeRequest) GetADI() []byte {
 	return nil
 }
 
-func (x *ADIGenerateLoginCodeRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // ADI 生成登录码响应
 type ADIGenerateLoginCodeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1294,7 +1335,7 @@ type ADIGenerateLoginCodeResponse struct {
 
 func (x *ADIGenerateLoginCodeResponse) Reset() {
 	*x = ADIGenerateLoginCodeResponse{}
-	mi := &file_crypto_proto_msgTypes[21]
+	mi := &file_crypto_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1306,7 +1347,7 @@ func (x *ADIGenerateLoginCodeResponse) String() string {
 func (*ADIGenerateLoginCodeResponse) ProtoMessage() {}
 
 func (x *ADIGenerateLoginCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[21]
+	mi := &file_crypto_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1319,7 +1360,7 @@ func (x *ADIGenerateLoginCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ADIGenerateLoginCodeResponse.ProtoReflect.Descriptor instead.
 func (*ADIGenerateLoginCodeResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{21}
+	return file_crypto_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ADIGenerateLoginCodeResponse) GetCode() int32 {
@@ -1340,14 +1381,13 @@ func (x *ADIGenerateLoginCodeResponse) GetLoginCode() uint32 {
 type AbsintheHelloRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Mode          int32                  `protobuf:"varint,1,opt,name=mode,proto3" json:"mode,omitempty"`
-	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AbsintheHelloRequest) Reset() {
 	*x = AbsintheHelloRequest{}
-	mi := &file_crypto_proto_msgTypes[22]
+	mi := &file_crypto_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1359,7 +1399,7 @@ func (x *AbsintheHelloRequest) String() string {
 func (*AbsintheHelloRequest) ProtoMessage() {}
 
 func (x *AbsintheHelloRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[22]
+	mi := &file_crypto_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1372,7 +1412,7 @@ func (x *AbsintheHelloRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheHelloRequest.ProtoReflect.Descriptor instead.
 func (*AbsintheHelloRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{22}
+	return file_crypto_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *AbsintheHelloRequest) GetMode() int32 {
@@ -1380,13 +1420,6 @@ func (x *AbsintheHelloRequest) GetMode() int32 {
 		return x.Mode
 	}
 	return 0
-}
-
-func (x *AbsintheHelloRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
 }
 
 // Absinthe Hello 响应
@@ -1399,7 +1432,7 @@ type AbsintheHelloResponse struct {
 
 func (x *AbsintheHelloResponse) Reset() {
 	*x = AbsintheHelloResponse{}
-	mi := &file_crypto_proto_msgTypes[23]
+	mi := &file_crypto_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1411,7 +1444,7 @@ func (x *AbsintheHelloResponse) String() string {
 func (*AbsintheHelloResponse) ProtoMessage() {}
 
 func (x *AbsintheHelloResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[23]
+	mi := &file_crypto_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1424,7 +1457,7 @@ func (x *AbsintheHelloResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheHelloResponse.ProtoReflect.Descriptor instead.
 func (*AbsintheHelloResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{23}
+	return file_crypto_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *AbsintheHelloResponse) GetHelloMessage() []byte {
@@ -1440,14 +1473,13 @@ type AbsintheAddOptionRequest struct {
 	BikKey               []byte                 `protobuf:"bytes,1,opt,name=bik_key,json=bikKey,proto3" json:"bik_key,omitempty"`
 	BaaCert              []byte                 `protobuf:"bytes,2,opt,name=baa_cert,json=baaCert,proto3" json:"baa_cert,omitempty"`
 	IntermediateRootCert []byte                 `protobuf:"bytes,3,opt,name=intermediate_root_cert,json=intermediateRootCert,proto3" json:"intermediate_root_cert,omitempty"`
-	Controls             []string               `protobuf:"bytes,4,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
 
 func (x *AbsintheAddOptionRequest) Reset() {
 	*x = AbsintheAddOptionRequest{}
-	mi := &file_crypto_proto_msgTypes[24]
+	mi := &file_crypto_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1459,7 +1491,7 @@ func (x *AbsintheAddOptionRequest) String() string {
 func (*AbsintheAddOptionRequest) ProtoMessage() {}
 
 func (x *AbsintheAddOptionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[24]
+	mi := &file_crypto_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1472,7 +1504,7 @@ func (x *AbsintheAddOptionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheAddOptionRequest.ProtoReflect.Descriptor instead.
 func (*AbsintheAddOptionRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{24}
+	return file_crypto_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *AbsintheAddOptionRequest) GetBikKey() []byte {
@@ -1496,13 +1528,6 @@ func (x *AbsintheAddOptionRequest) GetIntermediateRootCert() []byte {
 	return nil
 }
 
-func (x *AbsintheAddOptionRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // Absinthe 添加选项响应
 type AbsintheAddOptionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1512,7 +1537,7 @@ type AbsintheAddOptionResponse struct {
 
 func (x *AbsintheAddOptionResponse) Reset() {
 	*x = AbsintheAddOptionResponse{}
-	mi := &file_crypto_proto_msgTypes[25]
+	mi := &file_crypto_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1524,7 +1549,7 @@ func (x *AbsintheAddOptionResponse) String() string {
 func (*AbsintheAddOptionResponse) ProtoMessage() {}
 
 func (x *AbsintheAddOptionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[25]
+	mi := &file_crypto_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1537,7 +1562,7 @@ func (x *AbsintheAddOptionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheAddOptionResponse.ProtoReflect.Descriptor instead.
 func (*AbsintheAddOptionResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{25}
+	return file_crypto_proto_rawDescGZIP(), []int{26}
 }
 
 // Absinthe 激活会话请求
@@ -1545,14 +1570,13 @@ type AbsintheActivateSessionRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	ValidationData []byte                 `protobuf:"bytes,1,opt,name=validation_data,json=validationData,proto3" json:"validation_data,omitempty"`
 	ServerKey      []byte                 `protobuf:"bytes,2,opt,name=server_key,json=serverKey,proto3" json:"server_key,omitempty"`
-	Controls       []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *AbsintheActivateSessionRequest) Reset() {
 	*x = AbsintheActivateSessionRequest{}
-	mi := &file_crypto_proto_msgTypes[26]
+	mi := &file_crypto_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1564,7 +1588,7 @@ func (x *AbsintheActivateSessionRequest) String() string {
 func (*AbsintheActivateSessionRequest) ProtoMessage() {}
 
 func (x *AbsintheActivateSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[26]
+	mi := &file_crypto_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1577,7 +1601,7 @@ func (x *AbsintheActivateSessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheActivateSessionRequest.ProtoReflect.Descriptor instead.
 func (*AbsintheActivateSessionRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{26}
+	return file_crypto_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *AbsintheActivateSessionRequest) GetValidationData() []byte {
@@ -1594,13 +1618,6 @@ func (x *AbsintheActivateSessionRequest) GetServerKey() []byte {
 	return nil
 }
 
-func (x *AbsintheActivateSessionRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // Absinthe 激活会话响应
 type AbsintheActivateSessionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1610,7 +1627,7 @@ type AbsintheActivateSessionResponse struct {
 
 func (x *AbsintheActivateSessionResponse) Reset() {
 	*x = AbsintheActivateSessionResponse{}
-	mi := &file_crypto_proto_msgTypes[27]
+	mi := &file_crypto_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1622,7 +1639,7 @@ func (x *AbsintheActivateSessionResponse) String() string {
 func (*AbsintheActivateSessionResponse) ProtoMessage() {}
 
 func (x *AbsintheActivateSessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[27]
+	mi := &file_crypto_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1635,21 +1652,20 @@ func (x *AbsintheActivateSessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheActivateSessionResponse.ProtoReflect.Descriptor instead.
 func (*AbsintheActivateSessionResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{27}
+	return file_crypto_proto_rawDescGZIP(), []int{28}
 }
 
 // Absinthe 签名数据请求
 type AbsintheSignDataRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SignData      []byte                 `protobuf:"bytes,1,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
-	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AbsintheSignDataRequest) Reset() {
 	*x = AbsintheSignDataRequest{}
-	mi := &file_crypto_proto_msgTypes[28]
+	mi := &file_crypto_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1661,7 +1677,7 @@ func (x *AbsintheSignDataRequest) String() string {
 func (*AbsintheSignDataRequest) ProtoMessage() {}
 
 func (x *AbsintheSignDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[28]
+	mi := &file_crypto_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1674,19 +1690,12 @@ func (x *AbsintheSignDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheSignDataRequest.ProtoReflect.Descriptor instead.
 func (*AbsintheSignDataRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{28}
+	return file_crypto_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *AbsintheSignDataRequest) GetSignData() []byte {
 	if x != nil {
 		return x.SignData
-	}
-	return nil
-}
-
-func (x *AbsintheSignDataRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -1702,7 +1711,7 @@ type AbsintheSignDataResponse struct {
 
 func (x *AbsintheSignDataResponse) Reset() {
 	*x = AbsintheSignDataResponse{}
-	mi := &file_crypto_proto_msgTypes[29]
+	mi := &file_crypto_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1714,7 +1723,7 @@ func (x *AbsintheSignDataResponse) String() string {
 func (*AbsintheSignDataResponse) ProtoMessage() {}
 
 func (x *AbsintheSignDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[29]
+	mi := &file_crypto_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1727,7 +1736,7 @@ func (x *AbsintheSignDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AbsintheSignDataResponse.ProtoReflect.Descriptor instead.
 func (*AbsintheSignDataResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{29}
+	return file_crypto_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *AbsintheSignDataResponse) GetSignature() []byte {
@@ -1748,14 +1757,13 @@ func (x *AbsintheSignDataResponse) GetOutServKey() []byte {
 type IdentitySessionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Cert          []byte                 `protobuf:"bytes,1,opt,name=cert,proto3" json:"cert,omitempty"`
-	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *IdentitySessionRequest) Reset() {
 	*x = IdentitySessionRequest{}
-	mi := &file_crypto_proto_msgTypes[30]
+	mi := &file_crypto_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1767,7 +1775,7 @@ func (x *IdentitySessionRequest) String() string {
 func (*IdentitySessionRequest) ProtoMessage() {}
 
 func (x *IdentitySessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[30]
+	mi := &file_crypto_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1780,19 +1788,12 @@ func (x *IdentitySessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdentitySessionRequest.ProtoReflect.Descriptor instead.
 func (*IdentitySessionRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{30}
+	return file_crypto_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *IdentitySessionRequest) GetCert() []byte {
 	if x != nil {
 		return x.Cert
-	}
-	return nil
-}
-
-func (x *IdentitySessionRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -1807,7 +1808,7 @@ type IdentitySessionResponse struct {
 
 func (x *IdentitySessionResponse) Reset() {
 	*x = IdentitySessionResponse{}
-	mi := &file_crypto_proto_msgTypes[31]
+	mi := &file_crypto_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1819,7 +1820,7 @@ func (x *IdentitySessionResponse) String() string {
 func (*IdentitySessionResponse) ProtoMessage() {}
 
 func (x *IdentitySessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[31]
+	mi := &file_crypto_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1832,7 +1833,7 @@ func (x *IdentitySessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdentitySessionResponse.ProtoReflect.Descriptor instead.
 func (*IdentitySessionResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{31}
+	return file_crypto_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *IdentitySessionResponse) GetRequest() []byte {
@@ -1847,14 +1848,13 @@ type IdentityValidationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Response      []byte                 `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
 	SignData      []byte                 `protobuf:"bytes,2,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
-	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *IdentityValidationRequest) Reset() {
 	*x = IdentityValidationRequest{}
-	mi := &file_crypto_proto_msgTypes[32]
+	mi := &file_crypto_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1866,7 +1866,7 @@ func (x *IdentityValidationRequest) String() string {
 func (*IdentityValidationRequest) ProtoMessage() {}
 
 func (x *IdentityValidationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[32]
+	mi := &file_crypto_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1879,7 +1879,7 @@ func (x *IdentityValidationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdentityValidationRequest.ProtoReflect.Descriptor instead.
 func (*IdentityValidationRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{32}
+	return file_crypto_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *IdentityValidationRequest) GetResponse() []byte {
@@ -1896,13 +1896,6 @@ func (x *IdentityValidationRequest) GetSignData() []byte {
 	return nil
 }
 
-func (x *IdentityValidationRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // Identity 验证响应
 type IdentityValidationResponse struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
@@ -1913,7 +1906,7 @@ type IdentityValidationResponse struct {
 
 func (x *IdentityValidationResponse) Reset() {
 	*x = IdentityValidationResponse{}
-	mi := &file_crypto_proto_msgTypes[33]
+	mi := &file_crypto_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1925,7 +1918,7 @@ func (x *IdentityValidationResponse) String() string {
 func (*IdentityValidationResponse) ProtoMessage() {}
 
 func (x *IdentityValidationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[33]
+	mi := &file_crypto_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1938,7 +1931,7 @@ func (x *IdentityValidationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdentityValidationResponse.ProtoReflect.Descriptor instead.
 func (*IdentityValidationResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{33}
+	return file_crypto_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *IdentityValidationResponse) GetValidationData() []byte {
@@ -1953,14 +1946,13 @@ type SAPExchangeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Version       int32                  `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
 	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SAPExchangeRequest) Reset() {
 	*x = SAPExchangeRequest{}
-	mi := &file_crypto_proto_msgTypes[34]
+	mi := &file_crypto_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1972,7 +1964,7 @@ func (x *SAPExchangeRequest) String() string {
 func (*SAPExchangeRequest) ProtoMessage() {}
 
 func (x *SAPExchangeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[34]
+	mi := &file_crypto_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1985,7 +1977,7 @@ func (x *SAPExchangeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPExchangeRequest.ProtoReflect.Descriptor instead.
 func (*SAPExchangeRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{34}
+	return file_crypto_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *SAPExchangeRequest) GetVersion() int32 {
@@ -2002,13 +1994,6 @@ func (x *SAPExchangeRequest) GetData() []byte {
 	return nil
 }
 
-func (x *SAPExchangeRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // SAP 交换响应
 type SAPExchangeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -2019,7 +2004,7 @@ type SAPExchangeResponse struct {
 
 func (x *SAPExchangeResponse) Reset() {
 	*x = SAPExchangeResponse{}
-	mi := &file_crypto_proto_msgTypes[35]
+	mi := &file_crypto_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2031,7 +2016,7 @@ func (x *SAPExchangeResponse) String() string {
 func (*SAPExchangeResponse) ProtoMessage() {}
 
 func (x *SAPExchangeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[35]
+	mi := &file_crypto_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2044,7 +2029,7 @@ func (x *SAPExchangeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPExchangeResponse.ProtoReflect.Descriptor instead.
 func (*SAPExchangeResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{35}
+	return file_crypto_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *SAPExchangeResponse) GetExchangeData() []byte {
@@ -2058,14 +2043,13 @@ func (x *SAPExchangeResponse) GetExchangeData() []byte {
 type SAPSignPrimeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SignData      []byte                 `protobuf:"bytes,1,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
-	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SAPSignPrimeRequest) Reset() {
 	*x = SAPSignPrimeRequest{}
-	mi := &file_crypto_proto_msgTypes[36]
+	mi := &file_crypto_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2077,7 +2061,7 @@ func (x *SAPSignPrimeRequest) String() string {
 func (*SAPSignPrimeRequest) ProtoMessage() {}
 
 func (x *SAPSignPrimeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[36]
+	mi := &file_crypto_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2090,19 +2074,12 @@ func (x *SAPSignPrimeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPSignPrimeRequest.ProtoReflect.Descriptor instead.
 func (*SAPSignPrimeRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{36}
+	return file_crypto_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *SAPSignPrimeRequest) GetSignData() []byte {
 	if x != nil {
 		return x.SignData
-	}
-	return nil
-}
-
-func (x *SAPSignPrimeRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -2117,7 +2094,7 @@ type SAPSignPrimeResponse struct {
 
 func (x *SAPSignPrimeResponse) Reset() {
 	*x = SAPSignPrimeResponse{}
-	mi := &file_crypto_proto_msgTypes[37]
+	mi := &file_crypto_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2129,7 +2106,7 @@ func (x *SAPSignPrimeResponse) String() string {
 func (*SAPSignPrimeResponse) ProtoMessage() {}
 
 func (x *SAPSignPrimeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[37]
+	mi := &file_crypto_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2142,7 +2119,7 @@ func (x *SAPSignPrimeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPSignPrimeResponse.ProtoReflect.Descriptor instead.
 func (*SAPSignPrimeResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{37}
+	return file_crypto_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *SAPSignPrimeResponse) GetSignature() []byte {
@@ -2156,14 +2133,13 @@ func (x *SAPSignPrimeResponse) GetSignature() []byte {
 type SAPVerifyPrimeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SAPVerifyPrimeRequest) Reset() {
 	*x = SAPVerifyPrimeRequest{}
-	mi := &file_crypto_proto_msgTypes[38]
+	mi := &file_crypto_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2175,7 +2151,7 @@ func (x *SAPVerifyPrimeRequest) String() string {
 func (*SAPVerifyPrimeRequest) ProtoMessage() {}
 
 func (x *SAPVerifyPrimeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[38]
+	mi := &file_crypto_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2188,19 +2164,12 @@ func (x *SAPVerifyPrimeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPVerifyPrimeRequest.ProtoReflect.Descriptor instead.
 func (*SAPVerifyPrimeRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{38}
+	return file_crypto_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *SAPVerifyPrimeRequest) GetData() []byte {
 	if x != nil {
 		return x.Data
-	}
-	return nil
-}
-
-func (x *SAPVerifyPrimeRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -2214,7 +2183,7 @@ type SAPVerifyPrimeResponse struct {
 
 func (x *SAPVerifyPrimeResponse) Reset() {
 	*x = SAPVerifyPrimeResponse{}
-	mi := &file_crypto_proto_msgTypes[39]
+	mi := &file_crypto_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2226,7 +2195,7 @@ func (x *SAPVerifyPrimeResponse) String() string {
 func (*SAPVerifyPrimeResponse) ProtoMessage() {}
 
 func (x *SAPVerifyPrimeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[39]
+	mi := &file_crypto_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2239,21 +2208,20 @@ func (x *SAPVerifyPrimeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPVerifyPrimeResponse.ProtoReflect.Descriptor instead.
 func (*SAPVerifyPrimeResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{39}
+	return file_crypto_proto_rawDescGZIP(), []int{40}
 }
 
 // SAP 签名请求
 type SAPSignRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SignData      []byte                 `protobuf:"bytes,1,opt,name=sign_data,json=signData,proto3" json:"sign_data,omitempty"`
-	Controls      []string               `protobuf:"bytes,2,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SAPSignRequest) Reset() {
 	*x = SAPSignRequest{}
-	mi := &file_crypto_proto_msgTypes[40]
+	mi := &file_crypto_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2265,7 +2233,7 @@ func (x *SAPSignRequest) String() string {
 func (*SAPSignRequest) ProtoMessage() {}
 
 func (x *SAPSignRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[40]
+	mi := &file_crypto_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2278,19 +2246,12 @@ func (x *SAPSignRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPSignRequest.ProtoReflect.Descriptor instead.
 func (*SAPSignRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{40}
+	return file_crypto_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *SAPSignRequest) GetSignData() []byte {
 	if x != nil {
 		return x.SignData
-	}
-	return nil
-}
-
-func (x *SAPSignRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
 	}
 	return nil
 }
@@ -2305,7 +2266,7 @@ type SAPSignResponse struct {
 
 func (x *SAPSignResponse) Reset() {
 	*x = SAPSignResponse{}
-	mi := &file_crypto_proto_msgTypes[41]
+	mi := &file_crypto_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2317,7 +2278,7 @@ func (x *SAPSignResponse) String() string {
 func (*SAPSignResponse) ProtoMessage() {}
 
 func (x *SAPSignResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[41]
+	mi := &file_crypto_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2330,7 +2291,7 @@ func (x *SAPSignResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPSignResponse.ProtoReflect.Descriptor instead.
 func (*SAPSignResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{41}
+	return file_crypto_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *SAPSignResponse) GetSignature() []byte {
@@ -2345,14 +2306,13 @@ type SAPVerifyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	Signature     []byte                 `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"`
-	Controls      []string               `protobuf:"bytes,3,rep,name=controls,proto3" json:"controls,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SAPVerifyRequest) Reset() {
 	*x = SAPVerifyRequest{}
-	mi := &file_crypto_proto_msgTypes[42]
+	mi := &file_crypto_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2364,7 +2324,7 @@ func (x *SAPVerifyRequest) String() string {
 func (*SAPVerifyRequest) ProtoMessage() {}
 
 func (x *SAPVerifyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[42]
+	mi := &file_crypto_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2377,7 +2337,7 @@ func (x *SAPVerifyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPVerifyRequest.ProtoReflect.Descriptor instead.
 func (*SAPVerifyRequest) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{42}
+	return file_crypto_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *SAPVerifyRequest) GetData() []byte {
@@ -2394,13 +2354,6 @@ func (x *SAPVerifyRequest) GetSignature() []byte {
 	return nil
 }
 
-func (x *SAPVerifyRequest) GetControls() []string {
-	if x != nil {
-		return x.Controls
-	}
-	return nil
-}
-
 // SAP 验证响应
 type SAPVerifyResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -2410,7 +2363,7 @@ type SAPVerifyResponse struct {
 
 func (x *SAPVerifyResponse) Reset() {
 	*x = SAPVerifyResponse{}
-	mi := &file_crypto_proto_msgTypes[43]
+	mi := &file_crypto_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2422,7 +2375,7 @@ func (x *SAPVerifyResponse) String() string {
 func (*SAPVerifyResponse) ProtoMessage() {}
 
 func (x *SAPVerifyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_crypto_proto_msgTypes[43]
+	mi := &file_crypto_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2435,54 +2388,54 @@ func (x *SAPVerifyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SAPVerifyResponse.ProtoReflect.Descriptor instead.
 func (*SAPVerifyResponse) Descriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{43}
+	return file_crypto_proto_rawDescGZIP(), []int{44}
 }
 
 var File_crypto_proto protoreflect.FileDescriptor
 
 const file_crypto_proto_rawDesc = "" +
 	"\n" +
-	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"t\n" +
-	"\x11InitializeRequest\x12+\n" +
-	"\x04type\x18\x01 \x01(\x0e2\x17.icrypto.InitializeTypeR\x04type\x12\x16\n" +
-	"\x06device\x18\x02 \x01(\fR\x06device\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\",\n" +
+	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"\x9c\x01\n" +
+	"\x11InitializeRequest\x12\x16\n" +
+	"\x06device\x18\x02 \x01(\fR\x06device\x12\x17\n" +
+	"\aios_drm\x18\x04 \x01(\bR\x06iosDrm\x12:\n" +
+	"\rmacos_runtime\x18\x05 \x01(\x0e2\x15.icrypto.MacOSRuntimeR\fmacosRuntimeJ\x04\b\x01\x10\x02J\x04\b\x03\x10\x04R\x04typeR\bcontrols\",\n" +
 	"\x12InitializeResponse\x12\x16\n" +
 	"\x06device\x18\x01 \x01(\fR\x06device\"+\n" +
 	"\x11SyncDeviceRequest\x12\x16\n" +
 	"\x06device\x18\x01 \x01(\fR\x06device\"\x14\n" +
-	"\x12SyncDeviceResponse\"-\n" +
-	"\x0fFinalizeRequest\x12\x1a\n" +
-	"\bcontrols\x18\x01 \x03(\tR\bcontrols\"\x12\n" +
-	"\x10FinalizeResponse\";\n" +
-	"\x1dActivationDRMHandshakeRequest\x12\x1a\n" +
-	"\bcontrols\x18\x01 \x03(\tR\bcontrols\"\x85\x01\n" +
+	"\x12SyncDeviceResponse\"!\n" +
+	"\x0fFinalizeRequestJ\x04\b\x01\x10\x02R\bcontrols\"\x12\n" +
+	"\x10FinalizeResponse\"/\n" +
+	"\x1dActivationDRMHandshakeRequestJ\x04\b\x01\x10\x02R\bcontrols\"\x85\x01\n" +
 	"\x1eActivationDRMHandshakeResponse\x12'\n" +
 	"\x0fcollection_blob\x18\x01 \x01(\fR\x0ecollectionBlob\x12:\n" +
-	"\x19handshake_request_message\x18\x02 \x01(\fR\x17handshakeRequestMessage\"\xab\x01\n" +
+	"\x19handshake_request_message\x18\x02 \x01(\fR\x17handshakeRequestMessage\"\x9f\x01\n" +
 	"\x1bActivationDRMProcessRequest\x12\x16\n" +
 	"\x06SUInfo\x18\x01 \x01(\fR\x06SUInfo\x12<\n" +
 	"\x1ahandshake_response_message\x18\x02 \x01(\fR\x18handshakeResponseMessage\x12\x1a\n" +
-	"\bserverKP\x18\x03 \x01(\fR\bserverKP\x12\x1a\n" +
-	"\bcontrols\x18\x04 \x03(\tR\bcontrols\"@\n" +
+	"\bserverKP\x18\x03 \x01(\fR\bserverKPJ\x04\b\x04\x10\x05R\bcontrols\"@\n" +
 	"\x1cActivationDRMProcessResponse\x12\x10\n" +
 	"\x03UIK\x18\x01 \x01(\fR\x03UIK\x12\x0e\n" +
-	"\x02RK\x18\x02 \x01(\fR\x02RK\"k\n" +
+	"\x02RK\x18\x02 \x01(\fR\x02RK\"_\n" +
 	"\x1dActivationDRMSignatureRequest\x12.\n" +
-	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXml\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"\xe7\x01\n" +
+	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXmlJ\x04\b\x02\x10\x03R\bcontrols\"\xe7\x01\n" +
 	"\x1eActivationDRMSignatureResponse\x12.\n" +
 	"\x13fairplay_cert_chain\x18\x01 \x01(\fR\x11fairplayCertChain\x12-\n" +
 	"\x12fairplay_signature\x18\x02 \x01(\fR\x11fairplaySignature\x12 \n" +
 	"\vRKSignature\x18\x03 \x01(\fR\vRKSignature\x12(\n" +
 	"\x10sign_act_request\x18\x04 \x01(\fR\x0esignActRequest\x12\x1a\n" +
-	"\bserverKP\x18\x05 \x01(\fR\bserverKP\"i\n" +
+	"\bserverKP\x18\x05 \x01(\fR\bserverKP\"\xe4\x01\n" +
+	"\x15ActivationSignRequest\x12;\n" +
+	"\aprofile\x18\x01 \x01(\x0e2!.icrypto.ActivationSigningProfileR\aprofile\x12:\n" +
+	"\rmacos_runtime\x18\x05 \x01(\x0e2\x15.icrypto.MacOSRuntimeR\fmacosRuntime\x12\x16\n" +
+	"\x06device\x18\x03 \x01(\fR\x06device\x12.\n" +
+	"\x13activation_info_xml\x18\x04 \x01(\fR\x11activationInfoXmlJ\x04\b\x02\x10\x03R\x04type\"]\n" +
 	"\x1bActivationDeprecatedRequest\x12.\n" +
-	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXml\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"F\n" +
+	"\x13activation_info_xml\x18\x01 \x01(\fR\x11activationInfoXmlJ\x04\b\x02\x10\x03R\bcontrols\"F\n" +
 	"\x1cActivationDeprecatedResponse\x12\x12\n" +
 	"\x04sign\x18\x01 \x01(\fR\x04sign\x12\x12\n" +
-	"\x04cert\x18\x02 \x01(\fR\x04cert\"\xa8\x03\n" +
+	"\x04cert\x18\x02 \x01(\fR\x04cert\"\x9c\x03\n" +
 	"\x17ActivationRecordRequest\x12\x18\n" +
 	"\aunbrick\x18\x01 \x01(\bR\aunbrick\x12:\n" +
 	"\x19account_token_certificate\x18\x02 \x01(\fR\x17accountTokenCertificate\x12-\n" +
@@ -2491,103 +2444,92 @@ const file_crypto_proto_rawDesc = "" +
 	"\x11fairplay_key_data\x18\x05 \x01(\fR\x0ffairplayKeyData\x12#\n" +
 	"\raccount_token\x18\x06 \x01(\fR\faccountToken\x126\n" +
 	"\x17account_token_signature\x18\a \x01(\fR\x15accountTokenSignature\x12:\n" +
-	"\x19unique_device_certificate\x18\b \x01(\fR\x17uniqueDeviceCertificate\x12\x1a\n" +
-	"\bcontrols\x18\t \x03(\tR\bcontrols\"3\n" +
+	"\x19unique_device_certificate\x18\b \x01(\fR\x17uniqueDeviceCertificateJ\x04\b\t\x10\n" +
+	"R\bcontrols\"3\n" +
 	"\x18ActivationRecordResponse\x12\x17\n" +
-	"\apsc_sui\x18\x01 \x01(\fR\x06pscSui\"a\n" +
+	"\apsc_sui\x18\x01 \x01(\fR\x06pscSui\"U\n" +
 	"\x1bADIStartProvisioningRequest\x12\x12\n" +
 	"\x04DSID\x18\x01 \x01(\x03R\x04DSID\x12\x12\n" +
-	"\x04SPIM\x18\x02 \x01(\fR\x04SPIM\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"L\n" +
+	"\x04SPIM\x18\x02 \x01(\fR\x04SPIMJ\x04\b\x03\x10\x04R\bcontrols\"L\n" +
 	"\x1cADIStartProvisioningResponse\x12\x18\n" +
 	"\asession\x18\x01 \x01(\x04R\asession\x12\x12\n" +
-	"\x04CPIM\x18\x02 \x01(\fR\x04CPIM\"\xaf\x01\n" +
+	"\x04CPIM\x18\x02 \x01(\fR\x04CPIM\"\xa3\x01\n" +
 	"\x19ADIEndProvisioningRequest\x12\x18\n" +
 	"\asession\x18\x01 \x01(\x04R\asession\x12\x12\n" +
 	"\x04DSID\x18\x02 \x01(\x03R\x04DSID\x12\x14\n" +
 	"\x05RINFO\x18\x03 \x01(\x03R\x05RINFO\x12\x10\n" +
 	"\x03PTM\x18\x04 \x01(\fR\x03PTM\x12\x0e\n" +
 	"\x02TK\x18\x05 \x01(\fR\x02TK\x12\x10\n" +
-	"\x03ADI\x18\x06 \x01(\fR\x03ADI\x12\x1a\n" +
-	"\bcontrols\x18\a \x03(\tR\bcontrols\"R\n" +
+	"\x03ADI\x18\x06 \x01(\fR\x03ADIJ\x04\b\a\x10\bR\bcontrols\"R\n" +
 	"\x1aADIEndProvisioningResponse\x12\x10\n" +
 	"\x03MID\x18\x01 \x01(\fR\x03MID\x12\x10\n" +
 	"\x03OTP\x18\x02 \x01(\fR\x03OTP\x12\x10\n" +
-	"\x03ADI\x18\x03 \x01(\fR\x03ADI\"_\n" +
+	"\x03ADI\x18\x03 \x01(\fR\x03ADI\"S\n" +
 	"\x1bADIGenerateLoginCodeRequest\x12\x12\n" +
 	"\x04DSID\x18\x01 \x01(\x03R\x04DSID\x12\x10\n" +
-	"\x03ADI\x18\x02 \x01(\fR\x03ADI\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"Q\n" +
+	"\x03ADI\x18\x02 \x01(\fR\x03ADIJ\x04\b\x03\x10\x04R\bcontrols\"Q\n" +
 	"\x1cADIGenerateLoginCodeResponse\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x1d\n" +
 	"\n" +
-	"login_code\x18\x02 \x01(\rR\tloginCode\"F\n" +
+	"login_code\x18\x02 \x01(\rR\tloginCode\":\n" +
 	"\x14AbsintheHelloRequest\x12\x12\n" +
-	"\x04mode\x18\x01 \x01(\x05R\x04mode\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"<\n" +
+	"\x04mode\x18\x01 \x01(\x05R\x04modeJ\x04\b\x02\x10\x03R\bcontrols\"<\n" +
 	"\x15AbsintheHelloResponse\x12#\n" +
-	"\rhello_message\x18\x01 \x01(\fR\fhelloMessage\"\xa0\x01\n" +
+	"\rhello_message\x18\x01 \x01(\fR\fhelloMessage\"\x94\x01\n" +
 	"\x18AbsintheAddOptionRequest\x12\x17\n" +
 	"\abik_key\x18\x01 \x01(\fR\x06bikKey\x12\x19\n" +
 	"\bbaa_cert\x18\x02 \x01(\fR\abaaCert\x124\n" +
-	"\x16intermediate_root_cert\x18\x03 \x01(\fR\x14intermediateRootCert\x12\x1a\n" +
-	"\bcontrols\x18\x04 \x03(\tR\bcontrols\"\x1b\n" +
-	"\x19AbsintheAddOptionResponse\"\x84\x01\n" +
+	"\x16intermediate_root_cert\x18\x03 \x01(\fR\x14intermediateRootCertJ\x04\b\x04\x10\x05R\bcontrols\"\x1b\n" +
+	"\x19AbsintheAddOptionResponse\"x\n" +
 	"\x1eAbsintheActivateSessionRequest\x12'\n" +
 	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\x12\x1d\n" +
 	"\n" +
-	"server_key\x18\x02 \x01(\fR\tserverKey\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"!\n" +
-	"\x1fAbsintheActivateSessionResponse\"R\n" +
+	"server_key\x18\x02 \x01(\fR\tserverKeyJ\x04\b\x03\x10\x04R\bcontrols\"!\n" +
+	"\x1fAbsintheActivateSessionResponse\"F\n" +
 	"\x17AbsintheSignDataRequest\x12\x1b\n" +
-	"\tsign_data\x18\x01 \x01(\fR\bsignData\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"Z\n" +
+	"\tsign_data\x18\x01 \x01(\fR\bsignDataJ\x04\b\x02\x10\x03R\bcontrols\"Z\n" +
 	"\x18AbsintheSignDataResponse\x12\x1c\n" +
 	"\tsignature\x18\x01 \x01(\fR\tsignature\x12 \n" +
 	"\fout_serv_key\x18\x02 \x01(\fR\n" +
-	"outServKey\"H\n" +
+	"outServKey\"<\n" +
 	"\x16IdentitySessionRequest\x12\x12\n" +
-	"\x04cert\x18\x01 \x01(\fR\x04cert\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"3\n" +
+	"\x04cert\x18\x01 \x01(\fR\x04certJ\x04\b\x02\x10\x03R\bcontrols\"3\n" +
 	"\x17IdentitySessionResponse\x12\x18\n" +
-	"\arequest\x18\x01 \x01(\fR\arequest\"p\n" +
+	"\arequest\x18\x01 \x01(\fR\arequest\"d\n" +
 	"\x19IdentityValidationRequest\x12\x1a\n" +
 	"\bresponse\x18\x01 \x01(\fR\bresponse\x12\x1b\n" +
-	"\tsign_data\x18\x02 \x01(\fR\bsignData\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"E\n" +
+	"\tsign_data\x18\x02 \x01(\fR\bsignDataJ\x04\b\x03\x10\x04R\bcontrols\"E\n" +
 	"\x1aIdentityValidationResponse\x12'\n" +
-	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\"^\n" +
+	"\x0fvalidation_data\x18\x01 \x01(\fR\x0evalidationData\"R\n" +
 	"\x12SAPExchangeRequest\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\x05R\aversion\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\fR\x04data\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\":\n" +
+	"\x04data\x18\x02 \x01(\fR\x04dataJ\x04\b\x03\x10\x04R\bcontrols\":\n" +
 	"\x13SAPExchangeResponse\x12#\n" +
-	"\rexchange_data\x18\x01 \x01(\fR\fexchangeData\"N\n" +
+	"\rexchange_data\x18\x01 \x01(\fR\fexchangeData\"B\n" +
 	"\x13SAPSignPrimeRequest\x12\x1b\n" +
-	"\tsign_data\x18\x01 \x01(\fR\bsignData\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"4\n" +
+	"\tsign_data\x18\x01 \x01(\fR\bsignDataJ\x04\b\x02\x10\x03R\bcontrols\"4\n" +
 	"\x14SAPSignPrimeResponse\x12\x1c\n" +
-	"\tsignature\x18\x01 \x01(\fR\tsignature\"G\n" +
+	"\tsignature\x18\x01 \x01(\fR\tsignature\";\n" +
 	"\x15SAPVerifyPrimeRequest\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"\x18\n" +
-	"\x16SAPVerifyPrimeResponse\"I\n" +
+	"\x04data\x18\x01 \x01(\fR\x04dataJ\x04\b\x02\x10\x03R\bcontrols\"\x18\n" +
+	"\x16SAPVerifyPrimeResponse\"=\n" +
 	"\x0eSAPSignRequest\x12\x1b\n" +
-	"\tsign_data\x18\x01 \x01(\fR\bsignData\x12\x1a\n" +
-	"\bcontrols\x18\x02 \x03(\tR\bcontrols\"/\n" +
+	"\tsign_data\x18\x01 \x01(\fR\bsignDataJ\x04\b\x02\x10\x03R\bcontrols\"/\n" +
 	"\x0fSAPSignResponse\x12\x1c\n" +
-	"\tsignature\x18\x01 \x01(\fR\tsignature\"`\n" +
+	"\tsignature\x18\x01 \x01(\fR\tsignature\"T\n" +
 	"\x10SAPVerifyRequest\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1c\n" +
-	"\tsignature\x18\x02 \x01(\fR\tsignature\x12\x1a\n" +
-	"\bcontrols\x18\x03 \x03(\tR\bcontrols\"\x13\n" +
-	"\x11SAPVerifyResponse*:\n" +
-	"\x0eInitializeType\x12\b\n" +
-	"\x04AUTO\x10\x00\x12\n" +
+	"\tsignature\x18\x02 \x01(\fR\tsignatureJ\x04\b\x03\x10\x04R\bcontrols\"\x13\n" +
+	"\x11SAPVerifyResponse*4\n" +
+	"\fMacOSRuntime\x12\x0e\n" +
 	"\n" +
-	"\x06IOSDRM\x10\x01\x12\x12\n" +
-	"\x0eMACOSDISABLE15\x10\x042\xc3\x14\n" +
-	"\fCryptService\x12]\n" +
+	"MACOS_AUTO\x10\x00\x12\x14\n" +
+	"\x10MACOS_COMPATIBLE\x10\x01*^\n" +
+	"\x18ActivationSigningProfile\x12\x1e\n" +
+	"\x1aACTIVATION_SIGNING_CURRENT\x10\x00\x12\"\n" +
+	"\x1eACTIVATION_SIGNING_LEGACY_IOS9\x10\x012\xb9\x15\n" +
+	"\fCryptService\x12t\n" +
+	"\x0eActivationSign\x12\x1e.icrypto.ActivationSignRequest\x1a%.icrypto.ActivationDeprecatedResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/activation/sign\x12]\n" +
 	"\n" +
 	"Initialize\x12\x1a.icrypto.InitializeRequest\x1a\x1b.icrypto.InitializeResponse\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/initialize\x12^\n" +
 	"\n" +
@@ -2625,106 +2567,112 @@ func file_crypto_proto_rawDescGZIP() []byte {
 	return file_crypto_proto_rawDescData
 }
 
-var file_crypto_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_crypto_proto_msgTypes = make([]protoimpl.MessageInfo, 44)
+var file_crypto_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_crypto_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
 var file_crypto_proto_goTypes = []any{
-	(InitializeType)(0),                     // 0: icrypto.InitializeType
-	(*InitializeRequest)(nil),               // 1: icrypto.InitializeRequest
-	(*InitializeResponse)(nil),              // 2: icrypto.InitializeResponse
-	(*SyncDeviceRequest)(nil),               // 3: icrypto.SyncDeviceRequest
-	(*SyncDeviceResponse)(nil),              // 4: icrypto.SyncDeviceResponse
-	(*FinalizeRequest)(nil),                 // 5: icrypto.FinalizeRequest
-	(*FinalizeResponse)(nil),                // 6: icrypto.FinalizeResponse
-	(*ActivationDRMHandshakeRequest)(nil),   // 7: icrypto.ActivationDRMHandshakeRequest
-	(*ActivationDRMHandshakeResponse)(nil),  // 8: icrypto.ActivationDRMHandshakeResponse
-	(*ActivationDRMProcessRequest)(nil),     // 9: icrypto.ActivationDRMProcessRequest
-	(*ActivationDRMProcessResponse)(nil),    // 10: icrypto.ActivationDRMProcessResponse
-	(*ActivationDRMSignatureRequest)(nil),   // 11: icrypto.ActivationDRMSignatureRequest
-	(*ActivationDRMSignatureResponse)(nil),  // 12: icrypto.ActivationDRMSignatureResponse
-	(*ActivationDeprecatedRequest)(nil),     // 13: icrypto.ActivationDeprecatedRequest
-	(*ActivationDeprecatedResponse)(nil),    // 14: icrypto.ActivationDeprecatedResponse
-	(*ActivationRecordRequest)(nil),         // 15: icrypto.ActivationRecordRequest
-	(*ActivationRecordResponse)(nil),        // 16: icrypto.ActivationRecordResponse
-	(*ADIStartProvisioningRequest)(nil),     // 17: icrypto.ADIStartProvisioningRequest
-	(*ADIStartProvisioningResponse)(nil),    // 18: icrypto.ADIStartProvisioningResponse
-	(*ADIEndProvisioningRequest)(nil),       // 19: icrypto.ADIEndProvisioningRequest
-	(*ADIEndProvisioningResponse)(nil),      // 20: icrypto.ADIEndProvisioningResponse
-	(*ADIGenerateLoginCodeRequest)(nil),     // 21: icrypto.ADIGenerateLoginCodeRequest
-	(*ADIGenerateLoginCodeResponse)(nil),    // 22: icrypto.ADIGenerateLoginCodeResponse
-	(*AbsintheHelloRequest)(nil),            // 23: icrypto.AbsintheHelloRequest
-	(*AbsintheHelloResponse)(nil),           // 24: icrypto.AbsintheHelloResponse
-	(*AbsintheAddOptionRequest)(nil),        // 25: icrypto.AbsintheAddOptionRequest
-	(*AbsintheAddOptionResponse)(nil),       // 26: icrypto.AbsintheAddOptionResponse
-	(*AbsintheActivateSessionRequest)(nil),  // 27: icrypto.AbsintheActivateSessionRequest
-	(*AbsintheActivateSessionResponse)(nil), // 28: icrypto.AbsintheActivateSessionResponse
-	(*AbsintheSignDataRequest)(nil),         // 29: icrypto.AbsintheSignDataRequest
-	(*AbsintheSignDataResponse)(nil),        // 30: icrypto.AbsintheSignDataResponse
-	(*IdentitySessionRequest)(nil),          // 31: icrypto.IdentitySessionRequest
-	(*IdentitySessionResponse)(nil),         // 32: icrypto.IdentitySessionResponse
-	(*IdentityValidationRequest)(nil),       // 33: icrypto.IdentityValidationRequest
-	(*IdentityValidationResponse)(nil),      // 34: icrypto.IdentityValidationResponse
-	(*SAPExchangeRequest)(nil),              // 35: icrypto.SAPExchangeRequest
-	(*SAPExchangeResponse)(nil),             // 36: icrypto.SAPExchangeResponse
-	(*SAPSignPrimeRequest)(nil),             // 37: icrypto.SAPSignPrimeRequest
-	(*SAPSignPrimeResponse)(nil),            // 38: icrypto.SAPSignPrimeResponse
-	(*SAPVerifyPrimeRequest)(nil),           // 39: icrypto.SAPVerifyPrimeRequest
-	(*SAPVerifyPrimeResponse)(nil),          // 40: icrypto.SAPVerifyPrimeResponse
-	(*SAPSignRequest)(nil),                  // 41: icrypto.SAPSignRequest
-	(*SAPSignResponse)(nil),                 // 42: icrypto.SAPSignResponse
-	(*SAPVerifyRequest)(nil),                // 43: icrypto.SAPVerifyRequest
-	(*SAPVerifyResponse)(nil),               // 44: icrypto.SAPVerifyResponse
+	(MacOSRuntime)(0),                       // 0: icrypto.MacOSRuntime
+	(ActivationSigningProfile)(0),           // 1: icrypto.ActivationSigningProfile
+	(*InitializeRequest)(nil),               // 2: icrypto.InitializeRequest
+	(*InitializeResponse)(nil),              // 3: icrypto.InitializeResponse
+	(*SyncDeviceRequest)(nil),               // 4: icrypto.SyncDeviceRequest
+	(*SyncDeviceResponse)(nil),              // 5: icrypto.SyncDeviceResponse
+	(*FinalizeRequest)(nil),                 // 6: icrypto.FinalizeRequest
+	(*FinalizeResponse)(nil),                // 7: icrypto.FinalizeResponse
+	(*ActivationDRMHandshakeRequest)(nil),   // 8: icrypto.ActivationDRMHandshakeRequest
+	(*ActivationDRMHandshakeResponse)(nil),  // 9: icrypto.ActivationDRMHandshakeResponse
+	(*ActivationDRMProcessRequest)(nil),     // 10: icrypto.ActivationDRMProcessRequest
+	(*ActivationDRMProcessResponse)(nil),    // 11: icrypto.ActivationDRMProcessResponse
+	(*ActivationDRMSignatureRequest)(nil),   // 12: icrypto.ActivationDRMSignatureRequest
+	(*ActivationDRMSignatureResponse)(nil),  // 13: icrypto.ActivationDRMSignatureResponse
+	(*ActivationSignRequest)(nil),           // 14: icrypto.ActivationSignRequest
+	(*ActivationDeprecatedRequest)(nil),     // 15: icrypto.ActivationDeprecatedRequest
+	(*ActivationDeprecatedResponse)(nil),    // 16: icrypto.ActivationDeprecatedResponse
+	(*ActivationRecordRequest)(nil),         // 17: icrypto.ActivationRecordRequest
+	(*ActivationRecordResponse)(nil),        // 18: icrypto.ActivationRecordResponse
+	(*ADIStartProvisioningRequest)(nil),     // 19: icrypto.ADIStartProvisioningRequest
+	(*ADIStartProvisioningResponse)(nil),    // 20: icrypto.ADIStartProvisioningResponse
+	(*ADIEndProvisioningRequest)(nil),       // 21: icrypto.ADIEndProvisioningRequest
+	(*ADIEndProvisioningResponse)(nil),      // 22: icrypto.ADIEndProvisioningResponse
+	(*ADIGenerateLoginCodeRequest)(nil),     // 23: icrypto.ADIGenerateLoginCodeRequest
+	(*ADIGenerateLoginCodeResponse)(nil),    // 24: icrypto.ADIGenerateLoginCodeResponse
+	(*AbsintheHelloRequest)(nil),            // 25: icrypto.AbsintheHelloRequest
+	(*AbsintheHelloResponse)(nil),           // 26: icrypto.AbsintheHelloResponse
+	(*AbsintheAddOptionRequest)(nil),        // 27: icrypto.AbsintheAddOptionRequest
+	(*AbsintheAddOptionResponse)(nil),       // 28: icrypto.AbsintheAddOptionResponse
+	(*AbsintheActivateSessionRequest)(nil),  // 29: icrypto.AbsintheActivateSessionRequest
+	(*AbsintheActivateSessionResponse)(nil), // 30: icrypto.AbsintheActivateSessionResponse
+	(*AbsintheSignDataRequest)(nil),         // 31: icrypto.AbsintheSignDataRequest
+	(*AbsintheSignDataResponse)(nil),        // 32: icrypto.AbsintheSignDataResponse
+	(*IdentitySessionRequest)(nil),          // 33: icrypto.IdentitySessionRequest
+	(*IdentitySessionResponse)(nil),         // 34: icrypto.IdentitySessionResponse
+	(*IdentityValidationRequest)(nil),       // 35: icrypto.IdentityValidationRequest
+	(*IdentityValidationResponse)(nil),      // 36: icrypto.IdentityValidationResponse
+	(*SAPExchangeRequest)(nil),              // 37: icrypto.SAPExchangeRequest
+	(*SAPExchangeResponse)(nil),             // 38: icrypto.SAPExchangeResponse
+	(*SAPSignPrimeRequest)(nil),             // 39: icrypto.SAPSignPrimeRequest
+	(*SAPSignPrimeResponse)(nil),            // 40: icrypto.SAPSignPrimeResponse
+	(*SAPVerifyPrimeRequest)(nil),           // 41: icrypto.SAPVerifyPrimeRequest
+	(*SAPVerifyPrimeResponse)(nil),          // 42: icrypto.SAPVerifyPrimeResponse
+	(*SAPSignRequest)(nil),                  // 43: icrypto.SAPSignRequest
+	(*SAPSignResponse)(nil),                 // 44: icrypto.SAPSignResponse
+	(*SAPVerifyRequest)(nil),                // 45: icrypto.SAPVerifyRequest
+	(*SAPVerifyResponse)(nil),               // 46: icrypto.SAPVerifyResponse
 }
 var file_crypto_proto_depIdxs = []int32{
-	0,  // 0: icrypto.InitializeRequest.type:type_name -> icrypto.InitializeType
-	1,  // 1: icrypto.CryptService.Initialize:input_type -> icrypto.InitializeRequest
-	3,  // 2: icrypto.CryptService.SyncDevice:input_type -> icrypto.SyncDeviceRequest
-	5,  // 3: icrypto.CryptService.Finalize:input_type -> icrypto.FinalizeRequest
-	7,  // 4: icrypto.CryptService.ActivationDRMHandshake:input_type -> icrypto.ActivationDRMHandshakeRequest
-	9,  // 5: icrypto.CryptService.ActivationDRMProcess:input_type -> icrypto.ActivationDRMProcessRequest
-	11, // 6: icrypto.CryptService.ActivationDRMSignature:input_type -> icrypto.ActivationDRMSignatureRequest
-	13, // 7: icrypto.CryptService.ActivationDeprecated:input_type -> icrypto.ActivationDeprecatedRequest
-	15, // 8: icrypto.CryptService.ActivationRecord:input_type -> icrypto.ActivationRecordRequest
-	17, // 9: icrypto.CryptService.ADIStartProvisioning:input_type -> icrypto.ADIStartProvisioningRequest
-	19, // 10: icrypto.CryptService.ADIEndProvisioning:input_type -> icrypto.ADIEndProvisioningRequest
-	21, // 11: icrypto.CryptService.ADIGenerateLoginCode:input_type -> icrypto.ADIGenerateLoginCodeRequest
-	23, // 12: icrypto.CryptService.AbsintheHello:input_type -> icrypto.AbsintheHelloRequest
-	25, // 13: icrypto.CryptService.AbsintheAddOption:input_type -> icrypto.AbsintheAddOptionRequest
-	27, // 14: icrypto.CryptService.AbsintheActivateSession:input_type -> icrypto.AbsintheActivateSessionRequest
-	29, // 15: icrypto.CryptService.AbsintheSignData:input_type -> icrypto.AbsintheSignDataRequest
-	31, // 16: icrypto.CryptService.IdentitySession:input_type -> icrypto.IdentitySessionRequest
-	33, // 17: icrypto.CryptService.IdentityValidation:input_type -> icrypto.IdentityValidationRequest
-	35, // 18: icrypto.CryptService.SAPExchange:input_type -> icrypto.SAPExchangeRequest
-	37, // 19: icrypto.CryptService.SAPSignPrime:input_type -> icrypto.SAPSignPrimeRequest
-	39, // 20: icrypto.CryptService.SAPVerifyPrime:input_type -> icrypto.SAPVerifyPrimeRequest
-	41, // 21: icrypto.CryptService.SAPSign:input_type -> icrypto.SAPSignRequest
-	43, // 22: icrypto.CryptService.SAPVerify:input_type -> icrypto.SAPVerifyRequest
-	2,  // 23: icrypto.CryptService.Initialize:output_type -> icrypto.InitializeResponse
-	4,  // 24: icrypto.CryptService.SyncDevice:output_type -> icrypto.SyncDeviceResponse
-	6,  // 25: icrypto.CryptService.Finalize:output_type -> icrypto.FinalizeResponse
-	8,  // 26: icrypto.CryptService.ActivationDRMHandshake:output_type -> icrypto.ActivationDRMHandshakeResponse
-	10, // 27: icrypto.CryptService.ActivationDRMProcess:output_type -> icrypto.ActivationDRMProcessResponse
-	12, // 28: icrypto.CryptService.ActivationDRMSignature:output_type -> icrypto.ActivationDRMSignatureResponse
-	14, // 29: icrypto.CryptService.ActivationDeprecated:output_type -> icrypto.ActivationDeprecatedResponse
-	16, // 30: icrypto.CryptService.ActivationRecord:output_type -> icrypto.ActivationRecordResponse
-	18, // 31: icrypto.CryptService.ADIStartProvisioning:output_type -> icrypto.ADIStartProvisioningResponse
-	20, // 32: icrypto.CryptService.ADIEndProvisioning:output_type -> icrypto.ADIEndProvisioningResponse
-	22, // 33: icrypto.CryptService.ADIGenerateLoginCode:output_type -> icrypto.ADIGenerateLoginCodeResponse
-	24, // 34: icrypto.CryptService.AbsintheHello:output_type -> icrypto.AbsintheHelloResponse
-	26, // 35: icrypto.CryptService.AbsintheAddOption:output_type -> icrypto.AbsintheAddOptionResponse
-	28, // 36: icrypto.CryptService.AbsintheActivateSession:output_type -> icrypto.AbsintheActivateSessionResponse
-	30, // 37: icrypto.CryptService.AbsintheSignData:output_type -> icrypto.AbsintheSignDataResponse
-	32, // 38: icrypto.CryptService.IdentitySession:output_type -> icrypto.IdentitySessionResponse
-	34, // 39: icrypto.CryptService.IdentityValidation:output_type -> icrypto.IdentityValidationResponse
-	36, // 40: icrypto.CryptService.SAPExchange:output_type -> icrypto.SAPExchangeResponse
-	38, // 41: icrypto.CryptService.SAPSignPrime:output_type -> icrypto.SAPSignPrimeResponse
-	40, // 42: icrypto.CryptService.SAPVerifyPrime:output_type -> icrypto.SAPVerifyPrimeResponse
-	42, // 43: icrypto.CryptService.SAPSign:output_type -> icrypto.SAPSignResponse
-	44, // 44: icrypto.CryptService.SAPVerify:output_type -> icrypto.SAPVerifyResponse
-	23, // [23:45] is the sub-list for method output_type
-	1,  // [1:23] is the sub-list for method input_type
-	1,  // [1:1] is the sub-list for extension type_name
-	1,  // [1:1] is the sub-list for extension extendee
-	0,  // [0:1] is the sub-list for field type_name
+	0,  // 0: icrypto.InitializeRequest.macos_runtime:type_name -> icrypto.MacOSRuntime
+	1,  // 1: icrypto.ActivationSignRequest.profile:type_name -> icrypto.ActivationSigningProfile
+	0,  // 2: icrypto.ActivationSignRequest.macos_runtime:type_name -> icrypto.MacOSRuntime
+	14, // 3: icrypto.CryptService.ActivationSign:input_type -> icrypto.ActivationSignRequest
+	2,  // 4: icrypto.CryptService.Initialize:input_type -> icrypto.InitializeRequest
+	4,  // 5: icrypto.CryptService.SyncDevice:input_type -> icrypto.SyncDeviceRequest
+	6,  // 6: icrypto.CryptService.Finalize:input_type -> icrypto.FinalizeRequest
+	8,  // 7: icrypto.CryptService.ActivationDRMHandshake:input_type -> icrypto.ActivationDRMHandshakeRequest
+	10, // 8: icrypto.CryptService.ActivationDRMProcess:input_type -> icrypto.ActivationDRMProcessRequest
+	12, // 9: icrypto.CryptService.ActivationDRMSignature:input_type -> icrypto.ActivationDRMSignatureRequest
+	15, // 10: icrypto.CryptService.ActivationDeprecated:input_type -> icrypto.ActivationDeprecatedRequest
+	17, // 11: icrypto.CryptService.ActivationRecord:input_type -> icrypto.ActivationRecordRequest
+	19, // 12: icrypto.CryptService.ADIStartProvisioning:input_type -> icrypto.ADIStartProvisioningRequest
+	21, // 13: icrypto.CryptService.ADIEndProvisioning:input_type -> icrypto.ADIEndProvisioningRequest
+	23, // 14: icrypto.CryptService.ADIGenerateLoginCode:input_type -> icrypto.ADIGenerateLoginCodeRequest
+	25, // 15: icrypto.CryptService.AbsintheHello:input_type -> icrypto.AbsintheHelloRequest
+	27, // 16: icrypto.CryptService.AbsintheAddOption:input_type -> icrypto.AbsintheAddOptionRequest
+	29, // 17: icrypto.CryptService.AbsintheActivateSession:input_type -> icrypto.AbsintheActivateSessionRequest
+	31, // 18: icrypto.CryptService.AbsintheSignData:input_type -> icrypto.AbsintheSignDataRequest
+	33, // 19: icrypto.CryptService.IdentitySession:input_type -> icrypto.IdentitySessionRequest
+	35, // 20: icrypto.CryptService.IdentityValidation:input_type -> icrypto.IdentityValidationRequest
+	37, // 21: icrypto.CryptService.SAPExchange:input_type -> icrypto.SAPExchangeRequest
+	39, // 22: icrypto.CryptService.SAPSignPrime:input_type -> icrypto.SAPSignPrimeRequest
+	41, // 23: icrypto.CryptService.SAPVerifyPrime:input_type -> icrypto.SAPVerifyPrimeRequest
+	43, // 24: icrypto.CryptService.SAPSign:input_type -> icrypto.SAPSignRequest
+	45, // 25: icrypto.CryptService.SAPVerify:input_type -> icrypto.SAPVerifyRequest
+	16, // 26: icrypto.CryptService.ActivationSign:output_type -> icrypto.ActivationDeprecatedResponse
+	3,  // 27: icrypto.CryptService.Initialize:output_type -> icrypto.InitializeResponse
+	5,  // 28: icrypto.CryptService.SyncDevice:output_type -> icrypto.SyncDeviceResponse
+	7,  // 29: icrypto.CryptService.Finalize:output_type -> icrypto.FinalizeResponse
+	9,  // 30: icrypto.CryptService.ActivationDRMHandshake:output_type -> icrypto.ActivationDRMHandshakeResponse
+	11, // 31: icrypto.CryptService.ActivationDRMProcess:output_type -> icrypto.ActivationDRMProcessResponse
+	13, // 32: icrypto.CryptService.ActivationDRMSignature:output_type -> icrypto.ActivationDRMSignatureResponse
+	16, // 33: icrypto.CryptService.ActivationDeprecated:output_type -> icrypto.ActivationDeprecatedResponse
+	18, // 34: icrypto.CryptService.ActivationRecord:output_type -> icrypto.ActivationRecordResponse
+	20, // 35: icrypto.CryptService.ADIStartProvisioning:output_type -> icrypto.ADIStartProvisioningResponse
+	22, // 36: icrypto.CryptService.ADIEndProvisioning:output_type -> icrypto.ADIEndProvisioningResponse
+	24, // 37: icrypto.CryptService.ADIGenerateLoginCode:output_type -> icrypto.ADIGenerateLoginCodeResponse
+	26, // 38: icrypto.CryptService.AbsintheHello:output_type -> icrypto.AbsintheHelloResponse
+	28, // 39: icrypto.CryptService.AbsintheAddOption:output_type -> icrypto.AbsintheAddOptionResponse
+	30, // 40: icrypto.CryptService.AbsintheActivateSession:output_type -> icrypto.AbsintheActivateSessionResponse
+	32, // 41: icrypto.CryptService.AbsintheSignData:output_type -> icrypto.AbsintheSignDataResponse
+	34, // 42: icrypto.CryptService.IdentitySession:output_type -> icrypto.IdentitySessionResponse
+	36, // 43: icrypto.CryptService.IdentityValidation:output_type -> icrypto.IdentityValidationResponse
+	38, // 44: icrypto.CryptService.SAPExchange:output_type -> icrypto.SAPExchangeResponse
+	40, // 45: icrypto.CryptService.SAPSignPrime:output_type -> icrypto.SAPSignPrimeResponse
+	42, // 46: icrypto.CryptService.SAPVerifyPrime:output_type -> icrypto.SAPVerifyPrimeResponse
+	44, // 47: icrypto.CryptService.SAPSign:output_type -> icrypto.SAPSignResponse
+	46, // 48: icrypto.CryptService.SAPVerify:output_type -> icrypto.SAPVerifyResponse
+	26, // [26:49] is the sub-list for method output_type
+	3,  // [3:26] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_crypto_proto_init() }
@@ -2737,8 +2685,8 @@ func file_crypto_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_crypto_proto_rawDesc), len(file_crypto_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   44,
+			NumEnums:      2,
+			NumMessages:   45,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

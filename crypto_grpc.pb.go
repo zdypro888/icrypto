@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	CryptService_ActivationSign_FullMethodName          = "/icrypto.CryptService/ActivationSign"
 	CryptService_Initialize_FullMethodName              = "/icrypto.CryptService/Initialize"
 	CryptService_SyncDevice_FullMethodName              = "/icrypto.CryptService/SyncDevice"
 	CryptService_Finalize_FullMethodName                = "/icrypto.CryptService/Finalize"
@@ -49,6 +50,7 @@ const (
 //
 // 加密服务
 type CryptServiceClient interface {
+	ActivationSign(ctx context.Context, in *ActivationSignRequest, opts ...grpc.CallOption) (*ActivationDeprecatedResponse, error)
 	// 初始化
 	Initialize(ctx context.Context, in *InitializeRequest, opts ...grpc.CallOption) (*InitializeResponse, error)
 	// 同步设备状态，但不重新初始化 cryptor
@@ -101,6 +103,16 @@ type cryptServiceClient struct {
 
 func NewCryptServiceClient(cc grpc.ClientConnInterface) CryptServiceClient {
 	return &cryptServiceClient{cc}
+}
+
+func (c *cryptServiceClient) ActivationSign(ctx context.Context, in *ActivationSignRequest, opts ...grpc.CallOption) (*ActivationDeprecatedResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ActivationDeprecatedResponse)
+	err := c.cc.Invoke(ctx, CryptService_ActivationSign_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *cryptServiceClient) Initialize(ctx context.Context, in *InitializeRequest, opts ...grpc.CallOption) (*InitializeResponse, error) {
@@ -329,6 +341,7 @@ func (c *cryptServiceClient) SAPVerify(ctx context.Context, in *SAPVerifyRequest
 //
 // 加密服务
 type CryptServiceServer interface {
+	ActivationSign(context.Context, *ActivationSignRequest) (*ActivationDeprecatedResponse, error)
 	// 初始化
 	Initialize(context.Context, *InitializeRequest) (*InitializeResponse, error)
 	// 同步设备状态，但不重新初始化 cryptor
@@ -383,6 +396,9 @@ type CryptServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedCryptServiceServer struct{}
 
+func (UnimplementedCryptServiceServer) ActivationSign(context.Context, *ActivationSignRequest) (*ActivationDeprecatedResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ActivationSign not implemented")
+}
 func (UnimplementedCryptServiceServer) Initialize(context.Context, *InitializeRequest) (*InitializeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Initialize not implemented")
 }
@@ -468,6 +484,24 @@ func RegisterCryptServiceServer(s grpc.ServiceRegistrar, srv CryptServiceServer)
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&CryptService_ServiceDesc, srv)
+}
+
+func _CryptService_ActivationSign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActivationSignRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CryptServiceServer).ActivationSign(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CryptService_ActivationSign_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CryptServiceServer).ActivationSign(ctx, req.(*ActivationSignRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _CryptService_Initialize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -873,6 +907,10 @@ var CryptService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "icrypto.CryptService",
 	HandlerType: (*CryptServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ActivationSign",
+			Handler:    _CryptService_ActivationSign_Handler,
+		},
 		{
 			MethodName: "Initialize",
 			Handler:    _CryptService_Initialize_Handler,

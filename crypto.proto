@@ -5,18 +5,19 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/zdypro888/icrypto";
 
-// 初始化类型枚举
-enum InitializeType {
-  AUTO           = 0;
-  IOSDRM         = 1;
-  MACOSDISABLE15 = 4;
+// macOS 计算镜像偏好，不改变对外声明的设备系统版本。
+enum MacOSRuntime {
+  MACOS_AUTO = 0;
+  MACOS_COMPATIBLE = 1;
 }
 
-// 初始化请求
+// 初始化参数分离 DRM 能力和 macOS 镜像偏好，不能再按位组合。
 message InitializeRequest {
-  InitializeType  type     = 1;
-  bytes           device   = 2;
-  repeated string controls = 3;
+  reserved 1, 3;
+  reserved "type", "controls";
+  bytes device = 2;
+  bool ios_drm = 4;
+  MacOSRuntime macos_runtime = 5;
 }
 
 // 初始化响应
@@ -36,7 +37,8 @@ message SyncDeviceResponse {}
 
 // 结束请求
 message FinalizeRequest {
-  repeated string controls = 1;
+  reserved 1;
+  reserved "controls";
 }
 
 // 结束响应
@@ -44,7 +46,8 @@ message FinalizeResponse {}
 
 // DRM 激活握手请求
 message ActivationDRMHandshakeRequest {
-  repeated string controls = 1;
+  reserved 1;
+  reserved "controls";
 }
 
 // DRM 激活握手响应
@@ -58,7 +61,8 @@ message ActivationDRMProcessRequest {
   bytes           SUInfo                     = 1;
   bytes           handshake_response_message = 2;
   bytes           serverKP                   = 3;
-  repeated string controls                   = 4;
+  reserved 4;
+  reserved "controls";
 }
 
 // DRM 激活处理响应
@@ -70,7 +74,8 @@ message ActivationDRMProcessResponse {
 // DRM 激活签名请求
 message ActivationDRMSignatureRequest {
   bytes           activation_info_xml = 1;
-  repeated string controls            = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // DRM 激活签名响应
@@ -82,10 +87,27 @@ message ActivationDRMSignatureResponse {
   bytes serverKP            = 5;
 }
 
+// 只选择本次传统激活签名的实现，不改变 ADI/Validation 会话。
+enum ActivationSigningProfile {
+  ACTIVATION_SIGNING_CURRENT = 0;
+  ACTIVATION_SIGNING_LEGACY_IOS9 = 1;
+}
+
+// 一次性签名：不要求 Initialize，不写回设备，不占用调用方现有会话。
+message ActivationSignRequest {
+  ActivationSigningProfile profile = 1;
+  reserved 2;
+  reserved "type";
+  MacOSRuntime macos_runtime = 5;
+  bytes device = 3;
+  bytes activation_info_xml = 4;
+}
+
 // 旧版激活请求
 message ActivationDeprecatedRequest {
   bytes           activation_info_xml = 1;
-  repeated string controls            = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // 旧版激活响应
@@ -104,7 +126,8 @@ message ActivationRecordRequest {
   bytes           account_token             = 6;
   bytes           account_token_signature   = 7;
   bytes           unique_device_certificate = 8;
-  repeated string controls                  = 9;
+  reserved 9;
+  reserved "controls";
 }
 
 // 激活记录响应
@@ -116,7 +139,8 @@ message ActivationRecordResponse {
 message ADIStartProvisioningRequest {
   int64           DSID     = 1;
   bytes           SPIM     = 2;
-  repeated string controls = 3;
+  reserved 3;
+  reserved "controls";
 }
 
 // ADI 开始配置响应
@@ -133,7 +157,8 @@ message ADIEndProvisioningRequest {
   bytes           PTM      = 4;
   bytes           TK       = 5;
   bytes           ADI      = 6;
-  repeated string controls = 7;
+  reserved 7;
+  reserved "controls";
 }
 
 // ADI 结束配置响应
@@ -147,7 +172,8 @@ message ADIEndProvisioningResponse {
 message ADIGenerateLoginCodeRequest {
   int64           DSID     = 1;
   bytes           ADI      = 2;
-  repeated string controls = 3;
+  reserved 3;
+  reserved "controls";
 }
 
 // ADI 生成登录码响应
@@ -159,7 +185,8 @@ message ADIGenerateLoginCodeResponse {
 // Absinthe Hello 请求
 message AbsintheHelloRequest {
   int32           mode     = 1;
-  repeated string controls = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // Absinthe Hello 响应
@@ -172,7 +199,8 @@ message AbsintheAddOptionRequest {
   bytes           bik_key                = 1;
   bytes           baa_cert               = 2;
   bytes           intermediate_root_cert = 3;
-  repeated string controls               = 4;
+  reserved 4;
+  reserved "controls";
 }
 
 // Absinthe 添加选项响应
@@ -182,7 +210,8 @@ message AbsintheAddOptionResponse {}
 message AbsintheActivateSessionRequest {
   bytes           validation_data = 1;
   bytes           server_key      = 2;
-  repeated string controls        = 3;
+  reserved 3;
+  reserved "controls";
 }
 
 // Absinthe 激活会话响应
@@ -191,7 +220,8 @@ message AbsintheActivateSessionResponse {}
 // Absinthe 签名数据请求
 message AbsintheSignDataRequest {
   bytes           sign_data = 1;
-  repeated string controls  = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // Absinthe 签名数据响应
@@ -203,7 +233,8 @@ message AbsintheSignDataResponse {
 // Identity 会话请求
 message IdentitySessionRequest {
   bytes           cert     = 1;
-  repeated string controls = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // Identity 会话响应
@@ -215,7 +246,8 @@ message IdentitySessionResponse {
 message IdentityValidationRequest {
   bytes           response  = 1;
   bytes           sign_data = 2;
-  repeated string controls  = 3;
+  reserved 3;
+  reserved "controls";
 }
 
 // Identity 验证响应
@@ -227,7 +259,8 @@ message IdentityValidationResponse {
 message SAPExchangeRequest {
   int32           version  = 1;
   bytes           data     = 2;
-  repeated string controls = 3;
+  reserved 3;
+  reserved "controls";
 }
 
 // SAP 交换响应
@@ -238,7 +271,8 @@ message SAPExchangeResponse {
 // SAP 质数签名请求
 message SAPSignPrimeRequest {
   bytes           sign_data = 1;
-  repeated string controls  = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // SAP 质数签名响应
@@ -249,7 +283,8 @@ message SAPSignPrimeResponse {
 // SAP 质数验证请求
 message SAPVerifyPrimeRequest {
   bytes           data     = 1;
-  repeated string controls = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // SAP 质数验证响应
@@ -258,7 +293,8 @@ message SAPVerifyPrimeResponse {}
 // SAP 签名请求
 message SAPSignRequest {
   bytes           sign_data = 1;
-  repeated string controls  = 2;
+  reserved 2;
+  reserved "controls";
 }
 
 // SAP 签名响应
@@ -270,7 +306,8 @@ message SAPSignResponse {
 message SAPVerifyRequest {
   bytes           data      = 1;
   bytes           signature = 2;
-  repeated string controls  = 3;
+  reserved 3;
+  reserved "controls";
 }
 
 // SAP 验证响应
@@ -278,6 +315,10 @@ message SAPVerifyResponse {}
 
 // 加密服务
 service CryptService {
+  rpc ActivationSign(ActivationSignRequest) returns (ActivationDeprecatedResponse) {
+    option (google.api.http) = { post: "/activation/sign" body: "*" };
+  }
+
   // 初始化
   rpc Initialize(InitializeRequest) returns (InitializeResponse) {
     option (google.api.http) = {

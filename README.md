@@ -19,7 +19,7 @@ Apple 设备激活与身份验证的 RPC API 契约与 Go 客户端库，提供 
 | 分类 | RPC / Go 方法 | 用途 |
 | --- | --- | --- |
 | 会话生命周期 | `Initialize`、`SyncDevice`、`Finalize` | 初始化密码会话、合并后续设备状态、释放会话 |
-| DRM 激活 | `ActivationDRMHandshake`、`ActivationDRMProcess`、`ActivationDRMSignature`、`ActivationDeprecated`、`ActivationRecord` | DRM 握手、签名与激活记录处理 |
+| DRM 激活 | `ActivationDRMHandshake`、`ActivationDRMProcess`、`ActivationDRMSignature`、`ActivationRecord` | DRM 握手、签名与激活记录处理 |
 | ADI | `ADIStartProvisioning`、`ADIEndProvisioning`、`ADIGenerateLoginCode` | Anisette/ADI provisioning 与登录码生成 |
 | Absinthe | `AbsintheHello`、`AbsintheAddOption`、`AbsintheActivateSession`、`AbsintheSignData` | Absinthe 会话建立、配置与签名 |
 | Identity | `IdentitySession`、`IdentityValidation` | IDS/iMessage 身份会话和验证数据生成 |
@@ -77,7 +77,7 @@ func run() (err error) {
 	}
 	ctx := context.Background()
 
-	if err := cryptor.Initialize(ctx, icrypto.InitializeType_AUTO, device); err != nil {
+	if err := cryptor.Initialize(ctx, icrypto.InitializeOptions{}, device); err != nil {
 		return fmt.Errorf("initialize cryptor: %w", err)
 	}
 	defer func() {
@@ -357,3 +357,38 @@ Special key 的 cached ciphertext 是连接软件 AES 操作和硬件 descramble
 - [iMessage Contact Key Verification](https://security.apple.com/blog/imessage-contact-key-verification/)
 - [The Apple Wiki - APTicket](https://theapplewiki.com/wiki/APTicket)
 - [The Apple Wiki - ECID](https://theapplewiki.com/wiki/ECID)
+
+### 单次传统激活签名
+
+`ActivationSign(ctx, profile, macOSRuntime, device, xml)` 不需要 `Initialize`，只生成本次请求的签名/证书，不修改传入设备或已有 ADI/Validation 会话。`CURRENT` 使用现有模拟实现，`LEGACY_IOS9` 仅用于 iOS 传统签名；签名接口不提供 DRM 参数。HTTP 路由为 `POST /activation/sign`。
+
+该接口由服务端清理临时计算状态。它不替代 Apple 激活 HTTP 请求，也不保证任意数据库身份能被 Apple 接受。客户端与 iClouder/iCryptor/Core 必须同步更新；不支持的服务会明确返回 Unimplemented，不会自动改用另一种签名实现。
+
+### 初始化选项
+
+```go
+options := icrypto.InitializeOptions{
+    IOSDRM: false,
+    MacOSRuntime: icrypto.MacOSRuntime_MACOS_AUTO,
+}
+err := cryptor.Initialize(ctx, options, device)
+```
+
+零值为普通自动初始化；IOSDRM 仅允许 iOS。macOS 可选 AUTO（保留已验证版本映射）或 COMPATIBLE（原有 Intel 实现），它不改变对外设备身份。无需也不能传入内部 Hardware 枚举。
+
+本次内部接口清理移除了 InitializeType 位标志、MACOSDISABLE15 和所有未使用的 controls 字段；旧 protobuf 字段编号已 reserved。代码调用方及 iClouder/iCryptor/Core 需要一起升级；发布时先更新服务端，再更新调用方，不依赖跨版本兼容。
+
+
+### 调用层次与参数含义
+
+- `idevice`：选择业务身份、编排 Apple HTTP 请求、管理不同用途的计算会话和设备状态合并。
+- `icrypto`：定义计算接口与 RPC 客户端；参数及调用前提见 [cryptor.go](cryptor.go)。
+- `iunios`：选择运行镜像并执行原生计算，判断对应环境是否支持该能力。
+
+`InitializeOptions` 是计算环境选项，`device` 是设备身份，`ActivationSigningProfile` 是单次传统激活签名实现，三者不能互相替代。Legacy 签名不会将后续 IMD 或 Validation 会话切成 iOS9。
+
+`ActivationSign` 使用临时环境；`Initialize` 后的其他计算使用有状态会话。一次握手必须保持实例一致，业务层需要串行化完整握手，不能仅依赖每次 RPC 自身的锁。初始化可能回写设备状态，因此共享设备应先取快照。
+
+业务层统一用 `WithActivationSigner` 选择传统激活签名，已移除 `activation_deprecated` 字符串上下文开关。底层会话式 `ActivationDeprecated` 尚存在，其名称不表示 Legacy iOS9；新业务应使用独立的 `ActivationSign`。
+
+当前实现限制：iunios 的 `AbsintheAddOption` 不消费 BIK 字节，原生 BIK 句柄固定为零；`ActivationRecord` 使用 FairPlayKeyData 并导出 DRM 状态，其余记录字段仍由业务层校验。这不代表这些参数已实现完整原生语义。
