@@ -148,171 +148,6 @@
         ]
       }
     },
-    "/activation/deprecated": {
-      "post": {
-        "summary": "旧版激活",
-        "operationId": "CryptService_ActivationDeprecated",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDeprecatedResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDeprecatedRequest"
-            }
-          }
-        ],
-        "tags": [
-          "CryptService"
-        ]
-      }
-    },
-    "/activation/drm/handshake": {
-      "post": {
-        "summary": "DRM 激活握手",
-        "operationId": "CryptService_ActivationDRMHandshake",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDRMHandshakeResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDRMHandshakeRequest"
-            }
-          }
-        ],
-        "tags": [
-          "CryptService"
-        ]
-      }
-    },
-    "/activation/drm/process": {
-      "post": {
-        "summary": "DRM 激活处理",
-        "operationId": "CryptService_ActivationDRMProcess",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDRMProcessResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDRMProcessRequest"
-            }
-          }
-        ],
-        "tags": [
-          "CryptService"
-        ]
-      }
-    },
-    "/activation/drm/signature": {
-      "post": {
-        "summary": "DRM 激活签名",
-        "operationId": "CryptService_ActivationDRMSignature",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDRMSignatureResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationDRMSignatureRequest"
-            }
-          }
-        ],
-        "tags": [
-          "CryptService"
-        ]
-      }
-    },
-    "/activation/record": {
-      "post": {
-        "summary": "激活记录",
-        "operationId": "CryptService_ActivationRecord",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationRecordResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/icryptoActivationRecordRequest"
-            }
-          }
-        ],
-        "tags": [
-          "CryptService"
-        ]
-      }
-    },
     "/activation/sign": {
       "post": {
         "operationId": "CryptService_ActivationSign",
@@ -320,7 +155,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/icryptoActivationDeprecatedResponse"
+              "$ref": "#/definitions/icryptoActivationSignResponse"
             }
           },
           "default": {
@@ -337,6 +172,39 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/icryptoActivationSignRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/activation/sign-in-session": {
+      "post": {
+        "summary": "旧版激活",
+        "operationId": "CryptService_ActivationSignInSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationSignResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoActivationSignInSessionRequest"
             }
           }
         ],
@@ -478,6 +346,138 @@
         ]
       }
     },
+    "/drm/activation/export-state": {
+      "post": {
+        "summary": "激活记录",
+        "operationId": "CryptService_DRMActivationExportState",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationExportStateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationExportStateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/drm/activation/handshake": {
+      "post": {
+        "summary": "DRM 激活握手",
+        "operationId": "CryptService_DRMActivationHandshake",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationHandshakeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationHandshakeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/drm/activation/process-handshake": {
+      "post": {
+        "summary": "DRM 激活处理",
+        "operationId": "CryptService_DRMActivationProcessHandshake",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationProcessHandshakeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationProcessHandshakeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/drm/activation/sign": {
+      "post": {
+        "summary": "DRM 激活签名",
+        "operationId": "CryptService_DRMActivationSign",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationSignResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoDRMActivationSignRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
     "/finalize": {
       "post": {
         "summary": "结束",
@@ -511,72 +511,6 @@
         ]
       }
     },
-    "/identity/session": {
-      "post": {
-        "summary": "Identity 会话",
-        "operationId": "CryptService_IdentitySession",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/icryptoIdentitySessionResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/icryptoIdentitySessionRequest"
-            }
-          }
-        ],
-        "tags": [
-          "CryptService"
-        ]
-      }
-    },
-    "/identity/validation": {
-      "post": {
-        "summary": "Identity 验证",
-        "operationId": "CryptService_IdentityValidation",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/icryptoIdentityValidationResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/icryptoIdentityValidationRequest"
-            }
-          }
-        ],
-        "tags": [
-          "CryptService"
-        ]
-      }
-    },
     "/initialize": {
       "post": {
         "summary": "初始化",
@@ -602,6 +536,72 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/icryptoInitializeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/nac/generate-validation": {
+      "post": {
+        "summary": "NAC生成校验数据",
+        "operationId": "CryptService_NACGenerateValidation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoNACGenerateValidationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoNACGenerateValidationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CryptService"
+        ]
+      }
+    },
+    "/nac/init": {
+      "post": {
+        "summary": "NAC初始化",
+        "operationId": "CryptService_NACInit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/icryptoNACInitResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/icryptoNACInitRequest"
             }
           }
         ],
@@ -884,7 +884,7 @@
     "icryptoAbsintheActivateSessionRequest": {
       "type": "object",
       "properties": {
-        "validationData": {
+        "handshakeResponse": {
           "type": "string",
           "format": "byte"
         },
@@ -893,7 +893,7 @@
           "format": "byte"
         }
       },
-      "title": "Absinthe 激活会话请求"
+      "title": "额外Absinthe/PSC握手响应；handshake_response不是NAC输出的validation-data。"
     },
     "icryptoAbsintheActivateSessionResponse": {
       "type": "object",
@@ -915,7 +915,7 @@
           "format": "byte"
         }
       },
-      "title": "Absinthe 添加选项请求"
+      "title": "配置额外Absinthe/PSC会话的BAA选项；BIK字节尚不支持导入，非空必须报错。"
     },
     "icryptoAbsintheAddOptionResponse": {
       "type": "object",
@@ -965,57 +965,7 @@
       },
       "title": "Absinthe 签名数据响应"
     },
-    "icryptoActivationDRMHandshakeRequest": {
-      "type": "object",
-      "title": "DRM 激活握手请求"
-    },
-    "icryptoActivationDRMHandshakeResponse": {
-      "type": "object",
-      "properties": {
-        "collectionBlob": {
-          "type": "string",
-          "format": "byte"
-        },
-        "handshakeRequestMessage": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "DRM 激活握手响应"
-    },
-    "icryptoActivationDRMProcessRequest": {
-      "type": "object",
-      "properties": {
-        "SUInfo": {
-          "type": "string",
-          "format": "byte"
-        },
-        "handshakeResponseMessage": {
-          "type": "string",
-          "format": "byte"
-        },
-        "serverKP": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "DRM 激活处理请求"
-    },
-    "icryptoActivationDRMProcessResponse": {
-      "type": "object",
-      "properties": {
-        "UIK": {
-          "type": "string",
-          "format": "byte"
-        },
-        "RK": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "DRM 激活处理响应"
-    },
-    "icryptoActivationDRMSignatureRequest": {
+    "icryptoActivationSignInSessionRequest": {
       "type": "object",
       "properties": {
         "activationInfoXml": {
@@ -1023,45 +973,29 @@
           "format": "byte"
         }
       },
-      "title": "DRM 激活签名请求"
+      "title": "当前有状态会话的传统激活签名请求，不表示Legacy iOS9。"
     },
-    "icryptoActivationDRMSignatureResponse": {
+    "icryptoActivationSignRequest": {
       "type": "object",
       "properties": {
-        "fairplayCertChain": {
+        "profile": {
+          "$ref": "#/definitions/icryptoActivationSigningProfile"
+        },
+        "macosRuntime": {
+          "$ref": "#/definitions/icryptoMacOSRuntime"
+        },
+        "device": {
           "type": "string",
           "format": "byte"
         },
-        "fairplaySignature": {
-          "type": "string",
-          "format": "byte"
-        },
-        "RKSignature": {
-          "type": "string",
-          "format": "byte"
-        },
-        "signActRequest": {
-          "type": "string",
-          "format": "byte"
-        },
-        "serverKP": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "DRM 激活签名响应"
-    },
-    "icryptoActivationDeprecatedRequest": {
-      "type": "object",
-      "properties": {
         "activationInfoXml": {
           "type": "string",
           "format": "byte"
         }
       },
-      "title": "旧版激活请求"
+      "title": "一次性签名：不要求 Initialize，不写回设备，不占用调用方现有会话。"
     },
-    "icryptoActivationDeprecatedResponse": {
+    "icryptoActivationSignResponse": {
       "type": "object",
       "properties": {
         "sign": {
@@ -1073,9 +1007,18 @@
           "format": "byte"
         }
       },
-      "title": "旧版激活响应"
+      "title": "传统激活签名的通用输出，供独立签名与会话内签名共用。"
     },
-    "icryptoActivationRecordRequest": {
+    "icryptoActivationSigningProfile": {
+      "type": "string",
+      "enum": [
+        "ACTIVATION_SIGNING_CURRENT",
+        "ACTIVATION_SIGNING_LEGACY_IOS9"
+      ],
+      "default": "ACTIVATION_SIGNING_CURRENT",
+      "title": "只选择本次传统激活签名的实现，不改变 ADI/Validation 会话。"
+    },
+    "icryptoDRMActivationExportStateRequest": {
       "type": "object",
       "properties": {
         "unbrick": {
@@ -1112,7 +1055,7 @@
       },
       "title": "激活记录请求"
     },
-    "icryptoActivationRecordResponse": {
+    "icryptoDRMActivationExportStateResponse": {
       "type": "object",
       "properties": {
         "pscSui": {
@@ -1122,34 +1065,91 @@
       },
       "title": "激活记录响应"
     },
-    "icryptoActivationSignRequest": {
+    "icryptoDRMActivationHandshakeRequest": {
+      "type": "object",
+      "title": "DRM 激活握手请求"
+    },
+    "icryptoDRMActivationHandshakeResponse": {
       "type": "object",
       "properties": {
-        "profile": {
-          "$ref": "#/definitions/icryptoActivationSigningProfile"
-        },
-        "macosRuntime": {
-          "$ref": "#/definitions/icryptoMacOSRuntime"
-        },
-        "device": {
+        "collectionBlob": {
           "type": "string",
           "format": "byte"
         },
+        "handshakeRequestMessage": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "DRM 激活握手响应"
+    },
+    "icryptoDRMActivationProcessHandshakeRequest": {
+      "type": "object",
+      "properties": {
+        "SUInfo": {
+          "type": "string",
+          "format": "byte"
+        },
+        "handshakeResponseMessage": {
+          "type": "string",
+          "format": "byte"
+        },
+        "serverKP": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "DRM 激活处理请求"
+    },
+    "icryptoDRMActivationProcessHandshakeResponse": {
+      "type": "object",
+      "properties": {
+        "UIK": {
+          "type": "string",
+          "format": "byte"
+        },
+        "RK": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "DRM 激活处理响应"
+    },
+    "icryptoDRMActivationSignRequest": {
+      "type": "object",
+      "properties": {
         "activationInfoXml": {
           "type": "string",
           "format": "byte"
         }
       },
-      "title": "一次性签名：不要求 Initialize，不写回设备，不占用调用方现有会话。"
+      "title": "DRM 激活签名请求"
     },
-    "icryptoActivationSigningProfile": {
-      "type": "string",
-      "enum": [
-        "ACTIVATION_SIGNING_CURRENT",
-        "ACTIVATION_SIGNING_LEGACY_IOS9"
-      ],
-      "default": "ACTIVATION_SIGNING_CURRENT",
-      "title": "只选择本次传统激活签名的实现，不改变 ADI/Validation 会话。"
+    "icryptoDRMActivationSignResponse": {
+      "type": "object",
+      "properties": {
+        "fairplayCertChain": {
+          "type": "string",
+          "format": "byte"
+        },
+        "fairplaySignature": {
+          "type": "string",
+          "format": "byte"
+        },
+        "RKSignature": {
+          "type": "string",
+          "format": "byte"
+        },
+        "signActRequest": {
+          "type": "string",
+          "format": "byte"
+        },
+        "serverKP": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "DRM 激活签名响应"
     },
     "icryptoFinalizeRequest": {
       "type": "object",
@@ -1158,50 +1158,6 @@
     "icryptoFinalizeResponse": {
       "type": "object",
       "title": "结束响应"
-    },
-    "icryptoIdentitySessionRequest": {
-      "type": "object",
-      "properties": {
-        "cert": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "Identity 会话请求"
-    },
-    "icryptoIdentitySessionResponse": {
-      "type": "object",
-      "properties": {
-        "request": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "Identity 会话响应"
-    },
-    "icryptoIdentityValidationRequest": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "type": "string",
-          "format": "byte"
-        },
-        "signData": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "Identity 验证请求"
-    },
-    "icryptoIdentityValidationResponse": {
-      "type": "object",
-      "properties": {
-        "validationData": {
-          "type": "string",
-          "format": "byte"
-        }
-      },
-      "title": "Identity 验证响应"
     },
     "icryptoInitializeRequest": {
       "type": "object",
@@ -1237,6 +1193,50 @@
       ],
       "default": "MACOS_AUTO",
       "title": "macOS 计算镜像偏好，不改变对外声明的设备系统版本。"
+    },
+    "icryptoNACGenerateValidationRequest": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "string",
+          "format": "byte"
+        },
+        "signData": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "NAC校验数据请求；response非空时先推进握手，再对原始sign_data生成VD。"
+    },
+    "icryptoNACGenerateValidationResponse": {
+      "type": "object",
+      "properties": {
+        "validationData": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "NAC生成的validation-data，不是额外Absinthe/PSC签名。"
+    },
+    "icryptoNACInitRequest": {
+      "type": "object",
+      "properties": {
+        "cert": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "NAC初始化请求；证书属于本次业务握手，不能跨业务替换。"
+    },
+    "icryptoNACInitResponse": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "NAC初始化输出；后续响应处理与生成VD必须使用同一实例。"
     },
     "icryptoSAPExchangeRequest": {
       "type": "object",

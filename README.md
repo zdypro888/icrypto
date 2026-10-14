@@ -19,10 +19,10 @@ Apple 设备激活与身份验证的 RPC API 契约与 Go 客户端库，提供 
 | 分类 | RPC / Go 方法 | 用途 |
 | --- | --- | --- |
 | 会话生命周期 | `Initialize`、`SyncDevice`、`Finalize` | 初始化密码会话、合并后续设备状态、释放会话 |
-| DRM 激活 | `ActivationDRMHandshake`、`ActivationDRMProcess`、`ActivationDRMSignature`、`ActivationRecord` | DRM 握手、签名与激活记录处理 |
+| DRM 激活 | `DRMActivationHandshake`、`DRMActivationProcessHandshake`、`DRMActivationSign`、`DRMActivationExportState` | DRM 握手、签名与激活记录处理 |
 | ADI | `ADIStartProvisioning`、`ADIEndProvisioning`、`ADIGenerateLoginCode` | Anisette/ADI provisioning 与登录码生成 |
-| Absinthe | `AbsintheHello`、`AbsintheAddOption`、`AbsintheActivateSession`、`AbsintheSignData` | Absinthe 会话建立、配置与签名 |
-| Identity | `IdentitySession`、`IdentityValidation` | IDS/iMessage 身份会话和验证数据生成 |
+| Absinthe / PSC | `AbsintheHello`、`AbsintheAddOption`、`AbsintheActivateSession`、`AbsintheSignData` | Absinthe 会话建立、配置与签名 |
+| NAC | `NACInit`、`NACGenerateValidation` | Qualify、Identity Validation与重认证共用的会话/校验计算 |
 | SAP | `SAPExchange`、`SAPSignPrime`、`SAPVerifyPrime`、`SAPSign`、`SAPVerify` | SAP 协议交换、签名与验证 |
 
 每次通过 `NewCryptorGRPC`（或初始化后的 `NewCryptor` 工厂）创建客户端时，都会生成独立的 `client_id`；服务端应使用它关联同一调用方的会话状态。
@@ -104,7 +104,7 @@ func run() (err error) {
 		return fmt.Errorf("sync device state: %w", err)
 	}
 
-	collectionBlob, handshakeRequest, err := cryptor.ActivationDRMHandshake(ctx)
+	collectionBlob, handshakeRequest, err := cryptor.DRMActivationHandshake(ctx)
 	if err != nil {
 		return fmt.Errorf("create DRM handshake: %w", err)
 	}
@@ -166,7 +166,11 @@ icrypto.RegisterCryptServiceServer(grpcServer, service)
 
 不要直接编辑生成文件。客户端与服务端升级时需要保持协议版本一致，尤其是会话生命周期 RPC（当前包括 `SyncDevice`）。
 
-当前仓库尚未提供一键生成脚本。本版本使用 libprotoc 35.0（生成文件头记录为 `protoc` v7.35.0）、`protoc-gen-go` 1.36.11、`protoc-gen-go-grpc` 1.6.2，以及 grpc-gateway/OpenAPI 插件 2.27.8 生成；重新生成时还需要 Google API proto include 路径。
+使用 `./scripts/generate-proto.sh` 一次生成全部产物。Google HTTP 注解源码固定在 `tools/google/api`；不需要临时下载 include。当前工具为 libprotoc 36.2、protoc-gen-go 1.36.12、protoc-gen-go-grpc 1.6.2、grpc-gateway/OpenAPI 2.27.8，生成文件头保留具体版本。
+
+2026-10-14 计算契约统一：IdentitySession/IdentityValidation 已迁移为 `NACInit`/`NACGenerateValidation`；这是一套通用 NAC 计算，不专属于 Identity 业务。HTTP 路由为 `/nac/init`、`/nac/generate-validation`。传统激活有状态签名为 `ActivationSignInSession`（`/activation/sign-in-session`），与独立的 `ActivationSign` 共用签名响应类型。DRM 入口统一为 `DRMActivation*`，HTTP 路由为 `/drm/activation/*`。旧 RPC 方法和 HTTP 路由已移除，客户端、代理、icryptor、core 需要同步部署；保留使用中 protobuf 字段的编号不代表旧方法名仍可用。
+
+Absinthe 的 Hello/AddOption/ActivateSession/SignData 保留 Apple 原生动作词，对应额外 PSC/Pisco 会话。ActivateSession 的 `handshake_response` 取代误导性的 `validation_data`，字段编号仍为1；NAC 输出仍叫 validation-data。两组上下文独立，业务 Qualify/Identity Validation 也分别建立服务器会话。
 
 ## 开发与验证
 
@@ -296,10 +300,10 @@ GIDDerivedKey → SIK → UIK → RefKey
 设备                                    Apple IDS 服务
   |                                          |
   |-- 1. 获取 validation cert ------------->|
-  |-- 2. IdentitySession + AbsintheHello -->|
+  |-- 2. NACInit + AbsintheHello -->|
   |<-- 3. SessionInfo + AbsintheResponse ---|
   |-- 4. AbsintheActivateSession ---------->|
-  |-- 5. IdentityValidation + AbsintheSign ->|
+  |-- 5. NACGenerateValidation + AbsintheSign ->|
   |<-- 6. 注册成功 -------------------------|
 ```
 
@@ -389,6 +393,6 @@ err := cryptor.Initialize(ctx, options, device)
 
 `ActivationSign` 使用临时环境；`Initialize` 后的其他计算使用有状态会话。一次握手必须保持实例一致，业务层需要串行化完整握手，不能仅依赖每次 RPC 自身的锁。初始化可能回写设备状态，因此共享设备应先取快照。
 
-业务层统一用 `WithActivationSigner` 选择传统激活签名，已移除 `activation_deprecated` 字符串上下文开关。底层会话式 `ActivationDeprecated` 尚存在，其名称不表示 Legacy iOS9；新业务应使用独立的 `ActivationSign`。
+业务层统一用 `WithActivationSigner` 选择传统激活签名，已移除 `activation_deprecated` 字符串上下文开关。底层会话式 `ActivationSignInSession` 尚存在，其名称不表示 Legacy iOS9；新业务应使用独立的 `ActivationSign`。
 
-当前实现限制：iunios 的 `AbsintheAddOption` 不消费 BIK 字节，原生 BIK 句柄固定为零；`ActivationRecord` 使用 FairPlayKeyData 并导出 DRM 状态，其余记录字段仍由业务层校验。这不代表这些参数已实现完整原生语义。
+当前实现限制：iunios 的 `AbsintheAddOption` 不支持BIK字节导入，非空输入明确报错；空输入的原生BIK句柄为零。AddOption使用可更新的PSC会话槽，成功后接收新句柄；`DRMActivationExportState` 使用 FairPlayKeyData 并导出 DRM 状态，其余记录字段仍由业务层校验。这不代表这些参数已实现完整原生语义。

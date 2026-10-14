@@ -174,61 +174,61 @@ func (crypt *CryptorGRPC) Finalize(ctx context.Context) error {
 	return nil
 }
 
-// ActivationDRMHandshake 开始 DRM 激活握手，返回采集数据和握手请求。
-func (crypt *CryptorGRPC) ActivationDRMHandshake(ctx context.Context) ([]byte, []byte, error) {
+// DRMActivationHandshake 开始 DRM 激活握手，返回采集数据和握手请求。
+func (crypt *CryptorGRPC) DRMActivationHandshake(ctx context.Context) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	var response *ActivationDRMHandshakeResponse
-	if response, err = crypt.Client.ActivationDRMHandshake(ctx, &ActivationDRMHandshakeRequest{}); err != nil {
+	var response *DRMActivationHandshakeResponse
+	if response, err = crypt.Client.DRMActivationHandshake(ctx, &DRMActivationHandshakeRequest{}); err != nil {
 		return nil, nil, err
 	}
 	return response.CollectionBlob, response.HandshakeRequestMessage, nil
 }
 
-// ActivationDRMProcess 处理 DRM 握手响应，返回 UIK 与 RK。
-func (crypt *CryptorGRPC) ActivationDRMProcess(ctx context.Context, suinfo, handshakeResponseMessage, serverKP []byte) ([]byte, []byte, error) {
+// DRMActivationProcessHandshake 处理 DRM 握手响应，返回 UIK 与 RK。
+func (crypt *CryptorGRPC) DRMActivationProcessHandshake(ctx context.Context, suinfo, handshakeResponseMessage, serverKP []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	var response *ActivationDRMProcessResponse
-	if response, err = crypt.Client.ActivationDRMProcess(ctx, &ActivationDRMProcessRequest{SUInfo: suinfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP}); err != nil {
+	var response *DRMActivationProcessHandshakeResponse
+	if response, err = crypt.Client.DRMActivationProcessHandshake(ctx, &DRMActivationProcessHandshakeRequest{SUInfo: suinfo, HandshakeResponseMessage: handshakeResponseMessage, ServerKP: serverKP}); err != nil {
 		return nil, nil, err
 	}
 	return response.UIK, response.RK, nil
 }
 
-// ActivationDRMSignature 签署激活 XML，返回签名、证书、RK 签名、激活请求和服务器密钥。
-func (crypt *CryptorGRPC) ActivationDRMSignature(ctx context.Context, activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
+// DRMActivationSign 签署激活 XML，返回签名、证书、RK 签名、激活请求和服务器密钥。
+func (crypt *CryptorGRPC) DRMActivationSign(ctx context.Context, activationXML []byte) ([]byte, []byte, []byte, []byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	var response *ActivationDRMSignatureResponse
-	if response, err = crypt.Client.ActivationDRMSignature(ctx, &ActivationDRMSignatureRequest{ActivationInfoXml: activationXML}); err != nil {
+	var response *DRMActivationSignResponse
+	if response, err = crypt.Client.DRMActivationSign(ctx, &DRMActivationSignRequest{ActivationInfoXml: activationXML}); err != nil {
 		return nil, nil, nil, nil, nil, err
 	}
 	return response.FairplaySignature, response.FairplayCertChain, response.RKSignature, response.SignActRequest, response.ServerKP, nil
 }
 
-// ActivationDeprecated 使用当前会话计算传统激活签名及证书；独立签名优先使用 ActivationSign。
-func (crypt *CryptorGRPC) ActivationDeprecated(ctx context.Context, activationXML []byte) ([]byte, []byte, error) {
+// ActivationSignInSession 使用当前会话计算传统激活签名及证书；独立签名优先使用 ActivationSign。
+func (crypt *CryptorGRPC) ActivationSignInSession(ctx context.Context, activationXML []byte) ([]byte, []byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	var response *ActivationDeprecatedResponse
-	if response, err = crypt.Client.ActivationDeprecated(ctx, &ActivationDeprecatedRequest{ActivationInfoXml: activationXML}); err != nil {
+	var response *ActivationSignResponse
+	if response, err = crypt.Client.ActivationSignInSession(ctx, &ActivationSignInSessionRequest{ActivationInfoXml: activationXML}); err != nil {
 		return nil, nil, err
 	}
 	return response.Sign, response.Cert, nil
 }
 
-// ActivationRecord 向 DRM 会话提供激活记录并导出 psc.sui。
-func (crypt *CryptorGRPC) ActivationRecord(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, error) {
+// DRMActivationExportState 向 DRM 会话提供激活记录并导出 psc.sui。
+func (crypt *CryptorGRPC) DRMActivationExportState(ctx context.Context, unbrick bool, AccountTokenCertificate, DeviceCertificate, RegulatoryInfo, FairPlayKeyData, AccountToken, AccountTokenSignature, UniqueDeviceCertificate []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	var response *ActivationRecordResponse
-	if response, err = crypt.Client.ActivationRecord(ctx, &ActivationRecordRequest{
+	var response *DRMActivationExportStateResponse
+	if response, err = crypt.Client.DRMActivationExportState(ctx, &DRMActivationExportStateRequest{
 		Unbrick:                 unbrick,
 		AccountTokenCertificate: AccountTokenCertificate,
 		DeviceCertificate:       DeviceCertificate,
@@ -304,11 +304,11 @@ func (crypt *CryptorGRPC) AbsintheAddOption(ctx context.Context, BIKKey []byte, 
 }
 
 // AbsintheActivateSession 使用服务器响应推进当前 Absinthe 会话。
-func (crypt *CryptorGRPC) AbsintheActivateSession(ctx context.Context, validationData []byte, serverKey []byte) error {
+func (crypt *CryptorGRPC) AbsintheActivateSession(ctx context.Context, handshakeResponse []byte, serverKey []byte) error {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	if _, err = crypt.Client.AbsintheActivateSession(ctx, &AbsintheActivateSessionRequest{ValidationData: validationData, ServerKey: serverKey}); err != nil {
+	if _, err = crypt.Client.AbsintheActivateSession(ctx, &AbsintheActivateSessionRequest{HandshakeResponse: handshakeResponse, ServerKey: serverKey}); err != nil {
 		return err
 	}
 	return nil
@@ -326,25 +326,25 @@ func (crypt *CryptorGRPC) AbsintheSignData(ctx context.Context, dataToSign []byt
 	return response.Signature, response.OutServKey, nil
 }
 
-// IdentitySession 生成 Validation 握手请求。
-func (crypt *CryptorGRPC) IdentitySession(ctx context.Context, cert []byte) ([]byte, error) {
+// NACInit 建立NAC上下文并生成业务服务器的会话请求。
+func (crypt *CryptorGRPC) NACInit(ctx context.Context, cert []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	var response *IdentitySessionResponse
-	if response, err = crypt.Client.IdentitySession(ctx, &IdentitySessionRequest{Cert: cert}); err != nil {
+	var response *NACInitResponse
+	if response, err = crypt.Client.NACInit(ctx, &NACInitRequest{Cert: cert}); err != nil {
 		return nil, err
 	}
 	return response.Request, nil
 }
 
-// IdentityValidation 处理 Validation 握手响应并生成 validation-data。
-func (crypt *CryptorGRPC) IdentityValidation(ctx context.Context, sessionInfo []byte, signData []byte) ([]byte, error) {
+// NACGenerateValidation 在同一NAC上下文内处理可选握手响应并生成validation-data。
+func (crypt *CryptorGRPC) NACGenerateValidation(ctx context.Context, sessionInfo []byte, signData []byte) ([]byte, error) {
 	ctx, cancel := crypt.metaContext(ctx)
 	defer cancel()
 	var err error
-	var response *IdentityValidationResponse
-	if response, err = crypt.Client.IdentityValidation(ctx, &IdentityValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
+	var response *NACGenerateValidationResponse
+	if response, err = crypt.Client.NACGenerateValidation(ctx, &NACGenerateValidationRequest{Response: sessionInfo, SignData: signData}); err != nil {
 		return nil, err
 	}
 	return response.ValidationData, nil

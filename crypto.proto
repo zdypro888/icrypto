@@ -45,19 +45,19 @@ message FinalizeRequest {
 message FinalizeResponse {}
 
 // DRM 激活握手请求
-message ActivationDRMHandshakeRequest {
+message DRMActivationHandshakeRequest {
   reserved 1;
   reserved "controls";
 }
 
 // DRM 激活握手响应
-message ActivationDRMHandshakeResponse {
+message DRMActivationHandshakeResponse {
   bytes collection_blob           = 1;
   bytes handshake_request_message = 2;
 }
 
 // DRM 激活处理请求
-message ActivationDRMProcessRequest {
+message DRMActivationProcessHandshakeRequest {
   bytes           SUInfo                     = 1;
   bytes           handshake_response_message = 2;
   bytes           serverKP                   = 3;
@@ -66,20 +66,20 @@ message ActivationDRMProcessRequest {
 }
 
 // DRM 激活处理响应
-message ActivationDRMProcessResponse {
+message DRMActivationProcessHandshakeResponse {
   bytes UIK = 1;
   bytes RK  = 2;
 }
 
 // DRM 激活签名请求
-message ActivationDRMSignatureRequest {
+message DRMActivationSignRequest {
   bytes           activation_info_xml = 1;
   reserved 2;
   reserved "controls";
 }
 
 // DRM 激活签名响应
-message ActivationDRMSignatureResponse {
+message DRMActivationSignResponse {
   bytes fairplay_cert_chain = 1;
   bytes fairplay_signature  = 2;
   bytes RKSignature         = 3;
@@ -103,21 +103,21 @@ message ActivationSignRequest {
   bytes activation_info_xml = 4;
 }
 
-// 旧版激活请求
-message ActivationDeprecatedRequest {
+// 当前有状态会话的传统激活签名请求，不表示Legacy iOS9。
+message ActivationSignInSessionRequest {
   bytes           activation_info_xml = 1;
   reserved 2;
   reserved "controls";
 }
 
-// 旧版激活响应
-message ActivationDeprecatedResponse {
+// 传统激活签名的通用输出，供独立签名与会话内签名共用。
+message ActivationSignResponse {
   bytes sign = 1;
   bytes cert = 2;
 }
 
 // 激活记录请求
-message ActivationRecordRequest {
+message DRMActivationExportStateRequest {
   bool            unbrick                   = 1;
   bytes           account_token_certificate = 2;
   bytes           device_certificate        = 3;
@@ -131,7 +131,7 @@ message ActivationRecordRequest {
 }
 
 // 激活记录响应
-message ActivationRecordResponse {
+message DRMActivationExportStateResponse {
   bytes psc_sui     = 1;
 }
 
@@ -194,7 +194,7 @@ message AbsintheHelloResponse {
   bytes hello_message = 1;
 }
 
-// Absinthe 添加选项请求
+// 配置额外Absinthe/PSC会话的BAA选项；BIK字节尚不支持导入，非空必须报错。
 message AbsintheAddOptionRequest {
   bytes           bik_key                = 1;
   bytes           baa_cert               = 2;
@@ -206,9 +206,9 @@ message AbsintheAddOptionRequest {
 // Absinthe 添加选项响应
 message AbsintheAddOptionResponse {}
 
-// Absinthe 激活会话请求
+// 额外Absinthe/PSC握手响应；handshake_response不是NAC输出的validation-data。
 message AbsintheActivateSessionRequest {
-  bytes           validation_data = 1;
+  bytes           handshake_response = 1;
   bytes           server_key      = 2;
   reserved 3;
   reserved "controls";
@@ -230,28 +230,28 @@ message AbsintheSignDataResponse {
   bytes out_serv_key = 2;
 }
 
-// Identity 会话请求
-message IdentitySessionRequest {
+// NAC初始化请求；证书属于本次业务握手，不能跨业务替换。
+message NACInitRequest {
   bytes           cert     = 1;
   reserved 2;
   reserved "controls";
 }
 
-// Identity 会话响应
-message IdentitySessionResponse {
+// NAC初始化输出；后续响应处理与生成VD必须使用同一实例。
+message NACInitResponse {
   bytes request = 1;
 }
 
-// Identity 验证请求
-message IdentityValidationRequest {
+// NAC校验数据请求；response非空时先推进握手，再对原始sign_data生成VD。
+message NACGenerateValidationRequest {
   bytes           response  = 1;
   bytes           sign_data = 2;
   reserved 3;
   reserved "controls";
 }
 
-// Identity 验证响应
-message IdentityValidationResponse {
+// NAC生成的validation-data，不是额外Absinthe/PSC签名。
+message NACGenerateValidationResponse {
   bytes validation_data = 1;
 }
 
@@ -315,7 +315,7 @@ message SAPVerifyResponse {}
 
 // 加密服务
 service CryptService {
-  rpc ActivationSign(ActivationSignRequest) returns (ActivationDeprecatedResponse) {
+  rpc ActivationSign(ActivationSignRequest) returns (ActivationSignResponse) {
     option (google.api.http) = { post: "/activation/sign" body: "*" };
   }
 
@@ -344,41 +344,41 @@ service CryptService {
   }
 
   // DRM 激活握手
-  rpc ActivationDRMHandshake(ActivationDRMHandshakeRequest) returns (ActivationDRMHandshakeResponse) {
+  rpc DRMActivationHandshake(DRMActivationHandshakeRequest) returns (DRMActivationHandshakeResponse) {
     option (google.api.http) = {
-      post: "/activation/drm/handshake"
+      post: "/drm/activation/handshake"
       body: "*"
     };
   }
 
   // DRM 激活处理
-  rpc ActivationDRMProcess(ActivationDRMProcessRequest) returns (ActivationDRMProcessResponse) {
+  rpc DRMActivationProcessHandshake(DRMActivationProcessHandshakeRequest) returns (DRMActivationProcessHandshakeResponse) {
     option (google.api.http) = {
-      post: "/activation/drm/process"
+      post: "/drm/activation/process-handshake"
       body: "*"
     };
   }
 
   // DRM 激活签名
-  rpc ActivationDRMSignature(ActivationDRMSignatureRequest) returns (ActivationDRMSignatureResponse) {
+  rpc DRMActivationSign(DRMActivationSignRequest) returns (DRMActivationSignResponse) {
     option (google.api.http) = {
-      post: "/activation/drm/signature"
+      post: "/drm/activation/sign"
       body: "*"
     };
   }
 
   // 旧版激活
-  rpc ActivationDeprecated(ActivationDeprecatedRequest) returns (ActivationDeprecatedResponse) {
+  rpc ActivationSignInSession(ActivationSignInSessionRequest) returns (ActivationSignResponse) {
     option (google.api.http) = {
-      post: "/activation/deprecated"
+      post: "/activation/sign-in-session"
       body: "*"
     };
   }
 
   // 激活记录
-  rpc ActivationRecord(ActivationRecordRequest) returns (ActivationRecordResponse) {
+  rpc DRMActivationExportState(DRMActivationExportStateRequest) returns (DRMActivationExportStateResponse) {
     option (google.api.http) = {
-      post: "/activation/record"
+      post: "/drm/activation/export-state"
       body: "*"
     };
   }
@@ -439,18 +439,18 @@ service CryptService {
     };
   }
 
-  // Identity 会话
-  rpc IdentitySession(IdentitySessionRequest) returns (IdentitySessionResponse) {
+  // NAC初始化
+  rpc NACInit(NACInitRequest) returns (NACInitResponse) {
     option (google.api.http) = {
-      post: "/identity/session"
+      post: "/nac/init"
       body: "*"
     };
   }
 
-  // Identity 验证
-  rpc IdentityValidation(IdentityValidationRequest) returns (IdentityValidationResponse) {
+  // NAC生成校验数据
+  rpc NACGenerateValidation(NACGenerateValidationRequest) returns (NACGenerateValidationResponse) {
     option (google.api.http) = {
-      post: "/identity/validation"
+      post: "/nac/generate-validation"
       body: "*"
     };
   }

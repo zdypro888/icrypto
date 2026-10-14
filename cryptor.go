@@ -53,22 +53,22 @@ type Cryptor interface {
 	// 清理应使用独立且有超时的 context，避免业务取消导致资源滞留。
 	Finalize(ctx context.Context) error
 
-	// ActivationDRMHandshake 开始 DRM 激活，返回送交 Apple 的采集数据与握手消息。
+	// DRMActivationHandshake 开始 DRM 激活，返回送交 Apple 的采集数据与握手消息。
 	// 需要支持 DRM 的运行环境和相应硬件；不执行 Apple 网络请求。
-	ActivationDRMHandshake(ctx context.Context) (collectionBlob, handshakeRequest []byte, err error)
-	// ActivationDRMProcess 在同一会话处理握手响应，返回 UIK 与 RK。
+	DRMActivationHandshake(ctx context.Context) (collectionBlob, handshakeRequest []byte, err error)
+	// DRMActivationProcessHandshake 在同一会话处理握手响应，返回 UIK 与 RK。
 	// 三项输入须来自本次流程，不能跨设备或跨会话拼接。
-	ActivationDRMProcess(ctx context.Context, suinfo, handshakeResponseMessage, serverKP []byte) (uik, rk []byte, err error)
-	// ActivationDRMSignature 在 DRM 握手后签署最终激活 XML。
+	DRMActivationProcessHandshake(ctx context.Context, suinfo, handshakeResponseMessage, serverKP []byte) (uik, rk []byte, err error)
+	// DRMActivationSign 在 DRM 握手后签署最终激活 XML。
 	// 各返回值对应独立协议字段，调用方不得调换顺序或再次编码被签名的数据。
-	ActivationDRMSignature(ctx context.Context, activationXML []byte) (signature, certificate, rkSignature, signedActivationRequest, serverKP []byte, err error)
-	// ActivationDeprecated 使用已初始化会话计算传统激活签名；不表示 iOS9 实现。
+	DRMActivationSign(ctx context.Context, activationXML []byte) (signature, certificate, rkSignature, signedActivationRequest, serverKP []byte, err error)
+	// ActivationSignInSession 使用已初始化会话计算传统激活签名；不表示 iOS9 实现。
 	// 独立传统激活应使用 ActivationSign，避免借用正在进行其他握手的会话。
-	ActivationDeprecated(ctx context.Context, activationXML []byte) (signature, certificate []byte, err error)
-	// ActivationRecord 将激活返回材料交给 DRM 会话，导出 psc.sui。
+	ActivationSignInSession(ctx context.Context, activationXML []byte) (signature, certificate []byte, err error)
+	// DRMActivationExportState 将激活返回材料交给 DRM 会话，导出 psc.sui。
 	// 调用方先验证激活记录，再提交业务设备状态；各字段保持 Apple 返回的原始字节。
 	// 当前 iunios 实现使用 FairPlayKeyData 并导出会话状态，其余字段不参与该实现的计算。
-	ActivationRecord(ctx context.Context, unbrick bool, accountTokenCertificate, deviceCertificate, regulatoryInfo, fairPlayKeyData, accountToken, accountTokenSignature, uniqueDeviceCertificate []byte) (pscSUI []byte, err error)
+	DRMActivationExportState(ctx context.Context, unbrick bool, accountTokenCertificate, deviceCertificate, regulatoryInfo, fairPlayKeyData, accountToken, accountTokenSignature, uniqueDeviceCertificate []byte) (pscSUI []byte, err error)
 
 	// ADIStartProvisioning 用服务器 SPIM 开始配置，返回 CPIM 和本实例内有效的会话句柄。
 	// CPIM 由业务层发送给 Apple，session 交给同一实例的 ADIEndProvisioning。
@@ -80,24 +80,27 @@ type Cryptor interface {
 	// ADIGenerateLoginCode 使用 ADI 配置计算登录码；它不是短信验证码的读取接口。
 	ADIGenerateLoginCode(ctx context.Context, dsid int64, adi []byte) (loginCode uint32, err error)
 
-	// AbsintheHello 为 Absinthe 握手生成 hello；mode 原样传给原生实现。
-	// 不等同于下方的 IdentitySession/IdentityValidation，两条流程不能互相替代。
+	// AbsintheHello 建立额外Absinthe/PSC上下文并生成hello；mode原样传给原生实现。
+	// 不等同于下方的 NACInit/NACGenerateValidation，两条流程不能互相替代。
 	AbsintheHello(ctx context.Context, mode int) (hello []byte, err error)
-	// AbsintheAddOption 配置 BAA 证书及中间证书。
-	// 当前 iunios 原生调用的 BIK 句柄固定为零，尚未消费 bikKeyRef 的字节。
-	AbsintheAddOption(ctx context.Context, bikKeyRef, baaCert, intermediateRootCert []byte) error
+	// AbsintheAddOption 配置已有PSC上下文的BAA证书及中间证书，不建立NAC上下文。
+	// 当前后端不能导入BIK字节：只接受空bikKey，原生SecKeyRef传零。
+	AbsintheAddOption(ctx context.Context, bikKey, baaCert, intermediateRootCert []byte) error
 	// AbsintheActivateSession 使用服务器响应和密钥推进当前 Absinthe 会话。
-	// validationData 在这里是该握手的输入，不能仅凭名称当作注册用的 validation-data。
+	// handshakeResponse是服务器握手输入，与NAC输出的validation-data不同。
 	AbsintheActivateSession(ctx context.Context, validationData, serverKey []byte) error
 	// AbsintheSignData 在已建立的 Absinthe 会话中签名，返回签名和输出服务器密钥。
 	AbsintheSignData(ctx context.Context, dataToSign []byte) (signature, serverKey []byte, err error)
 
-	// IdentitySession 用服务器证书生成 Validation 握手请求，供业务层发送给 Apple。
-	// 后续 IdentityValidation 必须继续使用本实例的状态。
-	IdentitySession(ctx context.Context, cert []byte) (sessionInfoRequest []byte, err error)
-	// IdentityValidation 处理服务器 sessionInfo 并对 signData 生成 validation-data。
+	// NACInit 使用业务服务器证书建立NAC上下文并生成握手请求；Qualify/Identity/重认证共用此计算。
+	// iunios 的 iPhone7 后端需要 Initialize 携带同一设备的 FairPlayKeyData；
+	// 仅采集硬件资料不含激活状态，不能替代完整业务设备快照。
+	// 后续 NACGenerateValidation 必须继续使用本实例的状态。
+	NACInit(ctx context.Context, cert []byte) (sessionInfoRequest []byte, err error)
+	// NACGenerateValidation 保留原子契约：先处理可选sessionInfo，再用同一NAC上下文生成VD。
+	// 此名是项目组合操作名；内部对应NACKeyEstablishment与VD生成。
 	// sessionInfo 为空时沿用已有握手状态；signData 必须保持协议要求的原始字节。
-	IdentityValidation(ctx context.Context, sessionInfo, signData []byte) (validationData []byte, err error)
+	NACGenerateValidation(ctx context.Context, sessionInfo, signData []byte) (validationData []byte, err error)
 
 	// SAPExchange 按指定版本交换 SAP 握手数据；网络交互由业务层推进。
 	SAPExchange(ctx context.Context, version int, data []byte) (response []byte, err error)

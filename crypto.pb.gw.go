@@ -143,9 +143,9 @@ func local_request_CryptService_Finalize_0(ctx context.Context, marshaler runtim
 	return msg, metadata, err
 }
 
-func request_CryptService_ActivationDRMHandshake_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CryptService_DRMActivationHandshake_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq ActivationDRMHandshakeRequest
+		protoReq DRMActivationHandshakeRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -154,52 +154,25 @@ func request_CryptService_ActivationDRMHandshake_0(ctx context.Context, marshale
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
 	}
-	msg, err := client.ActivationDRMHandshake(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.DRMActivationHandshake(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_CryptService_ActivationDRMHandshake_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CryptService_DRMActivationHandshake_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq ActivationDRMHandshakeRequest
+		protoReq DRMActivationHandshakeRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := server.ActivationDRMHandshake(ctx, &protoReq)
+	msg, err := server.DRMActivationHandshake(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-func request_CryptService_ActivationDRMProcess_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CryptService_DRMActivationProcessHandshake_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq ActivationDRMProcessRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if req.Body != nil {
-		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	msg, err := client.ActivationDRMProcess(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-}
-
-func local_request_CryptService_ActivationDRMProcess_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq ActivationDRMProcessRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	msg, err := server.ActivationDRMProcess(ctx, &protoReq)
-	return msg, metadata, err
-}
-
-func request_CryptService_ActivationDRMSignature_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq ActivationDRMSignatureRequest
+		protoReq DRMActivationProcessHandshakeRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -208,52 +181,25 @@ func request_CryptService_ActivationDRMSignature_0(ctx context.Context, marshale
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
 	}
-	msg, err := client.ActivationDRMSignature(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.DRMActivationProcessHandshake(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_CryptService_ActivationDRMSignature_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CryptService_DRMActivationProcessHandshake_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq ActivationDRMSignatureRequest
+		protoReq DRMActivationProcessHandshakeRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := server.ActivationDRMSignature(ctx, &protoReq)
+	msg, err := server.DRMActivationProcessHandshake(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-func request_CryptService_ActivationDeprecated_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CryptService_DRMActivationSign_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq ActivationDeprecatedRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if req.Body != nil {
-		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	msg, err := client.ActivationDeprecated(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-}
-
-func local_request_CryptService_ActivationDeprecated_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq ActivationDeprecatedRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	msg, err := server.ActivationDeprecated(ctx, &protoReq)
-	return msg, metadata, err
-}
-
-func request_CryptService_ActivationRecord_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq ActivationRecordRequest
+		protoReq DRMActivationSignRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -262,19 +208,73 @@ func request_CryptService_ActivationRecord_0(ctx context.Context, marshaler runt
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
 	}
-	msg, err := client.ActivationRecord(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.DRMActivationSign(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_CryptService_ActivationRecord_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CryptService_DRMActivationSign_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq ActivationRecordRequest
+		protoReq DRMActivationSignRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := server.ActivationRecord(ctx, &protoReq)
+	msg, err := server.DRMActivationSign(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_CryptService_ActivationSignInSession_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq ActivationSignInSessionRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	msg, err := client.ActivationSignInSession(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_CryptService_ActivationSignInSession_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq ActivationSignInSessionRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.ActivationSignInSession(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_CryptService_DRMActivationExportState_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq DRMActivationExportStateRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	msg, err := client.DRMActivationExportState(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_CryptService_DRMActivationExportState_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq DRMActivationExportStateRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.DRMActivationExportState(ctx, &protoReq)
 	return msg, metadata, err
 }
 
@@ -467,9 +467,9 @@ func local_request_CryptService_AbsintheSignData_0(ctx context.Context, marshale
 	return msg, metadata, err
 }
 
-func request_CryptService_IdentitySession_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CryptService_NACInit_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq IdentitySessionRequest
+		protoReq NACInitRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -478,25 +478,25 @@ func request_CryptService_IdentitySession_0(ctx context.Context, marshaler runti
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
 	}
-	msg, err := client.IdentitySession(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.NACInit(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_CryptService_IdentitySession_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CryptService_NACInit_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq IdentitySessionRequest
+		protoReq NACInitRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := server.IdentitySession(ctx, &protoReq)
+	msg, err := server.NACInit(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-func request_CryptService_IdentityValidation_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CryptService_NACGenerateValidation_0(ctx context.Context, marshaler runtime.Marshaler, client CryptServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq IdentityValidationRequest
+		protoReq NACGenerateValidationRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -505,19 +505,19 @@ func request_CryptService_IdentityValidation_0(ctx context.Context, marshaler ru
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
 	}
-	msg, err := client.IdentityValidation(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.NACGenerateValidation(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_CryptService_IdentityValidation_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CryptService_NACGenerateValidation_0(ctx context.Context, marshaler runtime.Marshaler, server CryptServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq IdentityValidationRequest
+		protoReq NACGenerateValidationRequest
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := server.IdentityValidation(ctx, &protoReq)
+	msg, err := server.NACGenerateValidation(ctx, &protoReq)
 	return msg, metadata, err
 }
 
@@ -742,105 +742,105 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		}
 		forward_CryptService_Finalize_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDRMHandshake_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationHandshake_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMHandshake", runtime.WithHTTPPathPattern("/activation/drm/handshake"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationHandshake", runtime.WithHTTPPathPattern("/drm/activation/handshake"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CryptService_ActivationDRMHandshake_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CryptService_DRMActivationHandshake_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDRMHandshake_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationHandshake_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDRMProcess_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationProcessHandshake_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMProcess", runtime.WithHTTPPathPattern("/activation/drm/process"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationProcessHandshake", runtime.WithHTTPPathPattern("/drm/activation/process-handshake"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CryptService_ActivationDRMProcess_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CryptService_DRMActivationProcessHandshake_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDRMProcess_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationProcessHandshake_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDRMSignature_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationSign_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMSignature", runtime.WithHTTPPathPattern("/activation/drm/signature"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationSign", runtime.WithHTTPPathPattern("/drm/activation/sign"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CryptService_ActivationDRMSignature_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CryptService_DRMActivationSign_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDRMSignature_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationSign_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDeprecated_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_ActivationSignInSession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationDeprecated", runtime.WithHTTPPathPattern("/activation/deprecated"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationSignInSession", runtime.WithHTTPPathPattern("/activation/sign-in-session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CryptService_ActivationDeprecated_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CryptService_ActivationSignInSession_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDeprecated_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_ActivationSignInSession_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationRecord_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationExportState_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/ActivationRecord", runtime.WithHTTPPathPattern("/activation/record"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationExportState", runtime.WithHTTPPathPattern("/drm/activation/export-state"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CryptService_ActivationRecord_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CryptService_DRMActivationExportState_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationRecord_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationExportState_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_CryptService_ADIStartProvisioning_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -982,45 +982,45 @@ func RegisterCryptServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 		}
 		forward_CryptService_AbsintheSignData_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_IdentitySession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_NACInit_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/IdentitySession", runtime.WithHTTPPathPattern("/identity/session"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/NACInit", runtime.WithHTTPPathPattern("/nac/init"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CryptService_IdentitySession_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CryptService_NACInit_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_IdentitySession_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_NACInit_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_IdentityValidation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_NACGenerateValidation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/IdentityValidation", runtime.WithHTTPPathPattern("/identity/validation"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/icrypto.CryptService/NACGenerateValidation", runtime.WithHTTPPathPattern("/nac/generate-validation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CryptService_IdentityValidation_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CryptService_NACGenerateValidation_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_IdentityValidation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_NACGenerateValidation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_CryptService_SAPExchange_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -1230,90 +1230,90 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		}
 		forward_CryptService_Finalize_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDRMHandshake_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationHandshake_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMHandshake", runtime.WithHTTPPathPattern("/activation/drm/handshake"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationHandshake", runtime.WithHTTPPathPattern("/drm/activation/handshake"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CryptService_ActivationDRMHandshake_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CryptService_DRMActivationHandshake_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDRMHandshake_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationHandshake_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDRMProcess_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationProcessHandshake_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMProcess", runtime.WithHTTPPathPattern("/activation/drm/process"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationProcessHandshake", runtime.WithHTTPPathPattern("/drm/activation/process-handshake"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CryptService_ActivationDRMProcess_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CryptService_DRMActivationProcessHandshake_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDRMProcess_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationProcessHandshake_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDRMSignature_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationSign_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDRMSignature", runtime.WithHTTPPathPattern("/activation/drm/signature"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationSign", runtime.WithHTTPPathPattern("/drm/activation/sign"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CryptService_ActivationDRMSignature_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CryptService_DRMActivationSign_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDRMSignature_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationSign_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationDeprecated_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_ActivationSignInSession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationDeprecated", runtime.WithHTTPPathPattern("/activation/deprecated"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationSignInSession", runtime.WithHTTPPathPattern("/activation/sign-in-session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CryptService_ActivationDeprecated_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CryptService_ActivationSignInSession_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationDeprecated_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_ActivationSignInSession_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_ActivationRecord_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_DRMActivationExportState_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/ActivationRecord", runtime.WithHTTPPathPattern("/activation/record"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/DRMActivationExportState", runtime.WithHTTPPathPattern("/drm/activation/export-state"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CryptService_ActivationRecord_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CryptService_DRMActivationExportState_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_ActivationRecord_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_DRMActivationExportState_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_CryptService_ADIStartProvisioning_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -1434,39 +1434,39 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 		}
 		forward_CryptService_AbsintheSignData_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_IdentitySession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_NACInit_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/IdentitySession", runtime.WithHTTPPathPattern("/identity/session"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/NACInit", runtime.WithHTTPPathPattern("/nac/init"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CryptService_IdentitySession_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CryptService_NACInit_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_IdentitySession_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_NACInit_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CryptService_IdentityValidation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CryptService_NACGenerateValidation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/IdentityValidation", runtime.WithHTTPPathPattern("/identity/validation"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/icrypto.CryptService/NACGenerateValidation", runtime.WithHTTPPathPattern("/nac/generate-validation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CryptService_IdentityValidation_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CryptService_NACGenerateValidation_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CryptService_IdentityValidation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CryptService_NACGenerateValidation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodPost, pattern_CryptService_SAPExchange_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -1557,53 +1557,53 @@ func RegisterCryptServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 }
 
 var (
-	pattern_CryptService_ActivationSign_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"activation", "sign"}, ""))
-	pattern_CryptService_Initialize_0              = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"initialize"}, ""))
-	pattern_CryptService_SyncDevice_0              = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"device", "sync"}, ""))
-	pattern_CryptService_Finalize_0                = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"finalize"}, ""))
-	pattern_CryptService_ActivationDRMHandshake_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"activation", "drm", "handshake"}, ""))
-	pattern_CryptService_ActivationDRMProcess_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"activation", "drm", "process"}, ""))
-	pattern_CryptService_ActivationDRMSignature_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"activation", "drm", "signature"}, ""))
-	pattern_CryptService_ActivationDeprecated_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"activation", "deprecated"}, ""))
-	pattern_CryptService_ActivationRecord_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"activation", "record"}, ""))
-	pattern_CryptService_ADIStartProvisioning_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "start-provisioning"}, ""))
-	pattern_CryptService_ADIEndProvisioning_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "end-provisioning"}, ""))
-	pattern_CryptService_ADIGenerateLoginCode_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "generate-login-code"}, ""))
-	pattern_CryptService_AbsintheHello_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "hello"}, ""))
-	pattern_CryptService_AbsintheAddOption_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "add-option"}, ""))
-	pattern_CryptService_AbsintheActivateSession_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "activate-session"}, ""))
-	pattern_CryptService_AbsintheSignData_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "sign-data"}, ""))
-	pattern_CryptService_IdentitySession_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"identity", "session"}, ""))
-	pattern_CryptService_IdentityValidation_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"identity", "validation"}, ""))
-	pattern_CryptService_SAPExchange_0             = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "exchange"}, ""))
-	pattern_CryptService_SAPSignPrime_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "sign-prime"}, ""))
-	pattern_CryptService_SAPVerifyPrime_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "verify-prime"}, ""))
-	pattern_CryptService_SAPSign_0                 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "sign"}, ""))
-	pattern_CryptService_SAPVerify_0               = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "verify"}, ""))
+	pattern_CryptService_ActivationSign_0                = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"activation", "sign"}, ""))
+	pattern_CryptService_Initialize_0                    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"initialize"}, ""))
+	pattern_CryptService_SyncDevice_0                    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"device", "sync"}, ""))
+	pattern_CryptService_Finalize_0                      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"finalize"}, ""))
+	pattern_CryptService_DRMActivationHandshake_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"drm", "activation", "handshake"}, ""))
+	pattern_CryptService_DRMActivationProcessHandshake_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"drm", "activation", "process-handshake"}, ""))
+	pattern_CryptService_DRMActivationSign_0             = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"drm", "activation", "sign"}, ""))
+	pattern_CryptService_ActivationSignInSession_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"activation", "sign-in-session"}, ""))
+	pattern_CryptService_DRMActivationExportState_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"drm", "activation", "export-state"}, ""))
+	pattern_CryptService_ADIStartProvisioning_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "start-provisioning"}, ""))
+	pattern_CryptService_ADIEndProvisioning_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "end-provisioning"}, ""))
+	pattern_CryptService_ADIGenerateLoginCode_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"adi", "generate-login-code"}, ""))
+	pattern_CryptService_AbsintheHello_0                 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "hello"}, ""))
+	pattern_CryptService_AbsintheAddOption_0             = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "add-option"}, ""))
+	pattern_CryptService_AbsintheActivateSession_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "activate-session"}, ""))
+	pattern_CryptService_AbsintheSignData_0              = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"absinthe", "sign-data"}, ""))
+	pattern_CryptService_NACInit_0                       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"nac", "init"}, ""))
+	pattern_CryptService_NACGenerateValidation_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"nac", "generate-validation"}, ""))
+	pattern_CryptService_SAPExchange_0                   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "exchange"}, ""))
+	pattern_CryptService_SAPSignPrime_0                  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "sign-prime"}, ""))
+	pattern_CryptService_SAPVerifyPrime_0                = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "verify-prime"}, ""))
+	pattern_CryptService_SAPSign_0                       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "sign"}, ""))
+	pattern_CryptService_SAPVerify_0                     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sap", "verify"}, ""))
 )
 
 var (
-	forward_CryptService_ActivationSign_0          = runtime.ForwardResponseMessage
-	forward_CryptService_Initialize_0              = runtime.ForwardResponseMessage
-	forward_CryptService_SyncDevice_0              = runtime.ForwardResponseMessage
-	forward_CryptService_Finalize_0                = runtime.ForwardResponseMessage
-	forward_CryptService_ActivationDRMHandshake_0  = runtime.ForwardResponseMessage
-	forward_CryptService_ActivationDRMProcess_0    = runtime.ForwardResponseMessage
-	forward_CryptService_ActivationDRMSignature_0  = runtime.ForwardResponseMessage
-	forward_CryptService_ActivationDeprecated_0    = runtime.ForwardResponseMessage
-	forward_CryptService_ActivationRecord_0        = runtime.ForwardResponseMessage
-	forward_CryptService_ADIStartProvisioning_0    = runtime.ForwardResponseMessage
-	forward_CryptService_ADIEndProvisioning_0      = runtime.ForwardResponseMessage
-	forward_CryptService_ADIGenerateLoginCode_0    = runtime.ForwardResponseMessage
-	forward_CryptService_AbsintheHello_0           = runtime.ForwardResponseMessage
-	forward_CryptService_AbsintheAddOption_0       = runtime.ForwardResponseMessage
-	forward_CryptService_AbsintheActivateSession_0 = runtime.ForwardResponseMessage
-	forward_CryptService_AbsintheSignData_0        = runtime.ForwardResponseMessage
-	forward_CryptService_IdentitySession_0         = runtime.ForwardResponseMessage
-	forward_CryptService_IdentityValidation_0      = runtime.ForwardResponseMessage
-	forward_CryptService_SAPExchange_0             = runtime.ForwardResponseMessage
-	forward_CryptService_SAPSignPrime_0            = runtime.ForwardResponseMessage
-	forward_CryptService_SAPVerifyPrime_0          = runtime.ForwardResponseMessage
-	forward_CryptService_SAPSign_0                 = runtime.ForwardResponseMessage
-	forward_CryptService_SAPVerify_0               = runtime.ForwardResponseMessage
+	forward_CryptService_ActivationSign_0                = runtime.ForwardResponseMessage
+	forward_CryptService_Initialize_0                    = runtime.ForwardResponseMessage
+	forward_CryptService_SyncDevice_0                    = runtime.ForwardResponseMessage
+	forward_CryptService_Finalize_0                      = runtime.ForwardResponseMessage
+	forward_CryptService_DRMActivationHandshake_0        = runtime.ForwardResponseMessage
+	forward_CryptService_DRMActivationProcessHandshake_0 = runtime.ForwardResponseMessage
+	forward_CryptService_DRMActivationSign_0             = runtime.ForwardResponseMessage
+	forward_CryptService_ActivationSignInSession_0       = runtime.ForwardResponseMessage
+	forward_CryptService_DRMActivationExportState_0      = runtime.ForwardResponseMessage
+	forward_CryptService_ADIStartProvisioning_0          = runtime.ForwardResponseMessage
+	forward_CryptService_ADIEndProvisioning_0            = runtime.ForwardResponseMessage
+	forward_CryptService_ADIGenerateLoginCode_0          = runtime.ForwardResponseMessage
+	forward_CryptService_AbsintheHello_0                 = runtime.ForwardResponseMessage
+	forward_CryptService_AbsintheAddOption_0             = runtime.ForwardResponseMessage
+	forward_CryptService_AbsintheActivateSession_0       = runtime.ForwardResponseMessage
+	forward_CryptService_AbsintheSignData_0              = runtime.ForwardResponseMessage
+	forward_CryptService_NACInit_0                       = runtime.ForwardResponseMessage
+	forward_CryptService_NACGenerateValidation_0         = runtime.ForwardResponseMessage
+	forward_CryptService_SAPExchange_0                   = runtime.ForwardResponseMessage
+	forward_CryptService_SAPSignPrime_0                  = runtime.ForwardResponseMessage
+	forward_CryptService_SAPVerifyPrime_0                = runtime.ForwardResponseMessage
+	forward_CryptService_SAPSign_0                       = runtime.ForwardResponseMessage
+	forward_CryptService_SAPVerify_0                     = runtime.ForwardResponseMessage
 )
