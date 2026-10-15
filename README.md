@@ -393,6 +393,14 @@ err := cryptor.Initialize(ctx, options, device)
 
 `ActivationSign` 使用临时环境；`Initialize` 后的其他计算使用有状态会话。一次握手必须保持实例一致，业务层需要串行化完整握手，不能仅依赖每次 RPC 自身的锁。初始化可能回写设备状态，因此共享设备应先取快照。
 
-业务层统一用 `WithActivationSigner` 选择传统激活签名，已移除 `activation_deprecated` 字符串上下文开关。底层会话式 `ActivationSignInSession` 尚存在，其名称不表示 Legacy iOS9；新业务应使用独立的 `ActivationSign`。
+业务层统一用 `WithActivationSigner` 选择传统激活签名，已移除 `activation_deprecated` 字符串上下文开关。底层会话式 `ActivationSignInSession` 的名称不表示 Legacy iOS9；独立传统签名使用 `ActivationSign`。已激活 iOS 的 `idevice.Device.Reactivation(ctx)` 使用专用 NAC 会话并以 `ActivationSignInSession` 签署 CertificateInfoXML，完成 Recertification 业务，不是新的单次签名 profile，也不新增 RPC。
 
 当前实现限制：iunios 的 `AbsintheAddOption` 不支持BIK字节导入，非空输入明确报错；空输入的原生BIK句柄为零。AddOption使用可更新的PSC会话槽，成功后接收新句柄；`DRMActivationExportState` 使用 FairPlayKeyData 并导出 DRM 状态，其余记录字段仍由业务层校验。这不代表这些参数已实现完整原生语义。
+
+### DRM UIK 复用选项
+
+`InitializeOptions{IOSDRM: true, DRMUIKMode: DRMUIKMode_DRM_UIK_COMMITTED}` 明确要求复用已提交 UIK。当前 iPhone7 后端的 AUTO 也使用 committed UIK，仍执行完整握手。显式模式通过 Initialize 请求字段 6、响应字段 2 确认；旧服务不确认时客户端拒绝合并返回的设备状态。PROPOSED/bump 暂未适配，明确报错；此选项不是跳过握手或 Recertification。
+
+`InitializeOptions.SEPDeviceUDID` 通过初始化请求字段 7 指定真实 SEP 手机，仅允许 IOSDRM。业务 `DRMActivationOptions.ComputeUDID` 会将指定设备与已保存的计算绑定、Device UDID 合并校验；冲突或设备离线直接失败。成功初始化返回的 Device 携带 `DRMHardwareUDID` 与 `DRMUIKFingerprint`，由后端实际硬件与 UIK 公钥产生，供以后复用核对。不要把 ADI 的 AES backend 绑定当作 UIK 绑定，两者使用不同计算材料。
+
+`DRMUIKReuseError` 的结构化 gRPC reason 仅表示初始化时确认旧 UIK 不可复用，供业务层切换为完整新 DRM；清理失败不保留可回退标记。新 DRM 不等于低层 PROPOSED/bump，业务 `UseCommittedUIK=false` 直接使用新激活快照和 AUTO 后端模式。

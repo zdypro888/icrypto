@@ -984,6 +984,13 @@
         "macosRuntime": {
           "$ref": "#/definitions/icryptoMacOSRuntime"
         },
+        "drmUikMode": {
+          "$ref": "#/definitions/icryptoDRMUIKMode"
+        },
+        "sepDeviceUdid": {
+          "type": "string",
+          "title": "指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。"
+        },
         "device": {
           "type": "string",
           "format": "byte"
@@ -1151,6 +1158,17 @@
       },
       "title": "DRM 激活签名响应"
     },
+    "icryptoDRMUIKMode": {
+      "type": "string",
+      "enum": [
+        "DRM_UIK_AUTO",
+        "DRM_UIK_COMMITTED",
+        "DRM_UIK_PROPOSED"
+      ],
+      "default": "DRM_UIK_AUTO",
+      "description": "- DRM_UIK_PROPOSED: 保留明确语义；当前后端未适配 bump/proposed，必须拒绝。",
+      "title": "DRM UIK 选择；AUTO 在已适配的 iPhone7 后端使用 committed UIK。"
+    },
     "icryptoFinalizeRequest": {
       "type": "object",
       "title": "结束请求"
@@ -1171,6 +1189,13 @@
         },
         "macosRuntime": {
           "$ref": "#/definitions/icryptoMacOSRuntime"
+        },
+        "drmUikMode": {
+          "$ref": "#/definitions/icryptoDRMUIKMode"
+        },
+        "sepDeviceUdid": {
+          "type": "string",
+          "title": "指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。"
         }
       },
       "title": "初始化参数分离 DRM 能力和 macOS 镜像偏好，不能再按位组合。"
@@ -1181,6 +1206,10 @@
         "device": {
           "type": "string",
           "format": "byte"
+        },
+        "drmUikMode": {
+          "$ref": "#/definitions/icryptoDRMUIKMode",
+          "title": "确认显式模式已被后端接受，防止旧服务忽略新字段。"
         }
       },
       "title": "初始化响应"

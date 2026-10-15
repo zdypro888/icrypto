@@ -11,6 +11,14 @@ enum MacOSRuntime {
   MACOS_COMPATIBLE = 1;
 }
 
+// DRM UIK 选择；AUTO 在已适配的 iPhone7 后端使用 committed UIK。
+enum DRMUIKMode {
+  DRM_UIK_AUTO = 0;
+  DRM_UIK_COMMITTED = 1;
+  // 保留明确语义；当前后端未适配 bump/proposed，必须拒绝。
+  DRM_UIK_PROPOSED = 2;
+}
+
 // 初始化参数分离 DRM 能力和 macOS 镜像偏好，不能再按位组合。
 message InitializeRequest {
   reserved 1, 3;
@@ -18,11 +26,16 @@ message InitializeRequest {
   bytes device = 2;
   bool ios_drm = 4;
   MacOSRuntime macos_runtime = 5;
+  DRMUIKMode drm_uik_mode = 6;
+  // 指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。
+  string sep_device_udid = 7;
 }
 
 // 初始化响应
 message InitializeResponse {
   bytes device = 1;
+  // 确认显式模式已被后端接受，防止旧服务忽略新字段。
+  DRMUIKMode drm_uik_mode = 2;
 }
 
 // 同步已初始化 cryptor 使用的设备状态。
@@ -99,6 +112,9 @@ message ActivationSignRequest {
   reserved 2;
   reserved "type";
   MacOSRuntime macos_runtime = 5;
+  DRMUIKMode drm_uik_mode = 6;
+  // 指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。
+  string sep_device_udid = 7;
   bytes device = 3;
   bytes activation_info_xml = 4;
 }

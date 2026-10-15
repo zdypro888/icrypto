@@ -69,6 +69,57 @@ func (MacOSRuntime) EnumDescriptor() ([]byte, []int) {
 	return file_crypto_proto_rawDescGZIP(), []int{0}
 }
 
+// DRM UIK 选择；AUTO 在已适配的 iPhone7 后端使用 committed UIK。
+type DRMUIKMode int32
+
+const (
+	DRMUIKMode_DRM_UIK_AUTO      DRMUIKMode = 0
+	DRMUIKMode_DRM_UIK_COMMITTED DRMUIKMode = 1
+	// 保留明确语义；当前后端未适配 bump/proposed，必须拒绝。
+	DRMUIKMode_DRM_UIK_PROPOSED DRMUIKMode = 2
+)
+
+// Enum value maps for DRMUIKMode.
+var (
+	DRMUIKMode_name = map[int32]string{
+		0: "DRM_UIK_AUTO",
+		1: "DRM_UIK_COMMITTED",
+		2: "DRM_UIK_PROPOSED",
+	}
+	DRMUIKMode_value = map[string]int32{
+		"DRM_UIK_AUTO":      0,
+		"DRM_UIK_COMMITTED": 1,
+		"DRM_UIK_PROPOSED":  2,
+	}
+)
+
+func (x DRMUIKMode) Enum() *DRMUIKMode {
+	p := new(DRMUIKMode)
+	*p = x
+	return p
+}
+
+func (x DRMUIKMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DRMUIKMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_crypto_proto_enumTypes[1].Descriptor()
+}
+
+func (DRMUIKMode) Type() protoreflect.EnumType {
+	return &file_crypto_proto_enumTypes[1]
+}
+
+func (x DRMUIKMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DRMUIKMode.Descriptor instead.
+func (DRMUIKMode) EnumDescriptor() ([]byte, []int) {
+	return file_crypto_proto_rawDescGZIP(), []int{1}
+}
+
 // 只选择本次传统激活签名的实现，不改变 ADI/Validation 会话。
 type ActivationSigningProfile int32
 
@@ -100,11 +151,11 @@ func (x ActivationSigningProfile) String() string {
 }
 
 func (ActivationSigningProfile) Descriptor() protoreflect.EnumDescriptor {
-	return file_crypto_proto_enumTypes[1].Descriptor()
+	return file_crypto_proto_enumTypes[2].Descriptor()
 }
 
 func (ActivationSigningProfile) Type() protoreflect.EnumType {
-	return &file_crypto_proto_enumTypes[1]
+	return &file_crypto_proto_enumTypes[2]
 }
 
 func (x ActivationSigningProfile) Number() protoreflect.EnumNumber {
@@ -113,15 +164,18 @@ func (x ActivationSigningProfile) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ActivationSigningProfile.Descriptor instead.
 func (ActivationSigningProfile) EnumDescriptor() ([]byte, []int) {
-	return file_crypto_proto_rawDescGZIP(), []int{1}
+	return file_crypto_proto_rawDescGZIP(), []int{2}
 }
 
 // 初始化参数分离 DRM 能力和 macOS 镜像偏好，不能再按位组合。
 type InitializeRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Device        []byte                 `protobuf:"bytes,2,opt,name=device,proto3" json:"device,omitempty"`
-	IosDrm        bool                   `protobuf:"varint,4,opt,name=ios_drm,json=iosDrm,proto3" json:"ios_drm,omitempty"`
-	MacosRuntime  MacOSRuntime           `protobuf:"varint,5,opt,name=macos_runtime,json=macosRuntime,proto3,enum=icrypto.MacOSRuntime" json:"macos_runtime,omitempty"`
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Device       []byte                 `protobuf:"bytes,2,opt,name=device,proto3" json:"device,omitempty"`
+	IosDrm       bool                   `protobuf:"varint,4,opt,name=ios_drm,json=iosDrm,proto3" json:"ios_drm,omitempty"`
+	MacosRuntime MacOSRuntime           `protobuf:"varint,5,opt,name=macos_runtime,json=macosRuntime,proto3,enum=icrypto.MacOSRuntime" json:"macos_runtime,omitempty"`
+	DrmUikMode   DRMUIKMode             `protobuf:"varint,6,opt,name=drm_uik_mode,json=drmUikMode,proto3,enum=icrypto.DRMUIKMode" json:"drm_uik_mode,omitempty"`
+	// 指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。
+	SepDeviceUdid string `protobuf:"bytes,7,opt,name=sep_device_udid,json=sepDeviceUdid,proto3" json:"sep_device_udid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -177,10 +231,26 @@ func (x *InitializeRequest) GetMacosRuntime() MacOSRuntime {
 	return MacOSRuntime_MACOS_AUTO
 }
 
+func (x *InitializeRequest) GetDrmUikMode() DRMUIKMode {
+	if x != nil {
+		return x.DrmUikMode
+	}
+	return DRMUIKMode_DRM_UIK_AUTO
+}
+
+func (x *InitializeRequest) GetSepDeviceUdid() string {
+	if x != nil {
+		return x.SepDeviceUdid
+	}
+	return ""
+}
+
 // 初始化响应
 type InitializeResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Device        []byte                 `protobuf:"bytes,1,opt,name=device,proto3" json:"device,omitempty"`
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Device []byte                 `protobuf:"bytes,1,opt,name=device,proto3" json:"device,omitempty"`
+	// 确认显式模式已被后端接受，防止旧服务忽略新字段。
+	DrmUikMode    DRMUIKMode `protobuf:"varint,2,opt,name=drm_uik_mode,json=drmUikMode,proto3,enum=icrypto.DRMUIKMode" json:"drm_uik_mode,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -220,6 +290,13 @@ func (x *InitializeResponse) GetDevice() []byte {
 		return x.Device
 	}
 	return nil
+}
+
+func (x *InitializeResponse) GetDrmUikMode() DRMUIKMode {
+	if x != nil {
+		return x.DrmUikMode
+	}
+	return DRMUIKMode_DRM_UIK_AUTO
 }
 
 // 同步已初始化 cryptor 使用的设备状态。
@@ -708,11 +785,14 @@ func (x *DRMActivationSignResponse) GetServerKP() []byte {
 
 // 一次性签名：不要求 Initialize，不写回设备，不占用调用方现有会话。
 type ActivationSignRequest struct {
-	state             protoimpl.MessageState   `protogen:"open.v1"`
-	Profile           ActivationSigningProfile `protobuf:"varint,1,opt,name=profile,proto3,enum=icrypto.ActivationSigningProfile" json:"profile,omitempty"`
-	MacosRuntime      MacOSRuntime             `protobuf:"varint,5,opt,name=macos_runtime,json=macosRuntime,proto3,enum=icrypto.MacOSRuntime" json:"macos_runtime,omitempty"`
-	Device            []byte                   `protobuf:"bytes,3,opt,name=device,proto3" json:"device,omitempty"`
-	ActivationInfoXml []byte                   `protobuf:"bytes,4,opt,name=activation_info_xml,json=activationInfoXml,proto3" json:"activation_info_xml,omitempty"`
+	state        protoimpl.MessageState   `protogen:"open.v1"`
+	Profile      ActivationSigningProfile `protobuf:"varint,1,opt,name=profile,proto3,enum=icrypto.ActivationSigningProfile" json:"profile,omitempty"`
+	MacosRuntime MacOSRuntime             `protobuf:"varint,5,opt,name=macos_runtime,json=macosRuntime,proto3,enum=icrypto.MacOSRuntime" json:"macos_runtime,omitempty"`
+	DrmUikMode   DRMUIKMode               `protobuf:"varint,6,opt,name=drm_uik_mode,json=drmUikMode,proto3,enum=icrypto.DRMUIKMode" json:"drm_uik_mode,omitempty"`
+	// 指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。
+	SepDeviceUdid     string `protobuf:"bytes,7,opt,name=sep_device_udid,json=sepDeviceUdid,proto3" json:"sep_device_udid,omitempty"`
+	Device            []byte `protobuf:"bytes,3,opt,name=device,proto3" json:"device,omitempty"`
+	ActivationInfoXml []byte `protobuf:"bytes,4,opt,name=activation_info_xml,json=activationInfoXml,proto3" json:"activation_info_xml,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -759,6 +839,20 @@ func (x *ActivationSignRequest) GetMacosRuntime() MacOSRuntime {
 		return x.MacosRuntime
 	}
 	return MacOSRuntime_MACOS_AUTO
+}
+
+func (x *ActivationSignRequest) GetDrmUikMode() DRMUIKMode {
+	if x != nil {
+		return x.DrmUikMode
+	}
+	return DRMUIKMode_DRM_UIK_AUTO
+}
+
+func (x *ActivationSignRequest) GetSepDeviceUdid() string {
+	if x != nil {
+		return x.SepDeviceUdid
+	}
+	return ""
 }
 
 func (x *ActivationSignRequest) GetDevice() []byte {
@@ -2395,13 +2489,18 @@ var File_crypto_proto protoreflect.FileDescriptor
 
 const file_crypto_proto_rawDesc = "" +
 	"\n" +
-	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"\x9c\x01\n" +
+	"\fcrypto.proto\x12\aicrypto\x1a\x1cgoogle/api/annotations.proto\"\xfb\x01\n" +
 	"\x11InitializeRequest\x12\x16\n" +
 	"\x06device\x18\x02 \x01(\fR\x06device\x12\x17\n" +
 	"\aios_drm\x18\x04 \x01(\bR\x06iosDrm\x12:\n" +
-	"\rmacos_runtime\x18\x05 \x01(\x0e2\x15.icrypto.MacOSRuntimeR\fmacosRuntimeJ\x04\b\x01\x10\x02J\x04\b\x03\x10\x04R\x04typeR\bcontrols\",\n" +
+	"\rmacos_runtime\x18\x05 \x01(\x0e2\x15.icrypto.MacOSRuntimeR\fmacosRuntime\x125\n" +
+	"\fdrm_uik_mode\x18\x06 \x01(\x0e2\x13.icrypto.DRMUIKModeR\n" +
+	"drmUikMode\x12&\n" +
+	"\x0fsep_device_udid\x18\a \x01(\tR\rsepDeviceUdidJ\x04\b\x01\x10\x02J\x04\b\x03\x10\x04R\x04typeR\bcontrols\"c\n" +
 	"\x12InitializeResponse\x12\x16\n" +
-	"\x06device\x18\x01 \x01(\fR\x06device\"+\n" +
+	"\x06device\x18\x01 \x01(\fR\x06device\x125\n" +
+	"\fdrm_uik_mode\x18\x02 \x01(\x0e2\x13.icrypto.DRMUIKModeR\n" +
+	"drmUikMode\"+\n" +
 	"\x11SyncDeviceRequest\x12\x16\n" +
 	"\x06device\x18\x01 \x01(\fR\x06device\"\x14\n" +
 	"\x12SyncDeviceResponse\"!\n" +
@@ -2425,10 +2524,13 @@ const file_crypto_proto_rawDesc = "" +
 	"\x12fairplay_signature\x18\x02 \x01(\fR\x11fairplaySignature\x12 \n" +
 	"\vRKSignature\x18\x03 \x01(\fR\vRKSignature\x12(\n" +
 	"\x10sign_act_request\x18\x04 \x01(\fR\x0esignActRequest\x12\x1a\n" +
-	"\bserverKP\x18\x05 \x01(\fR\bserverKP\"\xe4\x01\n" +
+	"\bserverKP\x18\x05 \x01(\fR\bserverKP\"\xc3\x02\n" +
 	"\x15ActivationSignRequest\x12;\n" +
 	"\aprofile\x18\x01 \x01(\x0e2!.icrypto.ActivationSigningProfileR\aprofile\x12:\n" +
-	"\rmacos_runtime\x18\x05 \x01(\x0e2\x15.icrypto.MacOSRuntimeR\fmacosRuntime\x12\x16\n" +
+	"\rmacos_runtime\x18\x05 \x01(\x0e2\x15.icrypto.MacOSRuntimeR\fmacosRuntime\x125\n" +
+	"\fdrm_uik_mode\x18\x06 \x01(\x0e2\x13.icrypto.DRMUIKModeR\n" +
+	"drmUikMode\x12&\n" +
+	"\x0fsep_device_udid\x18\a \x01(\tR\rsepDeviceUdid\x12\x16\n" +
 	"\x06device\x18\x03 \x01(\fR\x06device\x12.\n" +
 	"\x13activation_info_xml\x18\x04 \x01(\fR\x11activationInfoXmlJ\x04\b\x02\x10\x03R\x04type\"`\n" +
 	"\x1eActivationSignInSessionRequest\x12.\n" +
@@ -2524,7 +2626,12 @@ const file_crypto_proto_rawDesc = "" +
 	"\fMacOSRuntime\x12\x0e\n" +
 	"\n" +
 	"MACOS_AUTO\x10\x00\x12\x14\n" +
-	"\x10MACOS_COMPATIBLE\x10\x01*^\n" +
+	"\x10MACOS_COMPATIBLE\x10\x01*K\n" +
+	"\n" +
+	"DRMUIKMode\x12\x10\n" +
+	"\fDRM_UIK_AUTO\x10\x00\x12\x15\n" +
+	"\x11DRM_UIK_COMMITTED\x10\x01\x12\x14\n" +
+	"\x10DRM_UIK_PROPOSED\x10\x02*^\n" +
 	"\x18ActivationSigningProfile\x12\x1e\n" +
 	"\x1aACTIVATION_SIGNING_CURRENT\x10\x00\x12\"\n" +
 	"\x1eACTIVATION_SIGNING_LEGACY_IOS9\x10\x012\xd9\x15\n" +
@@ -2567,112 +2674,116 @@ func file_crypto_proto_rawDescGZIP() []byte {
 	return file_crypto_proto_rawDescData
 }
 
-var file_crypto_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_crypto_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_crypto_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
 var file_crypto_proto_goTypes = []any{
 	(MacOSRuntime)(0),                             // 0: icrypto.MacOSRuntime
-	(ActivationSigningProfile)(0),                 // 1: icrypto.ActivationSigningProfile
-	(*InitializeRequest)(nil),                     // 2: icrypto.InitializeRequest
-	(*InitializeResponse)(nil),                    // 3: icrypto.InitializeResponse
-	(*SyncDeviceRequest)(nil),                     // 4: icrypto.SyncDeviceRequest
-	(*SyncDeviceResponse)(nil),                    // 5: icrypto.SyncDeviceResponse
-	(*FinalizeRequest)(nil),                       // 6: icrypto.FinalizeRequest
-	(*FinalizeResponse)(nil),                      // 7: icrypto.FinalizeResponse
-	(*DRMActivationHandshakeRequest)(nil),         // 8: icrypto.DRMActivationHandshakeRequest
-	(*DRMActivationHandshakeResponse)(nil),        // 9: icrypto.DRMActivationHandshakeResponse
-	(*DRMActivationProcessHandshakeRequest)(nil),  // 10: icrypto.DRMActivationProcessHandshakeRequest
-	(*DRMActivationProcessHandshakeResponse)(nil), // 11: icrypto.DRMActivationProcessHandshakeResponse
-	(*DRMActivationSignRequest)(nil),              // 12: icrypto.DRMActivationSignRequest
-	(*DRMActivationSignResponse)(nil),             // 13: icrypto.DRMActivationSignResponse
-	(*ActivationSignRequest)(nil),                 // 14: icrypto.ActivationSignRequest
-	(*ActivationSignInSessionRequest)(nil),        // 15: icrypto.ActivationSignInSessionRequest
-	(*ActivationSignResponse)(nil),                // 16: icrypto.ActivationSignResponse
-	(*DRMActivationExportStateRequest)(nil),       // 17: icrypto.DRMActivationExportStateRequest
-	(*DRMActivationExportStateResponse)(nil),      // 18: icrypto.DRMActivationExportStateResponse
-	(*ADIStartProvisioningRequest)(nil),           // 19: icrypto.ADIStartProvisioningRequest
-	(*ADIStartProvisioningResponse)(nil),          // 20: icrypto.ADIStartProvisioningResponse
-	(*ADIEndProvisioningRequest)(nil),             // 21: icrypto.ADIEndProvisioningRequest
-	(*ADIEndProvisioningResponse)(nil),            // 22: icrypto.ADIEndProvisioningResponse
-	(*ADIGenerateLoginCodeRequest)(nil),           // 23: icrypto.ADIGenerateLoginCodeRequest
-	(*ADIGenerateLoginCodeResponse)(nil),          // 24: icrypto.ADIGenerateLoginCodeResponse
-	(*AbsintheHelloRequest)(nil),                  // 25: icrypto.AbsintheHelloRequest
-	(*AbsintheHelloResponse)(nil),                 // 26: icrypto.AbsintheHelloResponse
-	(*AbsintheAddOptionRequest)(nil),              // 27: icrypto.AbsintheAddOptionRequest
-	(*AbsintheAddOptionResponse)(nil),             // 28: icrypto.AbsintheAddOptionResponse
-	(*AbsintheActivateSessionRequest)(nil),        // 29: icrypto.AbsintheActivateSessionRequest
-	(*AbsintheActivateSessionResponse)(nil),       // 30: icrypto.AbsintheActivateSessionResponse
-	(*AbsintheSignDataRequest)(nil),               // 31: icrypto.AbsintheSignDataRequest
-	(*AbsintheSignDataResponse)(nil),              // 32: icrypto.AbsintheSignDataResponse
-	(*NACInitRequest)(nil),                        // 33: icrypto.NACInitRequest
-	(*NACInitResponse)(nil),                       // 34: icrypto.NACInitResponse
-	(*NACGenerateValidationRequest)(nil),          // 35: icrypto.NACGenerateValidationRequest
-	(*NACGenerateValidationResponse)(nil),         // 36: icrypto.NACGenerateValidationResponse
-	(*SAPExchangeRequest)(nil),                    // 37: icrypto.SAPExchangeRequest
-	(*SAPExchangeResponse)(nil),                   // 38: icrypto.SAPExchangeResponse
-	(*SAPSignPrimeRequest)(nil),                   // 39: icrypto.SAPSignPrimeRequest
-	(*SAPSignPrimeResponse)(nil),                  // 40: icrypto.SAPSignPrimeResponse
-	(*SAPVerifyPrimeRequest)(nil),                 // 41: icrypto.SAPVerifyPrimeRequest
-	(*SAPVerifyPrimeResponse)(nil),                // 42: icrypto.SAPVerifyPrimeResponse
-	(*SAPSignRequest)(nil),                        // 43: icrypto.SAPSignRequest
-	(*SAPSignResponse)(nil),                       // 44: icrypto.SAPSignResponse
-	(*SAPVerifyRequest)(nil),                      // 45: icrypto.SAPVerifyRequest
-	(*SAPVerifyResponse)(nil),                     // 46: icrypto.SAPVerifyResponse
+	(DRMUIKMode)(0),                               // 1: icrypto.DRMUIKMode
+	(ActivationSigningProfile)(0),                 // 2: icrypto.ActivationSigningProfile
+	(*InitializeRequest)(nil),                     // 3: icrypto.InitializeRequest
+	(*InitializeResponse)(nil),                    // 4: icrypto.InitializeResponse
+	(*SyncDeviceRequest)(nil),                     // 5: icrypto.SyncDeviceRequest
+	(*SyncDeviceResponse)(nil),                    // 6: icrypto.SyncDeviceResponse
+	(*FinalizeRequest)(nil),                       // 7: icrypto.FinalizeRequest
+	(*FinalizeResponse)(nil),                      // 8: icrypto.FinalizeResponse
+	(*DRMActivationHandshakeRequest)(nil),         // 9: icrypto.DRMActivationHandshakeRequest
+	(*DRMActivationHandshakeResponse)(nil),        // 10: icrypto.DRMActivationHandshakeResponse
+	(*DRMActivationProcessHandshakeRequest)(nil),  // 11: icrypto.DRMActivationProcessHandshakeRequest
+	(*DRMActivationProcessHandshakeResponse)(nil), // 12: icrypto.DRMActivationProcessHandshakeResponse
+	(*DRMActivationSignRequest)(nil),              // 13: icrypto.DRMActivationSignRequest
+	(*DRMActivationSignResponse)(nil),             // 14: icrypto.DRMActivationSignResponse
+	(*ActivationSignRequest)(nil),                 // 15: icrypto.ActivationSignRequest
+	(*ActivationSignInSessionRequest)(nil),        // 16: icrypto.ActivationSignInSessionRequest
+	(*ActivationSignResponse)(nil),                // 17: icrypto.ActivationSignResponse
+	(*DRMActivationExportStateRequest)(nil),       // 18: icrypto.DRMActivationExportStateRequest
+	(*DRMActivationExportStateResponse)(nil),      // 19: icrypto.DRMActivationExportStateResponse
+	(*ADIStartProvisioningRequest)(nil),           // 20: icrypto.ADIStartProvisioningRequest
+	(*ADIStartProvisioningResponse)(nil),          // 21: icrypto.ADIStartProvisioningResponse
+	(*ADIEndProvisioningRequest)(nil),             // 22: icrypto.ADIEndProvisioningRequest
+	(*ADIEndProvisioningResponse)(nil),            // 23: icrypto.ADIEndProvisioningResponse
+	(*ADIGenerateLoginCodeRequest)(nil),           // 24: icrypto.ADIGenerateLoginCodeRequest
+	(*ADIGenerateLoginCodeResponse)(nil),          // 25: icrypto.ADIGenerateLoginCodeResponse
+	(*AbsintheHelloRequest)(nil),                  // 26: icrypto.AbsintheHelloRequest
+	(*AbsintheHelloResponse)(nil),                 // 27: icrypto.AbsintheHelloResponse
+	(*AbsintheAddOptionRequest)(nil),              // 28: icrypto.AbsintheAddOptionRequest
+	(*AbsintheAddOptionResponse)(nil),             // 29: icrypto.AbsintheAddOptionResponse
+	(*AbsintheActivateSessionRequest)(nil),        // 30: icrypto.AbsintheActivateSessionRequest
+	(*AbsintheActivateSessionResponse)(nil),       // 31: icrypto.AbsintheActivateSessionResponse
+	(*AbsintheSignDataRequest)(nil),               // 32: icrypto.AbsintheSignDataRequest
+	(*AbsintheSignDataResponse)(nil),              // 33: icrypto.AbsintheSignDataResponse
+	(*NACInitRequest)(nil),                        // 34: icrypto.NACInitRequest
+	(*NACInitResponse)(nil),                       // 35: icrypto.NACInitResponse
+	(*NACGenerateValidationRequest)(nil),          // 36: icrypto.NACGenerateValidationRequest
+	(*NACGenerateValidationResponse)(nil),         // 37: icrypto.NACGenerateValidationResponse
+	(*SAPExchangeRequest)(nil),                    // 38: icrypto.SAPExchangeRequest
+	(*SAPExchangeResponse)(nil),                   // 39: icrypto.SAPExchangeResponse
+	(*SAPSignPrimeRequest)(nil),                   // 40: icrypto.SAPSignPrimeRequest
+	(*SAPSignPrimeResponse)(nil),                  // 41: icrypto.SAPSignPrimeResponse
+	(*SAPVerifyPrimeRequest)(nil),                 // 42: icrypto.SAPVerifyPrimeRequest
+	(*SAPVerifyPrimeResponse)(nil),                // 43: icrypto.SAPVerifyPrimeResponse
+	(*SAPSignRequest)(nil),                        // 44: icrypto.SAPSignRequest
+	(*SAPSignResponse)(nil),                       // 45: icrypto.SAPSignResponse
+	(*SAPVerifyRequest)(nil),                      // 46: icrypto.SAPVerifyRequest
+	(*SAPVerifyResponse)(nil),                     // 47: icrypto.SAPVerifyResponse
 }
 var file_crypto_proto_depIdxs = []int32{
 	0,  // 0: icrypto.InitializeRequest.macos_runtime:type_name -> icrypto.MacOSRuntime
-	1,  // 1: icrypto.ActivationSignRequest.profile:type_name -> icrypto.ActivationSigningProfile
-	0,  // 2: icrypto.ActivationSignRequest.macos_runtime:type_name -> icrypto.MacOSRuntime
-	14, // 3: icrypto.CryptService.ActivationSign:input_type -> icrypto.ActivationSignRequest
-	2,  // 4: icrypto.CryptService.Initialize:input_type -> icrypto.InitializeRequest
-	4,  // 5: icrypto.CryptService.SyncDevice:input_type -> icrypto.SyncDeviceRequest
-	6,  // 6: icrypto.CryptService.Finalize:input_type -> icrypto.FinalizeRequest
-	8,  // 7: icrypto.CryptService.DRMActivationHandshake:input_type -> icrypto.DRMActivationHandshakeRequest
-	10, // 8: icrypto.CryptService.DRMActivationProcessHandshake:input_type -> icrypto.DRMActivationProcessHandshakeRequest
-	12, // 9: icrypto.CryptService.DRMActivationSign:input_type -> icrypto.DRMActivationSignRequest
-	15, // 10: icrypto.CryptService.ActivationSignInSession:input_type -> icrypto.ActivationSignInSessionRequest
-	17, // 11: icrypto.CryptService.DRMActivationExportState:input_type -> icrypto.DRMActivationExportStateRequest
-	19, // 12: icrypto.CryptService.ADIStartProvisioning:input_type -> icrypto.ADIStartProvisioningRequest
-	21, // 13: icrypto.CryptService.ADIEndProvisioning:input_type -> icrypto.ADIEndProvisioningRequest
-	23, // 14: icrypto.CryptService.ADIGenerateLoginCode:input_type -> icrypto.ADIGenerateLoginCodeRequest
-	25, // 15: icrypto.CryptService.AbsintheHello:input_type -> icrypto.AbsintheHelloRequest
-	27, // 16: icrypto.CryptService.AbsintheAddOption:input_type -> icrypto.AbsintheAddOptionRequest
-	29, // 17: icrypto.CryptService.AbsintheActivateSession:input_type -> icrypto.AbsintheActivateSessionRequest
-	31, // 18: icrypto.CryptService.AbsintheSignData:input_type -> icrypto.AbsintheSignDataRequest
-	33, // 19: icrypto.CryptService.NACInit:input_type -> icrypto.NACInitRequest
-	35, // 20: icrypto.CryptService.NACGenerateValidation:input_type -> icrypto.NACGenerateValidationRequest
-	37, // 21: icrypto.CryptService.SAPExchange:input_type -> icrypto.SAPExchangeRequest
-	39, // 22: icrypto.CryptService.SAPSignPrime:input_type -> icrypto.SAPSignPrimeRequest
-	41, // 23: icrypto.CryptService.SAPVerifyPrime:input_type -> icrypto.SAPVerifyPrimeRequest
-	43, // 24: icrypto.CryptService.SAPSign:input_type -> icrypto.SAPSignRequest
-	45, // 25: icrypto.CryptService.SAPVerify:input_type -> icrypto.SAPVerifyRequest
-	16, // 26: icrypto.CryptService.ActivationSign:output_type -> icrypto.ActivationSignResponse
-	3,  // 27: icrypto.CryptService.Initialize:output_type -> icrypto.InitializeResponse
-	5,  // 28: icrypto.CryptService.SyncDevice:output_type -> icrypto.SyncDeviceResponse
-	7,  // 29: icrypto.CryptService.Finalize:output_type -> icrypto.FinalizeResponse
-	9,  // 30: icrypto.CryptService.DRMActivationHandshake:output_type -> icrypto.DRMActivationHandshakeResponse
-	11, // 31: icrypto.CryptService.DRMActivationProcessHandshake:output_type -> icrypto.DRMActivationProcessHandshakeResponse
-	13, // 32: icrypto.CryptService.DRMActivationSign:output_type -> icrypto.DRMActivationSignResponse
-	16, // 33: icrypto.CryptService.ActivationSignInSession:output_type -> icrypto.ActivationSignResponse
-	18, // 34: icrypto.CryptService.DRMActivationExportState:output_type -> icrypto.DRMActivationExportStateResponse
-	20, // 35: icrypto.CryptService.ADIStartProvisioning:output_type -> icrypto.ADIStartProvisioningResponse
-	22, // 36: icrypto.CryptService.ADIEndProvisioning:output_type -> icrypto.ADIEndProvisioningResponse
-	24, // 37: icrypto.CryptService.ADIGenerateLoginCode:output_type -> icrypto.ADIGenerateLoginCodeResponse
-	26, // 38: icrypto.CryptService.AbsintheHello:output_type -> icrypto.AbsintheHelloResponse
-	28, // 39: icrypto.CryptService.AbsintheAddOption:output_type -> icrypto.AbsintheAddOptionResponse
-	30, // 40: icrypto.CryptService.AbsintheActivateSession:output_type -> icrypto.AbsintheActivateSessionResponse
-	32, // 41: icrypto.CryptService.AbsintheSignData:output_type -> icrypto.AbsintheSignDataResponse
-	34, // 42: icrypto.CryptService.NACInit:output_type -> icrypto.NACInitResponse
-	36, // 43: icrypto.CryptService.NACGenerateValidation:output_type -> icrypto.NACGenerateValidationResponse
-	38, // 44: icrypto.CryptService.SAPExchange:output_type -> icrypto.SAPExchangeResponse
-	40, // 45: icrypto.CryptService.SAPSignPrime:output_type -> icrypto.SAPSignPrimeResponse
-	42, // 46: icrypto.CryptService.SAPVerifyPrime:output_type -> icrypto.SAPVerifyPrimeResponse
-	44, // 47: icrypto.CryptService.SAPSign:output_type -> icrypto.SAPSignResponse
-	46, // 48: icrypto.CryptService.SAPVerify:output_type -> icrypto.SAPVerifyResponse
-	26, // [26:49] is the sub-list for method output_type
-	3,  // [3:26] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	1,  // 1: icrypto.InitializeRequest.drm_uik_mode:type_name -> icrypto.DRMUIKMode
+	1,  // 2: icrypto.InitializeResponse.drm_uik_mode:type_name -> icrypto.DRMUIKMode
+	2,  // 3: icrypto.ActivationSignRequest.profile:type_name -> icrypto.ActivationSigningProfile
+	0,  // 4: icrypto.ActivationSignRequest.macos_runtime:type_name -> icrypto.MacOSRuntime
+	1,  // 5: icrypto.ActivationSignRequest.drm_uik_mode:type_name -> icrypto.DRMUIKMode
+	15, // 6: icrypto.CryptService.ActivationSign:input_type -> icrypto.ActivationSignRequest
+	3,  // 7: icrypto.CryptService.Initialize:input_type -> icrypto.InitializeRequest
+	5,  // 8: icrypto.CryptService.SyncDevice:input_type -> icrypto.SyncDeviceRequest
+	7,  // 9: icrypto.CryptService.Finalize:input_type -> icrypto.FinalizeRequest
+	9,  // 10: icrypto.CryptService.DRMActivationHandshake:input_type -> icrypto.DRMActivationHandshakeRequest
+	11, // 11: icrypto.CryptService.DRMActivationProcessHandshake:input_type -> icrypto.DRMActivationProcessHandshakeRequest
+	13, // 12: icrypto.CryptService.DRMActivationSign:input_type -> icrypto.DRMActivationSignRequest
+	16, // 13: icrypto.CryptService.ActivationSignInSession:input_type -> icrypto.ActivationSignInSessionRequest
+	18, // 14: icrypto.CryptService.DRMActivationExportState:input_type -> icrypto.DRMActivationExportStateRequest
+	20, // 15: icrypto.CryptService.ADIStartProvisioning:input_type -> icrypto.ADIStartProvisioningRequest
+	22, // 16: icrypto.CryptService.ADIEndProvisioning:input_type -> icrypto.ADIEndProvisioningRequest
+	24, // 17: icrypto.CryptService.ADIGenerateLoginCode:input_type -> icrypto.ADIGenerateLoginCodeRequest
+	26, // 18: icrypto.CryptService.AbsintheHello:input_type -> icrypto.AbsintheHelloRequest
+	28, // 19: icrypto.CryptService.AbsintheAddOption:input_type -> icrypto.AbsintheAddOptionRequest
+	30, // 20: icrypto.CryptService.AbsintheActivateSession:input_type -> icrypto.AbsintheActivateSessionRequest
+	32, // 21: icrypto.CryptService.AbsintheSignData:input_type -> icrypto.AbsintheSignDataRequest
+	34, // 22: icrypto.CryptService.NACInit:input_type -> icrypto.NACInitRequest
+	36, // 23: icrypto.CryptService.NACGenerateValidation:input_type -> icrypto.NACGenerateValidationRequest
+	38, // 24: icrypto.CryptService.SAPExchange:input_type -> icrypto.SAPExchangeRequest
+	40, // 25: icrypto.CryptService.SAPSignPrime:input_type -> icrypto.SAPSignPrimeRequest
+	42, // 26: icrypto.CryptService.SAPVerifyPrime:input_type -> icrypto.SAPVerifyPrimeRequest
+	44, // 27: icrypto.CryptService.SAPSign:input_type -> icrypto.SAPSignRequest
+	46, // 28: icrypto.CryptService.SAPVerify:input_type -> icrypto.SAPVerifyRequest
+	17, // 29: icrypto.CryptService.ActivationSign:output_type -> icrypto.ActivationSignResponse
+	4,  // 30: icrypto.CryptService.Initialize:output_type -> icrypto.InitializeResponse
+	6,  // 31: icrypto.CryptService.SyncDevice:output_type -> icrypto.SyncDeviceResponse
+	8,  // 32: icrypto.CryptService.Finalize:output_type -> icrypto.FinalizeResponse
+	10, // 33: icrypto.CryptService.DRMActivationHandshake:output_type -> icrypto.DRMActivationHandshakeResponse
+	12, // 34: icrypto.CryptService.DRMActivationProcessHandshake:output_type -> icrypto.DRMActivationProcessHandshakeResponse
+	14, // 35: icrypto.CryptService.DRMActivationSign:output_type -> icrypto.DRMActivationSignResponse
+	17, // 36: icrypto.CryptService.ActivationSignInSession:output_type -> icrypto.ActivationSignResponse
+	19, // 37: icrypto.CryptService.DRMActivationExportState:output_type -> icrypto.DRMActivationExportStateResponse
+	21, // 38: icrypto.CryptService.ADIStartProvisioning:output_type -> icrypto.ADIStartProvisioningResponse
+	23, // 39: icrypto.CryptService.ADIEndProvisioning:output_type -> icrypto.ADIEndProvisioningResponse
+	25, // 40: icrypto.CryptService.ADIGenerateLoginCode:output_type -> icrypto.ADIGenerateLoginCodeResponse
+	27, // 41: icrypto.CryptService.AbsintheHello:output_type -> icrypto.AbsintheHelloResponse
+	29, // 42: icrypto.CryptService.AbsintheAddOption:output_type -> icrypto.AbsintheAddOptionResponse
+	31, // 43: icrypto.CryptService.AbsintheActivateSession:output_type -> icrypto.AbsintheActivateSessionResponse
+	33, // 44: icrypto.CryptService.AbsintheSignData:output_type -> icrypto.AbsintheSignDataResponse
+	35, // 45: icrypto.CryptService.NACInit:output_type -> icrypto.NACInitResponse
+	37, // 46: icrypto.CryptService.NACGenerateValidation:output_type -> icrypto.NACGenerateValidationResponse
+	39, // 47: icrypto.CryptService.SAPExchange:output_type -> icrypto.SAPExchangeResponse
+	41, // 48: icrypto.CryptService.SAPSignPrime:output_type -> icrypto.SAPSignPrimeResponse
+	43, // 49: icrypto.CryptService.SAPVerifyPrime:output_type -> icrypto.SAPVerifyPrimeResponse
+	45, // 50: icrypto.CryptService.SAPSign:output_type -> icrypto.SAPSignResponse
+	47, // 51: icrypto.CryptService.SAPVerify:output_type -> icrypto.SAPVerifyResponse
+	29, // [29:52] is the sub-list for method output_type
+	6,  // [6:29] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_crypto_proto_init() }
@@ -2685,7 +2796,7 @@ func file_crypto_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_crypto_proto_rawDesc), len(file_crypto_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      3,
 			NumMessages:   45,
 			NumExtensions: 0,
 			NumServices:   1,
