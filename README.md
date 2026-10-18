@@ -1,406 +1,50 @@
 # icrypto
 
-Apple 设备激活与身份验证的 RPC API 契约与 Go 客户端库，提供 gRPC/REST API 定义和与传输无关的密码服务接口。
+计算接口、protobuf/gRPC契约及Go客户端。这里不实现模拟器、硬件后端或独立服务器。
 
-## 项目定位
+| 文件 | 职责 |
+| --- | --- |
+| [crypto.proto](crypto.proto) | RPC、消息字段与HTTP映射的事实源 |
+| [cryptor.go](cryptor.go) | 与传输无关的计算接口 |
+| [cryptor.impl.go](cryptor.impl.go) | 会话标识、超时与gRPC客户端 |
+| [options.go](options.go) | 初始化选项及参数约束 |
+| [docs/](docs/README.md) | 完整使用说明和生成的OpenAPI描述 |
 
-本仓库负责协议与客户端抽象，不包含可独立启动的密码服务或硬件模拟实现：
+## 使用与生命周期
 
-- [`crypto.proto`](./crypto.proto)：`CryptService` 的 protobuf/gRPC 定义及 REST 路由注解。
-- [`cryptor.go`](./cryptor.go)：与传输无关的 `Cryptor` 接口，以及可选的 `DeviceSynchronizer` 能力。
-- [`cryptor.impl.go`](./cryptor.impl.go)：带会话标识、超时和消息大小限制的 gRPC 客户端。
-- [`docs/crypto.swagger.json`](./docs/crypto.swagger.json)：由协议定义生成的 OpenAPI 文档。
-- `crypto*.pb.go`：protobuf、gRPC 和 grpc-gateway 生成代码。
+Go版本以[go.mod](go.mod)为准。通过`InitGRPC`、`InitGRPCWithAPIKey`或`InitGRPCWithCreds`建立客户端工厂，每次`NewCryptor()`创建独立`client_id`。
 
-服务端需要实现生成的 `CryptServiceServer` 接口。REST 路由由 grpc-gateway 生成，但 HTTP server 的监听、认证和部署由宿主程序负责。
+1. `Initialize`建立计算会话，并合并服务端返回的设备状态。
+2. 后续取得新设备状态时，通过可选`DeviceSynchronizer.SyncDevice`同步，不重建环境。
+3. 在同一实例中完成需要保持上下文的握手；业务方应串行化完整事务。
+4. 无论成功或失败，都调用`Finalize`清理。
 
-## API 概览
+单次`ActivationSign`不要求`Initialize`，使用临时环境；`ActivationSignInSession`使用已有环境。设备身份、初始化环境及签名profile是三种不同参数，不能互相替代。
 
-| 分类 | RPC / Go 方法 | 用途 |
-| --- | --- | --- |
-| 会话生命周期 | `Initialize`、`SyncDevice`、`Finalize` | 初始化密码会话、合并后续设备状态、释放会话 |
-| DRM 激活 | `DRMActivationHandshake`、`DRMActivationProcessHandshake`、`DRMActivationSign`、`DRMActivationExportState` | DRM 握手、签名与激活记录处理 |
-| ADI | `ADIStartProvisioning`、`ADIEndProvisioning`、`ADIGenerateLoginCode` | Anisette/ADI provisioning 与登录码生成 |
-| Absinthe / PSC | `AbsintheHello`、`AbsintheAddOption`、`AbsintheActivateSession`、`AbsintheSignData` | Absinthe 会话建立、配置与签名 |
-| NAC | `NACInit`、`NACGenerateValidation` | Qualify、Identity Validation与重认证共用的会话/校验计算 |
-| SAP | `SAPExchange`、`SAPSignPrime`、`SAPVerifyPrime`、`SAPSign`、`SAPVerify` | SAP 协议交换、签名与验证 |
+详细示例、认证、服务端注册、错误及选项语义见[使用参考](docs/usage.md)。客户端不负责向业务服务器发送激活或注册请求。
 
-每次通过 `NewCryptorGRPC`（或初始化后的 `NewCryptor` 工厂）创建客户端时，都会生成独立的 `client_id`；服务端应使用它关联同一调用方的会话状态。
+## 接口分组
 
-## 安装
+| 分组 | 接口 |
+| --- | --- |
+| 生命周期 | `Initialize`、`SyncDevice`、`Finalize` |
+| 传统签名 | `ActivationSign`、`ActivationSignInSession` |
+| DRM | `DRMActivation*` |
+| ADI | `ADIStartProvisioning`、`ADIEndProvisioning`、`ADIGenerateLoginCode` |
+| Absinthe / PSC | `AbsintheHello`、`AbsintheAddOption`、`AbsintheActivateSession`、`AbsintheSignData` |
+| NAC | `NACInit`、`NACGenerateValidation` |
+| SAP | `SAPExchange`、`SAPSignPrime`、`SAPVerifyPrime`、`SAPSign`、`SAPVerify` |
 
-本模块要求 Go 1.26.4 或更高版本：
+NAC计算路由为`/nac/init`及`/nac/generate-validation`；旧Identity计算方法已经移除。客户端、代理及服务端必须使用相容契约，不能仅凭protobuf字段编号保留就假定旧方法名仍可用。
 
-```bash
-go get github.com/zdypro888/icrypto
-```
+## 修改与验证
 
-下方快速开始额外使用了项目的 `idevice.Device` 实现：
+修改协议后运行`./scripts/generate-proto.sh`，同步更新protobuf、gRPC、gateway及Swagger；不要手改生成文件。工具版本保留在生成文件头。
 
-```bash
-go get github.com/zdypro888/idevice
-```
-
-## gRPC 客户端快速开始
-
-下面示例使用 `idevice.Device` 作为 `IPlistObject`。自定义设备类型需要实现 `Marshal() ([]byte, error)` 和 `Unmarshal([]byte) error`，同时其字段必须能被 `go-plist` 编码成 binary plist。
-
-```go
-package main
-
-import (
-	"context"
-	"errors"
-	"fmt"
-	"log"
-
-	"github.com/zdypro888/icrypto"
-	"github.com/zdypro888/idevice"
-)
-
-func main() {
-	if err := run(); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func run() (err error) {
-	// 2116 是关联项目 iunios/cmd/icryptor 当前使用的端口；部署其他
-	// 服务端时替换成实际地址。InitGRPC 仅适合回环地址或可信子进程。
-	if err := icrypto.InitGRPC("127.0.0.1:2116"); err != nil {
-		return fmt.Errorf("initialize gRPC client: %w", err)
-	}
-
-	cryptor := icrypto.NewCryptor()
-	device := &idevice.Device{
-		// 填入当前工作流需要的设备字段。
-	}
-	ctx := context.Background()
-
-	if err := cryptor.Initialize(ctx, icrypto.InitializeOptions{}, device); err != nil {
-		return fmt.Errorf("initialize cryptor: %w", err)
-	}
-	defer func() {
-		if finalizeErr := cryptor.Finalize(context.Background()); finalizeErr != nil {
-			err = errors.Join(err, fmt.Errorf("finalize cryptor: %w", finalizeErr))
-		}
-	}()
-
-	// Initialize 可能补全硬件标识；随后才可请求依赖这些标识的票据。
-	if device.APTicket == nil {
-		if err := device.RequestAPTicket(ctx); err != nil {
-			return fmt.Errorf("request AP ticket: %w", err)
-		}
-	}
-	if device.APTicket == nil {
-		return errors.New("AP ticket request returned no ticket")
-	}
-	synchronizer, ok := cryptor.(icrypto.DeviceSynchronizer)
-	if !ok {
-		return errors.New("cryptor does not support device state synchronization")
-	}
-	// 将新增状态合并到远端，但不重建 VM、SEP 或 guest session。
-	if err := synchronizer.SyncDevice(ctx, device); err != nil {
-		return fmt.Errorf("sync device state: %w", err)
-	}
-
-	collectionBlob, handshakeRequest, err := cryptor.DRMActivationHandshake(ctx)
-	if err != nil {
-		return fmt.Errorf("create DRM handshake: %w", err)
-	}
-	fmt.Printf("collection blob: %d bytes, handshake request: %d bytes\n", len(collectionBlob), len(handshakeRequest))
-	return nil
-}
-```
-
-### 推荐生命周期
-
-1. 调用一次 `InitGRPC`、`InitGRPCWithAPIKey` 或 `InitGRPCWithCreds`，初始化进程级客户端工厂。
-2. 通过 `NewCryptor()` 创建一个有独立 `client_id` 的业务会话。
-3. 调用 `Initialize`，并使用响应更新传入的设备对象。
-4. 如果随后取得了依赖硬件标识的 AP ticket 或其他设备状态，调用 `DeviceSynchronizer.SyncDevice`。
-5. 执行 DRM、ADI、Absinthe、Identity 或 SAP 操作。
-6. 无论成功或失败，都调用 `Finalize` 释放远端会话。
-
-`SyncDevice` 被设计成独立的可选接口，以保持现有 `Cryptor` 实现的源码兼容性。需要该能力的调用方必须做类型断言；旧版服务端没有该 RPC 时会返回 `Unimplemented`，不能静默跳过依赖同步状态的流程。
-
-设备数据在 `Initialize` 和 `SyncDevice` 中均以完整 binary plist 传输。`SyncDevice` 的具体字段合并策略由服务端实现决定。
-
-## 服务端集成
-
-本仓库只提供生成的服务接口。实现方应按值嵌入 `UnimplementedCryptServiceServer`，实现所需 RPC，再注册到宿主 gRPC server：
-
-```go
-type cryptService struct {
-	icrypto.UnimplementedCryptServiceServer
-}
-
-service := &cryptService{}
-grpcServer := grpc.NewServer(
-	grpc.MaxRecvMsgSize(64*1024*1024),
-	grpc.MaxSendMsgSize(64*1024*1024),
-)
-icrypto.RegisterCryptServiceServer(grpcServer, service)
-```
-
-上面只展示注册关系，未实现任何密码操作。若要暴露 REST API，宿主还必须配置 grpc-gateway、监听地址、认证和 TLS。
-
-## 传输与认证
-
-| 初始化函数 | 传输 | 认证元数据 | 适用场景 |
-| --- | --- | --- | --- |
-| `InitGRPC(address)` | 明文 gRPC | `client_id` | 回环地址或可信子进程 |
-| `InitGRPCWithAPIKey(address, apiKey)` | 明文 gRPC | `client_id`、`x-api-key` | 由其他安全信道保护的代理连接 |
-| `InitGRPCWithCreds(address, apiKey, creds)` | 自定义 gRPC credentials；`creds == nil` 时退回明文 | `client_id`，可选 `x-api-key` | TLS 或其他受认证传输 |
-
-客户端为每次 RPC 派生最长 60 秒的上下文，并把单条消息的发送和接收上限设置为 64 MiB。不要把明文初始化函数用于不可信网络；API key 只提供应用层身份信息，不能替代传输加密。
-
-## 协议与生成代码
-
-修改协议时，以 [`crypto.proto`](./crypto.proto) 为事实源，并在同一个变更中重新生成以下文件：
-
-- `crypto.pb.go`
-- `crypto_grpc.pb.go`
-- `crypto.pb.gw.go`
-- `docs/crypto.swagger.json`
-
-不要直接编辑生成文件。客户端与服务端升级时需要保持协议版本一致，尤其是会话生命周期 RPC（当前包括 `SyncDevice`）。
-
-使用 `./scripts/generate-proto.sh` 一次生成全部产物。Google HTTP 注解源码固定在 `tools/google/api`；不需要临时下载 include。当前工具为 libprotoc 36.2、protoc-gen-go 1.36.12、protoc-gen-go-grpc 1.6.2、grpc-gateway/OpenAPI 2.27.8，生成文件头保留具体版本。
-
-2026-10-14 计算契约统一：IdentitySession/IdentityValidation 已迁移为 `NACInit`/`NACGenerateValidation`；这是一套通用 NAC 计算，不专属于 Identity 业务。HTTP 路由为 `/nac/init`、`/nac/generate-validation`。传统激活有状态签名为 `ActivationSignInSession`（`/activation/sign-in-session`），与独立的 `ActivationSign` 共用签名响应类型。DRM 入口统一为 `DRMActivation*`，HTTP 路由为 `/drm/activation/*`。旧 RPC 方法和 HTTP 路由已移除，客户端、代理、icryptor、core 需要同步部署；保留使用中 protobuf 字段的编号不代表旧方法名仍可用。
-
-Absinthe 的 Hello/AddOption/ActivateSession/SignData 保留 Apple 原生动作词，对应额外 PSC/Pisco 会话。ActivateSession 的 `handshake_response` 取代误导性的 `validation_data`，字段编号仍为1；NAC 输出仍叫 validation-data。两组上下文独立，业务 Qualify/Identity Validation 也分别建立服务器会话。
-
-## 开发与验证
-
-```bash
+```sh
 go test -count=1 ./...
 go test -race -count=1 ./...
 go vet ./...
-go mod verify
-go mod tidy -diff
 ```
 
-## 技术背景
-
-以下内容描述本项目所面向的真机安全模型，不代表 `icrypto` 客户端本身执行硬件运算；实际能力与安全边界取决于服务端后端。对应逆向证据保存在同一工作区 `iunios/sep/docs/` 下的 `attestation.md`、`kernel_aes_15_8_8.md` 和 `fairplay_iokit.md`。
-
-### 系统架构概述
-
-iOS 设备的激活与身份验证涉及多层硬件和软件协作：
-
-- **应用处理器（AP）**：运行 iOS 用户态进程（mobileactivationd、identityservicesd、fairplayd 等）
-- **内核驱动**：IOAESAccelerator（硬件 AES 引擎）、AppleKeyStore（密钥管理）、ProvInfoIOKit（设备信息采集）
-- **安全隔区（SEP）**：独立处理器，运行 SEPOS，管理 UID/GID 硬件密钥、SKS（Secure Key Store）密钥体系
-- **硬件密钥引擎**：AES 加速器内置 GID（同型号共享）、UID（设备唯一）、Device Key（设备密钥）等不可导出的硬件密钥
-
-数据流方向：AP 用户态 → 内核 IOKit → AES 硬件 / SEP，密钥运算全部在硬件内完成，AP 侧只能请求运算、不能读取密钥本体。
-
----
-
-### DRM 激活流程（iOS 10+）
-
-#### 流程概览
-
-```
-设备                                Apple 服务器
-  |                                      |
-  |-- 1. 采集设备信息 + InFieldCollection -->|
-  |-- 2. drmHandshake (SCRT + PCRT) ------>|
-  |<-- 3. SUInfo + HandshakeResponse -------|
-  |-- 4. PSC 处理 SUInfo ----------------->|
-  |-- 5. 生成 ActivationXML + 签名 ------->|
-  |-- 6. deviceActivation ----------------->|
-  |<-- 7. ActivationRecord ----------------|
-```
-
-#### 关键阶段
-
-**阶段 1：设备信息采集**
-- SerialNumber、UDID、ECID、IMEI 等基础标识
-- InFieldCollection manifest：由 ProvInfoIOKit 通过 IOAESAccelerator 的 special key 和 descrambler 硬件加密生成，包含设备的硬件指纹
-
-**阶段 2：DRM Handshake**
-- SCRT（Secure Certificate）：由 SEP 的 SIK/DeviceKey 生成，经 ECIES 加密
-- PCRT：InFieldCollection 采集的设备证明数据
-- SigningKey 签名 IngestBody，确保请求完整性
-
-**阶段 3-4：PSC 会话（Provisioning Session Control）**
-- Apple 返回 SUInfo + HandshakeResponseMessage + ServerKP
-- mobileactivationd 内部的 PSC 函数处理密钥协商
-- SUInfo 通过 ProvInfoIOKit 使用 AES special key 加密后存储为 psc.sui
-
-**阶段 5-6：激活签名与提交**
-- FairPlay 签名：fairplayd 对 ActivationXML 做 FairPlay 签名
-- RK 签名：SEP 的 RefKey 签名 ActivationXML
-- PSC SignAct：PSC 会话签名 + ServerKP
-- 三组签名 + 证书链一起提交给 `albert.apple.com/deviceservices/deviceActivation`
-
-**阶段 7：ActivationRecord**
-- Apple 验证通过后返回：DeviceCertificate、FairPlayKeyData、AccountToken、UniqueDeviceCertificate 等
-- 设备写入激活记录，完成激活
-
-#### IOAESAccelerator Special Key 机制
-
-内核 AES 硬件引擎在启动时执行 `_initKeyCache`：
-
-1. 从 nonce table 读取 source plaintext（每个 entry：4B handle + 4B keyType + 16B plaintext）
-2. 用 GID/UID key 加密 GID 类 plaintext → cached key
-3. 禁用 GID/UID 的直接硬件访问（`disableHardwareKey`）
-4. 用 Device Key 加密剩余 plaintext → cached key
-5. 后续 AES 操作通过 handle（如 0x899、0x89D）查 cached table 获取密钥
-
-Special key 的 cached ciphertext 是设备相关的（UID/Device Key 每台不同），FairPlay 和 ProvInfoIOKit 的加密结果依赖这些 cached key 的正确性。
-
-#### Descrambler（0xBB8）
-
-IOAESAccelerator 的 descrambler（keyId=3000）是硬件级的解扰操作：
-- 输入：key data（来自 special key 加密结果） + addon data（32 字节 info）
-- 内部使用与 UID 相关的固定硬件密钥
-- 输出：解扰后的 seed 数据
-
-Descrambler 的输入 key data 依赖 special key（如 0x89D）的加密结果，因此 special key 的正确性直接影响 descrambler 输出。
-
----
-
-### SEP 密钥体系（SKS）
-
-#### 密钥类型
-
-**命名说明（2026-04-15 实测验证）**：SEP 固件内部缓存/函数名与 mobileactivationd、Apple 用户层的术语存在**互调**，容易混淆。项目 Go 代码中的 `SKSClient` 字段采用**用户层**命名，与 `SecKeyCopySystemKey` 一致；下表分别列出两套名称。
-
-| Go 字段 (用户层) | SEP 函数 / cache | SecKeyCopySystemKey | 用途 |
-|------------------|------------------|---------------------|------|
-| `SIK`            | `sks_create_key_simple(1,1)` = `sks_create_device_key()` (cache: g_uik_key_cache) | (0) "com.apple.setoken.sik" | 出厂持久, attest UIK / 签 BAA SIKPub |
-| `UIK`            | `sks_create_key_simple(2,2)` (cache: g_device_key_cache) | (2)/(3) "com.apple.setoken.uikc/uikp" | 出厂持久, attest RefKey / BIK |
-| `GIDDerivedKey`  | `sks_create_gid_key(2)`, SEP key_type=6 "sep gid key" | (无对应) | SCRT1 链根 |
-| `SessionKey/SigningKey/RefKey` | `sks_create_key_simple` (7/8/9) 或 `CreateSigningKey` | — | 签名用途 |
-
-#### Attestation 链
-
-```
-GIDDerivedKey → SIK → UIK → RefKey
-```
-
-- SCRT1 (CollectSIK):           GIDDerivedKey → SIK
-- UIKCertification:             **SIK → UIK**         (SIK 签 UIK)
-- RKCertification (DRM):        **UIK → RefKey**       (UIK 签 RefKey)
-- RKCertification (BAA):        **UIK → BIK**          (同构, 只是 target 是一次性 BIK)
-- SCRT2 (CollectSigningAttestation): SIK → SigningKey
-- 每级 attestation 包含 GIDPubkeyHash = SHA256(签名方公钥)，形成信任链
-
----
-
-### iMessage（IDS）注册与 Absinthe 验证
-
-#### 注册流程
-
-```
-设备                                    Apple IDS 服务
-  |                                          |
-  |-- 1. 获取 validation cert ------------->|
-  |-- 2. NACInit + AbsintheHello -->|
-  |<-- 3. SessionInfo + AbsintheResponse ---|
-  |-- 4. AbsintheActivateSession ---------->|
-  |-- 5. NACGenerateValidation + AbsintheSign ->|
-  |<-- 6. 注册成功 -------------------------|
-```
-
-#### Absinthe 机制
-
-Absinthe 是苹果的设备验证框架（absd daemon），用于 iMessage/FaceTime 等服务的注册验证：
-
-- **AbsintheHello**：生成 hello 消息，创建 validation session
-- **AbsintheActivateSession**：用 Apple 返回的 response + server key 激活 session
-- **AbsintheSignData**：用激活后的 session 签名数据
-
-Absinthe 内部通过 IOAESAccelerator 的 descrambler（keyId=0xBB8）进行硬件级加密操作，与 DRM 激活共享相同的 AES 基础设施。
-
-#### SUInfo（psc.sui）的作用
-
-psc.sui 是 PSC 会话过程中产生的加密数据，由 ProvInfoIOKit 使用 special key（0x89D）加密 SUInfo 生成。它在后续的 iMessage 注册等流程中作为设备信任凭证使用。
-
----
-
-### 硬件安全边界
-
-#### 不可导出的密钥
-
-- **UID Key**：设备唯一，烧录在 SoC 中，只能在 AES 硬件引擎内使用
-- **GID Key**：同型号/SoC 家族共享，同样不可导出
-- **Device Key（0x7D0）**：设备唯一的 AES 密钥，用于 special key 派生
-- **SEP 密钥**：SIK、DeviceKey 等 SEP 密钥只在安全隔区内存在
-
-#### ECID 绑定
-
-ECID（Exclusive Chip ID）是 SoC 唯一编号，用于个性化签名（personalization）。AP Ticket、激活记录等都绑定到 ECID，使授权只对单台设备有效。
-
-#### Special Key 与 Descrambler 的桥梁作用
-
-Special key 的 cached ciphertext 是连接软件 AES 操作和硬件 descrambler 的桥梁：
-- 软件侧：用 cached key 做 AES 加密，产生 key data
-- 硬件侧：descrambler 用内部密钥对 key data 做解扰
-- 两者必须配套，cached key 必须是由真实硬件密钥派生的正确值
-
----
-
-## 合规声明
-
-本项目仅用于安全研究与学术目的。涉及的技术分析基于公开资料、Apple Platform Security 文档及安全研究社区的成果。请勿用于任何未经授权的用途。
-
----
-
-## 参考资料
-
-- [Apple Platform Security - Secure Enclave](https://support.apple.com/guide/security/secure-enclave-sec59b0b31ff/web)
-- [Apple Platform Security - Keybags for Data Protection](https://support.apple.com/guide/security/keybags-for-data-protection-sec6483d5760/web)
-- [Apple Platform Security - Secure Software Updates](https://support.apple.com/guide/security/secure-software-updates-secf683e0b36/web)
-- [Apple Platform Security - iMessage Security Overview](https://support.apple.com/guide/security/imessage-security-overview-secd9764312f/web)
-- [iMessage PQ3 Protocol](https://security.apple.com/blog/imessage-pq3/)
-- [iMessage Contact Key Verification](https://security.apple.com/blog/imessage-contact-key-verification/)
-- [The Apple Wiki - APTicket](https://theapplewiki.com/wiki/APTicket)
-- [The Apple Wiki - ECID](https://theapplewiki.com/wiki/ECID)
-
-### 单次传统激活签名
-
-`ActivationSign(ctx, profile, macOSRuntime, device, xml)` 不需要 `Initialize`，只生成本次请求的签名/证书，不修改传入设备或已有 ADI/Validation 会话。`CURRENT` 使用现有模拟实现，`LEGACY_IOS9` 仅用于 iOS 传统签名；签名接口不提供 DRM 参数。HTTP 路由为 `POST /activation/sign`。
-
-该接口由服务端清理临时计算状态。它不替代 Apple 激活 HTTP 请求，也不保证任意数据库身份能被 Apple 接受。客户端与 iClouder/iCryptor/Core 必须同步更新；不支持的服务会明确返回 Unimplemented，不会自动改用另一种签名实现。
-
-### 初始化选项
-
-```go
-options := icrypto.InitializeOptions{
-    IOSDRM: false,
-    MacOSRuntime: icrypto.MacOSRuntime_MACOS_AUTO,
-}
-err := cryptor.Initialize(ctx, options, device)
-```
-
-零值为普通自动初始化；IOSDRM 仅允许 iOS。macOS 可选 AUTO（保留已验证版本映射）或 COMPATIBLE（原有 Intel 实现），它不改变对外设备身份。无需也不能传入内部 Hardware 枚举。
-
-本次内部接口清理移除了 InitializeType 位标志、MACOSDISABLE15 和所有未使用的 controls 字段；旧 protobuf 字段编号已 reserved。代码调用方及 iClouder/iCryptor/Core 需要一起升级；发布时先更新服务端，再更新调用方，不依赖跨版本兼容。
-
-
-### 调用层次与参数含义
-
-- `idevice`：选择业务身份、编排 Apple HTTP 请求、管理不同用途的计算会话和设备状态合并。
-- `icrypto`：定义计算接口与 RPC 客户端；参数及调用前提见 [cryptor.go](cryptor.go)。
-- `iunios`：选择运行镜像并执行原生计算，判断对应环境是否支持该能力。
-
-`InitializeOptions` 是计算环境选项，`device` 是设备身份，`ActivationSigningProfile` 是单次传统激活签名实现，三者不能互相替代。Legacy 签名不会将后续 IMD 或 Validation 会话切成 iOS9。
-
-`ActivationSign` 使用临时环境；`Initialize` 后的其他计算使用有状态会话。一次握手必须保持实例一致，业务层需要串行化完整握手，不能仅依赖每次 RPC 自身的锁。初始化可能回写设备状态，因此共享设备应先取快照。
-
-业务层统一用 `WithActivationSigner` 选择传统激活签名，已移除 `activation_deprecated` 字符串上下文开关。底层会话式 `ActivationSignInSession` 的名称不表示 Legacy iOS9；独立传统签名使用 `ActivationSign`。已激活 iOS 的 `idevice.Device.Reactivation(ctx)` 使用专用 NAC 会话并以 `ActivationSignInSession` 签署 CertificateInfoXML，完成 Recertification 业务，不是新的单次签名 profile，也不新增 RPC。
-
-当前实现限制：iunios 的 `AbsintheAddOption` 不支持BIK字节导入，非空输入明确报错；空输入的原生BIK句柄为零。AddOption使用可更新的PSC会话槽，成功后接收新句柄；`DRMActivationExportState` 使用 FairPlayKeyData 并导出 DRM 状态，其余记录字段仍由业务层校验。这不代表这些参数已实现完整原生语义。
-
-### DRM UIK 复用选项
-
-`InitializeOptions{IOSDRM: true, DRMUIKMode: DRMUIKMode_DRM_UIK_COMMITTED}` 明确要求复用已提交 UIK。当前 iPhone7 后端的 AUTO 也使用 committed UIK，仍执行完整握手。显式模式通过 Initialize 请求字段 6、响应字段 2 确认；旧服务不确认时客户端拒绝合并返回的设备状态。PROPOSED/bump 暂未适配，明确报错；此选项不是跳过握手或 Recertification。
-
-`InitializeOptions.SEPDeviceUDID` 通过初始化请求字段 7 指定真实 SEP 手机，仅允许 IOSDRM。业务 `DRMActivationOptions.ComputeUDID` 会将指定设备与已保存的计算绑定、Device UDID 合并校验；冲突或设备离线直接失败。成功初始化返回的 Device 携带 `DRMHardwareUDID` 与 `DRMUIKFingerprint`，由后端实际硬件与 UIK 公钥产生，供以后复用核对。不要把 ADI 的 AES backend 绑定当作 UIK 绑定，两者使用不同计算材料。
-
-`DRMUIKReuseError` 的结构化 gRPC reason 仅表示初始化时确认旧 UIK 不可复用，供业务层切换为完整新 DRM；清理失败不保留可回退标记。新 DRM 不等于低层 PROPOSED/bump，业务 `UseCommittedUIK=false` 直接使用新激活快照和 AUTO 后端模式。
+同一workspace的业务编排在`idevice`，执行后端在`iunios`；本模块保持独立契约与客户端职责。[完整参考](docs/usage.md)中的研究背景不等于本客户端执行硬件运算，部署记录也不表示当前服务状态。
