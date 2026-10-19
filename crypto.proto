@@ -5,37 +5,39 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/zdypro888/icrypto";
 
-// macOS 计算镜像偏好，不改变对外声明的设备系统版本。
+// 选择服务端执行计算时加载的 macOS 程序版本；不修改 device 的机型或系统版本。
+// 只对 macOS 设备有效，iOS DRM 请求保持默认值 MACOS_AUTO。
 enum MacOSRuntime {
+  // 默认自动选择：当前后端对 device.ProductVersion == "15.5" 使用 macOS15 镜像，
+  // 其他 macOS 版本使用原有 Intel 镜像。
   MACOS_AUTO = 0;
+  // 强制使用原有 Intel 镜像，即使 device 声明的系统版本为 15.5。
   MACOS_COMPATIBLE = 1;
 }
 
-// DRM UIK 选择；AUTO 在已适配的 iPhone7 后端使用 committed UIK。
-enum DRMUIKMode {
-  DRM_UIK_AUTO = 0;
-  DRM_UIK_COMMITTED = 1;
-  // 保留明确语义；当前后端未适配 bump/proposed，必须拒绝。
-  DRM_UIK_PROPOSED = 2;
-}
-
-// 初始化参数分离 DRM 能力和 macOS 镜像偏好，不能再按位组合。
+// 创建后续计算共用的会话。device 提供业务设备信息，其余字段配置服务端计算方式。
 message InitializeRequest {
-  reserved 1, 3;
-  reserved "type", "controls";
+  // 待处理的 Device，以二进制 plist 编码；DRM 时表示待激活设备。
+  // 目标为另一设备时不借用计算手机身份；仅目标为空或同机时采用/补齐计算设备资料。
   bytes device = 2;
+  // 是否为本会话连接真实 SEP 并初始化 iOS DRM 所需的密钥上下文。
+  // true：用于 DRMActivationHandshake/ProcessHandshake/Sign 等 DRM 操作，仅支持 iOS。
+  // false（默认）：不执行这套 DRM/SEP 初始化，供普通计算流程使用。
+  // 这是初始化开关，设为 true 不会自动发起激活或向 Apple 发送请求。
   bool ios_drm = 4;
+  // macOS 计算程序版本选择，取值和默认行为见 MacOSRuntime。
+  // iOS DRM 请求保持 MACOS_AUTO；不能同时设置 ios_drm=true 和 MACOS_COMPATIBLE。
   MacOSRuntime macos_runtime = 5;
-  DRMUIKMode drm_uik_mode = 6;
-  // 指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。
+  // SEP 计算设备的 UDID，仅在 ios_drm=true 时可指定，可与 device 的 UDID 不同。
+  // 未指定时沿用 Device 中已有的计算绑定；没有绑定则由服务端调度计算设备。
+  // 已有计算绑定时，指定值必须与该绑定一致。
   string sep_device_udid = 7;
 }
 
-// 初始化响应
+// 返回初始化后的业务设备状态，包括实际 SEP 计算设备的 UDID。
 message InitializeResponse {
+  // 更新后的 Device（二进制 plist），含补齐的信息及计算设备绑定。
   bytes device = 1;
-  // 确认显式模式已被后端接受，防止旧服务忽略新字段。
-  DRMUIKMode drm_uik_mode = 2;
 }
 
 // 同步已初始化 cryptor 使用的设备状态。
@@ -50,8 +52,6 @@ message SyncDeviceResponse {}
 
 // 结束请求
 message FinalizeRequest {
-  reserved 1;
-  reserved "controls";
 }
 
 // 结束响应
@@ -59,8 +59,6 @@ message FinalizeResponse {}
 
 // DRM 激活握手请求
 message DRMActivationHandshakeRequest {
-  reserved 1;
-  reserved "controls";
 }
 
 // DRM 激活握手响应
@@ -74,8 +72,6 @@ message DRMActivationProcessHandshakeRequest {
   bytes           SUInfo                     = 1;
   bytes           handshake_response_message = 2;
   bytes           serverKP                   = 3;
-  reserved 4;
-  reserved "controls";
 }
 
 // DRM 激活处理响应
@@ -87,8 +83,6 @@ message DRMActivationProcessHandshakeResponse {
 // DRM 激活签名请求
 message DRMActivationSignRequest {
   bytes           activation_info_xml = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // DRM 激活签名响应
@@ -109,11 +103,8 @@ enum ActivationSigningProfile {
 // 一次性签名：不要求 Initialize，不写回设备，不占用调用方现有会话。
 message ActivationSignRequest {
   ActivationSigningProfile profile = 1;
-  reserved 2;
-  reserved "type";
   MacOSRuntime macos_runtime = 5;
-  DRMUIKMode drm_uik_mode = 6;
-  // 指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。
+  // 指定 SEP 计算设备，可与 device 中的待激活设备不同。
   string sep_device_udid = 7;
   bytes device = 3;
   bytes activation_info_xml = 4;
@@ -122,8 +113,6 @@ message ActivationSignRequest {
 // 当前有状态会话的传统激活签名请求，不表示Legacy iOS9。
 message ActivationSignInSessionRequest {
   bytes           activation_info_xml = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // 传统激活签名的通用输出，供独立签名与会话内签名共用。
@@ -142,8 +131,6 @@ message DRMActivationExportStateRequest {
   bytes           account_token             = 6;
   bytes           account_token_signature   = 7;
   bytes           unique_device_certificate = 8;
-  reserved 9;
-  reserved "controls";
 }
 
 // 激活记录响应
@@ -155,8 +142,6 @@ message DRMActivationExportStateResponse {
 message ADIStartProvisioningRequest {
   int64           DSID     = 1;
   bytes           SPIM     = 2;
-  reserved 3;
-  reserved "controls";
 }
 
 // ADI 开始配置响应
@@ -173,8 +158,6 @@ message ADIEndProvisioningRequest {
   bytes           PTM      = 4;
   bytes           TK       = 5;
   bytes           ADI      = 6;
-  reserved 7;
-  reserved "controls";
 }
 
 // ADI 结束配置响应
@@ -188,8 +171,6 @@ message ADIEndProvisioningResponse {
 message ADIGenerateLoginCodeRequest {
   int64           DSID     = 1;
   bytes           ADI      = 2;
-  reserved 3;
-  reserved "controls";
 }
 
 // ADI 生成登录码响应
@@ -201,8 +182,6 @@ message ADIGenerateLoginCodeResponse {
 // Absinthe Hello 请求
 message AbsintheHelloRequest {
   int32           mode     = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // Absinthe Hello 响应
@@ -215,8 +194,6 @@ message AbsintheAddOptionRequest {
   bytes           bik_key                = 1;
   bytes           baa_cert               = 2;
   bytes           intermediate_root_cert = 3;
-  reserved 4;
-  reserved "controls";
 }
 
 // Absinthe 添加选项响应
@@ -226,8 +203,6 @@ message AbsintheAddOptionResponse {}
 message AbsintheActivateSessionRequest {
   bytes           handshake_response = 1;
   bytes           server_key      = 2;
-  reserved 3;
-  reserved "controls";
 }
 
 // Absinthe 激活会话响应
@@ -236,8 +211,6 @@ message AbsintheActivateSessionResponse {}
 // Absinthe 签名数据请求
 message AbsintheSignDataRequest {
   bytes           sign_data = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // Absinthe 签名数据响应
@@ -249,8 +222,6 @@ message AbsintheSignDataResponse {
 // NAC初始化请求；证书属于本次业务握手，不能跨业务替换。
 message NACInitRequest {
   bytes           cert     = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // NAC初始化输出；后续响应处理与生成VD必须使用同一实例。
@@ -262,8 +233,6 @@ message NACInitResponse {
 message NACGenerateValidationRequest {
   bytes           response  = 1;
   bytes           sign_data = 2;
-  reserved 3;
-  reserved "controls";
 }
 
 // NAC生成的validation-data，不是额外Absinthe/PSC签名。
@@ -275,8 +244,6 @@ message NACGenerateValidationResponse {
 message SAPExchangeRequest {
   int32           version  = 1;
   bytes           data     = 2;
-  reserved 3;
-  reserved "controls";
 }
 
 // SAP 交换响应
@@ -287,8 +254,6 @@ message SAPExchangeResponse {
 // SAP 质数签名请求
 message SAPSignPrimeRequest {
   bytes           sign_data = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // SAP 质数签名响应
@@ -299,8 +264,6 @@ message SAPSignPrimeResponse {
 // SAP 质数验证请求
 message SAPVerifyPrimeRequest {
   bytes           data     = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // SAP 质数验证响应
@@ -309,8 +272,6 @@ message SAPVerifyPrimeResponse {}
 // SAP 签名请求
 message SAPSignRequest {
   bytes           sign_data = 1;
-  reserved 2;
-  reserved "controls";
 }
 
 // SAP 签名响应
@@ -322,8 +283,6 @@ message SAPSignResponse {
 message SAPVerifyRequest {
   bytes           data      = 1;
   bytes           signature = 2;
-  reserved 3;
-  reserved "controls";
 }
 
 // SAP 验证响应

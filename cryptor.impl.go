@@ -135,11 +135,9 @@ func (crypt *CryptorGRPC) Initialize(ctx context.Context, options InitializeOpti
 	if err != nil {
 		return err
 	}
-	request := &InitializeRequest{IosDrm: options.IOSDRM, MacosRuntime: options.MacOSRuntime, DrmUikMode: options.DRMUIKMode, SepDeviceUdid: options.SEPDeviceUDID, Device: devicePlist}
+	request := &InitializeRequest{IosDrm: options.IOSDRM, MacosRuntime: options.MacOSRuntime, SepDeviceUdid: options.SEPDeviceUDID, Device: devicePlist}
 	if response, err := crypt.Client.Initialize(ctx, request); err != nil {
 		return err
-	} else if options.DRMUIKMode != DRMUIKMode_DRM_UIK_AUTO && response.DrmUikMode != options.DRMUIKMode {
-		return fmt.Errorf("DRM backend did not confirm requested UIK mode; update the server")
 	} else if err := device.Unmarshal(response.Device); err != nil {
 		return err
 	} else {

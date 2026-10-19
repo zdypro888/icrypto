@@ -984,12 +984,9 @@
         "macosRuntime": {
           "$ref": "#/definitions/icryptoMacOSRuntime"
         },
-        "drmUikMode": {
-          "$ref": "#/definitions/icryptoDRMUIKMode"
-        },
         "sepDeviceUdid": {
           "type": "string",
-          "title": "指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。"
+          "title": "指定 SEP 计算设备，可与 device 中的待激活设备不同。"
         },
         "device": {
           "type": "string",
@@ -1158,17 +1155,6 @@
       },
       "title": "DRM 激活签名响应"
     },
-    "icryptoDRMUIKMode": {
-      "type": "string",
-      "enum": [
-        "DRM_UIK_AUTO",
-        "DRM_UIK_COMMITTED",
-        "DRM_UIK_PROPOSED"
-      ],
-      "default": "DRM_UIK_AUTO",
-      "description": "- DRM_UIK_PROPOSED: 保留明确语义；当前后端未适配 bump/proposed，必须拒绝。",
-      "title": "DRM UIK 选择；AUTO 在已适配的 iPhone7 后端使用 committed UIK。"
-    },
     "icryptoFinalizeRequest": {
       "type": "object",
       "title": "结束请求"
@@ -1182,37 +1168,34 @@
       "properties": {
         "device": {
           "type": "string",
-          "format": "byte"
+          "format": "byte",
+          "title": "待处理的 Device，以二进制 plist 编码；DRM 时表示待激活设备。\n目标为另一设备时不借用计算手机身份；仅目标为空或同机时采用/补齐计算设备资料。"
         },
         "iosDrm": {
-          "type": "boolean"
+          "type": "boolean",
+          "title": "是否为本会话连接真实 SEP 并初始化 iOS DRM 所需的密钥上下文。\ntrue：用于 DRMActivationHandshake/ProcessHandshake/Sign 等 DRM 操作，仅支持 iOS。\nfalse（默认）：不执行这套 DRM/SEP 初始化，供普通计算流程使用。\n这是初始化开关，设为 true 不会自动发起激活或向 Apple 发送请求。"
         },
         "macosRuntime": {
-          "$ref": "#/definitions/icryptoMacOSRuntime"
-        },
-        "drmUikMode": {
-          "$ref": "#/definitions/icryptoDRMUIKMode"
+          "$ref": "#/definitions/icryptoMacOSRuntime",
+          "title": "macOS 计算程序版本选择，取值和默认行为见 MacOSRuntime。\niOS DRM 请求保持 MACOS_AUTO；不能同时设置 ios_drm=true 和 MACOS_COMPATIBLE。"
         },
         "sepDeviceUdid": {
           "type": "string",
-          "title": "指定物理 SEP 手机；路由与旧绑定冲突时必须拒绝。"
+          "title": "SEP 计算设备的 UDID，仅在 ios_drm=true 时可指定，可与 device 的 UDID 不同。\n未指定时沿用 Device 中已有的计算绑定；没有绑定则由服务端调度计算设备。\n已有计算绑定时，指定值必须与该绑定一致。"
         }
       },
-      "title": "初始化参数分离 DRM 能力和 macOS 镜像偏好，不能再按位组合。"
+      "title": "创建后续计算共用的会话。device 提供业务设备信息，其余字段配置服务端计算方式。"
     },
     "icryptoInitializeResponse": {
       "type": "object",
       "properties": {
         "device": {
           "type": "string",
-          "format": "byte"
-        },
-        "drmUikMode": {
-          "$ref": "#/definitions/icryptoDRMUIKMode",
-          "title": "确认显式模式已被后端接受，防止旧服务忽略新字段。"
+          "format": "byte",
+          "title": "更新后的 Device（二进制 plist），含补齐的信息及计算设备绑定。"
         }
       },
-      "title": "初始化响应"
+      "title": "返回初始化后的业务设备状态，包括实际 SEP 计算设备的 UDID。"
     },
     "icryptoMacOSRuntime": {
       "type": "string",
@@ -1221,7 +1204,8 @@
         "MACOS_COMPATIBLE"
       ],
       "default": "MACOS_AUTO",
-      "title": "macOS 计算镜像偏好，不改变对外声明的设备系统版本。"
+      "description": "- MACOS_AUTO: 默认自动选择：当前后端对 device.ProductVersion == \"15.5\" 使用 macOS15 镜像，\n其他 macOS 版本使用原有 Intel 镜像。\n - MACOS_COMPATIBLE: 强制使用原有 Intel 镜像，即使 device 声明的系统版本为 15.5。",
+      "title": "选择服务端执行计算时加载的 macOS 程序版本；不修改 device 的机型或系统版本。\n只对 macOS 设备有效，iOS DRM 请求保持默认值 MACOS_AUTO。"
     },
     "icryptoNACGenerateValidationRequest": {
       "type": "object",
